@@ -423,6 +423,7 @@ void CommandConfigManager::registerGlobals() {
 	setGlobalInt("HEALTH", CreatureAttribute::HEALTH);
 	setGlobalInt("ACTION", CreatureAttribute::ACTION);
 	setGlobalInt("MIND", CreatureAttribute::MIND);
+	setGlobalInt("ATTACK_POOL", CreatureAttribute::UNKNOWN);
 
 	// weapons
 	setGlobalInt("ANYWEAPON", CombatManager::ANYWEAPON);
@@ -460,6 +461,7 @@ void CommandConfigManager::registerGlobals() {
 	setGlobalInt("ACTIONDEGRADE_EFFECT", CommandEffect::ACTIONDEGRADE);
 	setGlobalInt("MINDDEGRADE_EFFECT", CommandEffect::MINDDEGRADE);
 	setGlobalInt("REMOVE_COVER_EFFECT", CommandEffect::REMOVECOVER);
+	setGlobalInt("FORCECHOKE", CommandEffect::FORCECHOKE);
 
 	// trails
 	setGlobalInt("NOTRAIL", CombatManager::NOTRAIL);

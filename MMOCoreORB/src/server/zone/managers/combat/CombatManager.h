@@ -193,8 +193,9 @@ protected:
 	int doAreaCombatAction(TangibleObject* attacker, WeaponObject* weapon, TangibleObject* defenderObject, const CreatureAttackData& data);
 	int doAreaCombatAction(CreatureObject* attacker, WeaponObject* weapon, TangibleObject* defenderObject, const CreatureAttackData& data);
 	int doTargetCombatAction(CreatureObject* attacker, WeaponObject* weapon, TangibleObject* defenderObject, const CreatureAttackData& data);
-	void applyDots(CreatureObject* attacker, CreatureObject* defender, const CreatureAttackData& data, int appliedDamage, int unmitDamage);
+	void applyDots(CreatureObject* attacker, CreatureObject* defender, const CreatureAttackData& data, int appliedDamage, int unmitDamage, int poolsToDamage);
 	void applyWeaponDots(CreatureObject* attacker, CreatureObject* defender, WeaponObject* weapon);
+	uint8 getPoolForDot(uint64 dotType, int poolsToDamage);
 
 	float getWeaponRangeModifier(float currentRange, WeaponObject* weapon);
 
@@ -214,11 +215,11 @@ protected:
 	int getDefenderSecondaryDefenseModifier(CreatureObject* defender);
 	float getDefenderToughnessModifier(CreatureObject* defender, int attackType, int damType, float damage, Vector<int>& foodMitigation);
 	int calculateDamageRange(TangibleObject* attacker, CreatureObject* defender, WeaponObject* weapon);
-	float applyDamageModifiers(CreatureObject* attacker, WeaponObject* weapon, float damage);
+	float applyDamageModifiers(CreatureObject* attacker, WeaponObject* weapon, float damage, const CreatureAttackData& data);
 	int getSpeedModifier(CreatureObject* attacker, WeaponObject* weapon);
 	float calculateDamage(CreatureObject* attacker, WeaponObject* weapon, CreatureObject* defender, const CreatureAttackData& data, Vector<int>& foodMitigation);
 	float calculateDamage(TangibleObject* attacker, WeaponObject* weapon, CreatureObject* defender, const CreatureAttackData& data, Vector<int>& foodMitigation);
-	float calculateDamage(CreatureObject* attacker, WeaponObject* weapon, TangibleObject* defender);
+	float calculateDamage(CreatureObject* attacker, WeaponObject* weapon, TangibleObject* defender, const CreatureAttackData& data);
 	bool checkConeAngle(SceneObject* targetCreature, float angle, float creatureVectorX, float creatureVectorY, float directionVectorX, float directionVectorY);
 
 	void doMiss(TangibleObject* attacker, WeaponObject* weapon, CreatureObject* defender, int damage);

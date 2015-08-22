@@ -1199,7 +1199,7 @@ void PlayerManagerImplementation::disseminateExperience(TangibleObject* destruct
 		Locker squadLock(squadLeader, destructedObject);
 
 		//If he is a squad leader, and is in range of this player, then add the combat exp for him to use.
-		if (squadLeader->hasSkill("outdoors_squadleader_novice") && pos.distanceTo(attacker->getWorldPosition()) <= 192.f) {
+		if (squadLeader->hasSkill("outdoors_squadleader_novice") && pos.distanceTo(attacker->getWorldPosition()) <= ZoneServer::CLOSEOBJECTRANGE) {
 			int v = slExperience.get(squadLeader) + combatXp;
 			slExperience.put(squadLeader, v);
 		}
@@ -2839,11 +2839,6 @@ void PlayerManagerImplementation::lootAll(CreatureObject* player, CreatureObject
 
 	if (!ai->isDead() || player->isDead())
 		return;
-
-	if (ai->getDistanceTo(player) > 6) {
-		player->sendSystemMessage("@pet/droid_modules:corpse_too_far");
-		return;
-	}
 
 	SceneObject* creatureInventory = ai->getSlottedObject("inventory");
 

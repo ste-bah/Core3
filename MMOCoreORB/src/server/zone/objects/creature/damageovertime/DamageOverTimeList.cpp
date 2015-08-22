@@ -7,6 +7,8 @@
 
 #include "DamageOverTimeList.h"
 #include "server/zone/objects/creature/CreatureObject.h"
+#include "server/zone/objects/creature/commands/effect/CommandEffect.h"
+#include "server/zone/objects/creature/CreatureAttribute.h"
 
 uint64 DamageOverTimeList::activateDots(CreatureObject* victim) {
 	uint64 states = 0;
@@ -111,6 +113,10 @@ uint32 DamageOverTimeList::addDot(CreatureObject* victim, CreatureObject* attack
 	if (potency > 0 && System::random(100) >= MAX(5.f, MIN(potency * (80.f / (100.f + defense)), 95.f)))
 		return 0;
 
+	if (pool == CreatureAttribute::UNKNOWN) {
+		pool = getRandomPool(dotType);
+	}
+
 	int oldStrength = getStrength(pool, dotType);
 
 	int durationMod = 0;
@@ -138,11 +144,14 @@ uint32 DamageOverTimeList::addDot(CreatureObject* victim, CreatureObject* attack
 	}
 
 	//only 1 disease per bar allowed
-	if(dotType == CreatureState::DISEASED)
+	if(dotType == CreatureState::DISEASED) {
 		objectID = Long::hashCode(CreatureState::DISEASED);
+	} else if (dotType == CommandEffect::FORCECHOKE) {
+		objectID = 0;
+	}
 
 	DamageOverTime newDot(attacker, dotType, pool, strength, duration, secondaryStrength);
-	int dotPower = newDot.initDot(victim);
+	int dotPower = newDot.initDot(victim, attacker);
 
 	uint64 key = generateKey(dotType, pool, objectID);
 
@@ -183,9 +192,30 @@ uint32 DamageOverTimeList::addDot(CreatureObject* victim, CreatureObject* attack
 	dot = true;
 
 	locker.release();
-	victim->setState(dotType);
+
+	if (dotType != CommandEffect::FORCECHOKE)
+		victim->setState(dotType);
 
 	return dotPower;
+}
+
+uint8 DamageOverTimeList::getRandomPool(uint64 dotType) {
+	uint8 pool = 0;
+
+	switch (dotType) {
+	case CreatureState::POISONED:
+	case CreatureState::ONFIRE:
+	case CreatureState::BLEEDING:
+		pool = System::random(2) * 3;
+		break;
+	case CreatureState::DISEASED:
+		pool = System::random(8);
+		break;
+	default:
+		break;
+	}
+
+	return pool;
 }
 
 bool DamageOverTimeList::healState(CreatureObject* victim, uint64 dotType, float reduction) {
@@ -297,6 +327,9 @@ void DamageOverTimeList::sendStartMessage(CreatureObject* victim, uint64 type) {
 		break;
 	case CreatureState::ONFIRE:
 		victim->sendSystemMessage("@dot_message:start_fire");
+		break;
+	case CommandEffect::FORCECHOKE:
+		victim->sendSystemMessage("@combat_effects:choke_single");
 		break;
 	}
 }

@@ -9,14 +9,25 @@
 #include "server/zone/Zone.h"
 #include "server/zone/managers/templates/TemplateManager.h"
 #include "server/zone/objects/terrain/ProceduralTerrainAppearance.h"
+#include "server/zone/objects/terrain/TerrainGenerator.h"
 #include "server/zone/objects/terrain/SpaceTerrainAppearance.h"
+
+#define USE_CACHED_HEIGHT
 
 TerrainManager::TerrainManager(Zone* planet) : Logger("TerrainManager") {
 	zone = planet;
+
+	heightCache = NULL;
 }
 
 TerrainManager::TerrainManager(ManagedWeakReference<Zone*> planet) : Logger("TerrainManager") {
 	zone = planet.get();
+
+	heightCache = NULL;
+}
+
+TerrainManager::~TerrainManager() {
+	delete heightCache;
 }
 
 bool TerrainManager::initialize(const String& terrainFile) {
@@ -34,6 +45,12 @@ bool TerrainManager::initialize(const String& terrainFile) {
 	bool val = terrainData->load(iffStream);
 
 	delete iffStream;
+
+	if (heightCache != NULL) {
+		delete heightCache;
+	}
+
+	heightCache = new TerrainCache(this);
 
 	return val;
 }
@@ -115,11 +132,28 @@ void TerrainManager::addTerrainModification(float x, float y, const String& terr
 		return;
 	}
 
-	if (ptat->addTerrainModification(stream, x, y, objectid) == NULL) {
+	//to be safe that the generator is not deleted when we clear the cache
+	Locker locker(ptat->getGuard());
+
+	TerrainGenerator* generator = ptat->addTerrainModification(stream, x, y, objectid);
+	if (generator == NULL) {
 		error("could not add custom terrain file: " + terrainModificationFilename);
+
+		return;
 	}
 
+	clearCache(generator);
+
+	locker.release();
+
 	delete stream;
+}
+
+void TerrainManager::clearCache(TerrainGenerator* generator) {
+/*	totalHitCount.add(getCurrentCacheHitCount());
+	totalMissCount.add(getCurrentCacheMissCount());*/
+
+	heightCache->clear(generator);
 }
 
 void TerrainManager::removeTerrainModification(uint64 objectid) {
@@ -128,9 +162,34 @@ void TerrainManager::removeTerrainModification(uint64 objectid) {
 	if (ptat == NULL)
 		return;
 
-	ptat->removeTerrainModification(objectid);
+	TerrainGenerator* generator = ptat->removeTerrainModification(objectid);
+
+	if (generator != NULL) {
+		clearCache(generator);
+
+		delete generator;
+	}
 }
 
 ProceduralTerrainAppearance* TerrainManager::getProceduralTerrainAppearance() {
 	return dynamic_cast<ProceduralTerrainAppearance*>(terrainData.get());
+}
+
+float TerrainManager::getUnCachedHeight(float x, float y) {
+	return terrainData->getHeight(x, y);
+}
+
+float TerrainManager::getCachedHeight(float x, float y) {
+	return heightCache->getHeight(x, y);
+}
+
+float TerrainManager::getHeight(float x, float y) {
+#ifdef USE_CACHED_HEIGHT
+	x = floor(x * 10) / 10.f;
+	y = floor(y * 10) / 10.f;
+
+	return getCachedHeight(x, y);
+#else
+	return getUnCachedHeight(x, y);
+#endif
 }
