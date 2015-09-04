@@ -25,6 +25,15 @@ function NabooMoeniaScreenPlay:spawnMobiles()
 
 	--Anything dashed out will need to be added here and removed from spawn manager once the spawnMobiles command is extended.
 
+	--starport interior
+	local pNpc = spawnMobile("naboo", "pilot",60,-5.7,0.6,67.4,0,4215410)
+	self:setMoodString(pNpc, "sad")
+	pNpc = spawnMobile("naboo", "chassis_dealer",60,-4.3,0.6,67.6,-99,4215410)
+	self:setMoodString(pNpc, "conversation")
+	--relocated sw trainer from originally bugged exterior placement
+	pNpc = spawnMobile("naboo", "trainer_shipwright",60,-0.4,0.6,67.1,-177,4215410)
+	self:setMoodString(pNpc, "neutral")
+
 	--Outside
 	spawnMobile("naboo", "informant_npc_lvl_1",0,4652,3.8,-4749,0,0)
 	spawnMobile("naboo", "informant_npc_lvl_1",0,4744,3.8,-4847,0,0)
@@ -55,13 +64,15 @@ function NabooMoeniaScreenPlay:spawnMobiles()
 	spawnMobile("naboo", "trainer_merchant",0,4819,4.17,-4704,81,0)
 	spawnMobile("naboo", "trainer_musician",0,4740,3.8,-4886,0,0)
 	spawnMobile("naboo", "trainer_scout",0,4836.08,4.17,-4703.96,94,0)
-	--{"trainer_shipwright",0,4727,4.3,-4649,0,0, "", "a shipwright trainer"},
 	spawnMobile("naboo", "trainer_squadleader",0,4701,3.75,-4939,0,0)
 	spawnMobile("naboo", "trainer_tailor",0,4858,3.8,-4799,180,0)
 
 	--Cantina
 	spawnMobile("naboo", "rebel_recruiter",0,-29,-0.89,-1.2,74,119)
 	spawnMobile("naboo", "informant_npc_lvl_2",0,-2.2226,-0.894992,5.90785,90,111)
+	--hotel
+	pNpc = spawnMobile("naboo", "bartender",60,20.2,1.6,12.3,-180,1717470)
+	self:setMoodString(pNpc, "conversation")
 
 	--Guild Hall 4923 -4783
 	spawnMobile("naboo", "trainer_artisan",0,-0.0177415,1.13306,-13.3088,0,1717546)
@@ -85,5 +96,24 @@ function NabooMoeniaScreenPlay:spawnMobiles()
 	spawnMobile("naboo", "trainer_doctor",0,-25,0.26,-4,180,1717506)
 	spawnMobile("naboo", "trainer_medic",0,-17.2255,0.26,-1.2311,150,1717506)
 	spawnMobile("naboo", "trainer_medic",0,16.6671,0.26,5.91467,177,1717502)
+
+	--newb grind starter spawns
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 4782, 4.2, getRandomNumber(10) + -4526, getRandomNumber(360), 0)
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 4782, 4.2, getRandomNumber(10) + -4526, getRandomNumber(360), 0)
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 4782, 4.2, getRandomNumber(10) + -4526, getRandomNumber(360), 0)
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 4782, 4.2, getRandomNumber(10) + -4526, getRandomNumber(360), 0)
+	spawnMobile("naboo", "hermit_spider", 300, getRandomNumber(10) + 4635, 5.4, getRandomNumber(10) + -4542, getRandomNumber(360), 0)
+	spawnMobile("naboo", "hermit_spider", 300, getRandomNumber(10) + 4635, 5.4, getRandomNumber(10) + -4542, getRandomNumber(360), 0)
+	spawnMobile("naboo", "hermit_spider", 300, getRandomNumber(10) + 4635, 5.4, getRandomNumber(10) + -4542, getRandomNumber(360), 0)
+	spawnMobile("naboo", "hermit_spider", 300, getRandomNumber(10) + 4635, 5.4, getRandomNumber(10) + -4542, getRandomNumber(360), 0)
+	spawnMobile("naboo", "hermit_spider", 300, getRandomNumber(10) + 4635, 5.4, getRandomNumber(10) + -4542, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mott", 300, getRandomNumber(10) + 4577, 6.5, getRandomNumber(10) + -4622, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mott", 300, getRandomNumber(10) + 4577, 6.5, getRandomNumber(10) + -4622, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mott", 300, getRandomNumber(10) + 4577, 6.5, getRandomNumber(10) + -4622, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mott", 300, getRandomNumber(10) + 4577, 6.5, getRandomNumber(10) + -4622, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mott", 300, getRandomNumber(10) + 4577, 6.5, getRandomNumber(10) + -4622, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mummer_thug", 300, getRandomNumber(10) + 4681, 4.0, getRandomNumber(10) + -4730, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mummer_thug", 300, getRandomNumber(10) + 4681, 4.0, getRandomNumber(10) + -4730, getRandomNumber(360), 0)
+	spawnMobile("naboo", "mummer_thug", 300, getRandomNumber(10) + 4681, 4.0, getRandomNumber(10) + -4730, getRandomNumber(360), 0)
 
 end

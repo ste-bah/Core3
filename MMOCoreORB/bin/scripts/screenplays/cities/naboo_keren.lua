@@ -25,22 +25,33 @@ function NabooKerenScreenPlay:spawnMobiles()
 
 	--Anything dashed out will need to be added here and removed from spawn manager once the spawnMobiles command is extended.
 
+	--starport interior
+	local pNpc = spawnMobile("naboo", "chiss_female",60,55.2,-0.5,31.6,0,2125385)
+	self:setMoodString(pNpc, "npc_sitting_table_eating")
+	pNpc = spawnMobile("naboo", "chiss_male",60,57.4,-0.5,33.4,-135,2125385)
+	self:setMoodString(pNpc, "npc_sitting_chair")
+	pNpc = spawnMobile("naboo", "chassis_dealer",60,5.5,0.6,67.4,-2,2125382)
+	self:setMoodString(pNpc, "neutral")
+	--relocated sw trainer from previously bugged exterior spot
+	pNpc = spawnMobile("naboo", "trainer_shipwright",60,-0.5,0.6,67.2,180,2125382)
+	self:setMoodString(pNpc, "neutral")
+
+	--cantina
+	pNpc = spawnMobile("naboo", "bartender",60,3.6,-0.9,-2.5,163,5)
+	self:setMoodString(pNpc, "conversation")
 	--Guild Hall 1720 2613
 	spawnMobile("naboo", "trainer_artisan",0,0.0976721,1.13306,-13.6995,0,1396874)
-
 	--Guild Hall/Theater
 	spawnMobile("naboo", "trainer_dancer",0,18.188,2.12871,53.8705,2,4045383)
 	spawnMobile("naboo", "trainer_entertainer",0,29.6396,2.12878,74.0291,270,4045383)
 	spawnMobile("naboo", "trainer_musician",0,21.7887,2.12809,63.5017,3,4045383)
 	spawnMobile("naboo", "trainer_imagedesigner",0,-20.97,2.1287,74.23,180,4045384)
-
 	--Guild Hall 1786 2547
 	spawnMobile("naboo", "trainer_architect",0,11,1.133,-14.5,0,1650543)
 	spawnMobile("naboo", "trainer_armorsmith",0,-15,1.133,0,88,1650542)
 	spawnMobile("naboo", "trainer_droidengineer",0,-11,1.13306,-13,0,1650545)
 	spawnMobile("naboo", "trainer_merchant",0,12,1.13306,6,180,1650541)
 	spawnMobile("naboo", "trainer_weaponsmith",0,-2.5,1.13306,-8.4,91,1650544)
-
 	--Guild Hall 1851 2613
 	spawnMobile("naboo", "trainer_brawler",0,-11,1.13306,-12.5,0,1650535)
 	spawnMobile("naboo", "trainer_marksman",0,0,0,-13,0,1650534)
@@ -93,9 +104,25 @@ function NabooKerenScreenPlay:spawnMobiles()
 	spawnMobile("naboo", "trainer_rifleman",0,1276,13,2685,73,0)
 	spawnMobile("naboo", "trainer_scout",0,1512.27,25,2754.94,111,0)
 	spawnMobile("naboo", "trainer_scout",0,1842.37,12,2709.61,134,0)
-	--{"trainer_shipwright",0,1352,13,2768,141,0, "", "a shipwright trainer"},
 	spawnMobile("naboo", "trainer_smuggler",0,1362.94,13,2833.96,82,0)
 	spawnMobile("naboo", "trainer_smuggler",0,1846,12,2772,31,0)
 	spawnMobile("naboo", "trainer_weaponsmith",0,1905,12,2767,180,0)
 	spawnMobile("naboo", "trainer_bountyhunter",0,2087,30,2575,180,0)
+
+	--newb grind starter spawns
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 1360, 13.3, getRandomNumber(10) + 2941, getRandomNumber(360), 0)
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 1360, 13.3, getRandomNumber(10) + 2941, getRandomNumber(360), 0)
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 1360, 13.3, getRandomNumber(10) + 2941, getRandomNumber(360), 0)
+	spawnMobile("naboo", "gungan_hermit", 300, getRandomNumber(10) + 1360, 13.3, getRandomNumber(10) + 2941, getRandomNumber(360), 0)
+	spawnMobile("naboo", "flewt", 300, getRandomNumber(10) + 1216, 6.1, getRandomNumber(10) + 2878, getRandomNumber(360), 0)
+	spawnMobile("naboo", "flewt", 300, getRandomNumber(10) + 1216, 6.1, getRandomNumber(10) + 2878, getRandomNumber(360), 0)
+	spawnMobile("naboo", "flewt", 300, getRandomNumber(10) + 1216, 6.1, getRandomNumber(10) + 2878, getRandomNumber(360), 0)
+	spawnMobile("naboo", "flewt", 300, getRandomNumber(10) + 1216, 6.1, getRandomNumber(10) + 2878, getRandomNumber(360), 0)
+	spawnMobile("naboo", "flewt", 300, getRandomNumber(10) + 1216, 6.1, getRandomNumber(10) + 2878, getRandomNumber(360), 0)
+	spawnMobile("naboo", "chuba", 300, getRandomNumber(10) + 1328, 11.9, getRandomNumber(10) + 2604, getRandomNumber(360), 0)
+	spawnMobile("naboo", "chuba", 300, getRandomNumber(10) + 1328, 11.9, getRandomNumber(10) + 2604, getRandomNumber(360), 0)
+	spawnMobile("naboo", "chuba", 300, getRandomNumber(10) + 1328, 11.9, getRandomNumber(10) + 2604, getRandomNumber(360), 0)
+	spawnMobile("naboo", "chuba", 300, getRandomNumber(10) + 1328, 11.9, getRandomNumber(10) + 2604, getRandomNumber(360), 0)
+	spawnMobile("naboo", "chuba", 300, getRandomNumber(10) + 1328, 11.9, getRandomNumber(10) + 2604, getRandomNumber(360), 0)
+
 end

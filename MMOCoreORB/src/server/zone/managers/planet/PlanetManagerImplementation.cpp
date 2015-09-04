@@ -713,7 +713,7 @@ bool PlanetManagerImplementation::isInRangeWithPoi(float x, float y, float range
 
 	Vector3 target(x, y, 0);
 
-	Vector<Reference<PoiData*> > pois = clientPoiDataTable.getPois(zoneName);
+	const Vector<Reference<PoiData*> >& pois = clientPoiDataTable.getPois(zoneName);
 
 	for (int i = 0; i < pois.size(); ++i) {
 		if (pois.get(i)->getPosition().squaredDistanceTo(target) <= range * range)
@@ -724,14 +724,14 @@ bool PlanetManagerImplementation::isInRangeWithPoi(float x, float y, float range
 }
 
 bool PlanetManagerImplementation::isInObjectsNoBuildZone(float x, float y, float extraMargin) {
-	SortedVector<ManagedReference<QuadTreeEntry* > > closeObjects;
+	SortedVector<QuadTreeEntry*> closeObjects;
 
 	Vector3 targetPos(x, y, zone->getHeight(x, y));
 
 	zone->getInRangeObjects(x, y, 512, &closeObjects, true);
 
 	for (int i = 0; i < closeObjects.size(); ++i) {
-		SceneObject* obj = cast<SceneObject*>(closeObjects.get(i).get());
+		SceneObject* obj = cast<SceneObject*>(closeObjects.get(i));
 
 		SharedObjectTemplate* objectTemplate = obj->getObjectTemplate();
 
@@ -763,7 +763,7 @@ bool PlanetManagerImplementation::isInObjectsNoBuildZone(float x, float y, float
 }
 
 bool PlanetManagerImplementation::isSpawningPermittedAt(float x, float y, float margin) {
-	SortedVector<ManagedReference<ActiveArea* > > activeAreas;
+	SortedVector<ActiveArea*> activeAreas;
 
 	Vector3 targetPos(x, y, zone->getHeight(x, y));
 
@@ -799,12 +799,14 @@ bool PlanetManagerImplementation::isSpawningPermittedAt(float x, float y, float 
 }
 
 bool PlanetManagerImplementation::isBuildingPermittedAt(float x, float y, SceneObject* object, float margin) {
-	SortedVector<ManagedReference<ActiveArea* > > activeAreas;
+	SortedVector<ActiveArea*> activeAreas;
 
-	Vector3 targetPos(x, y, zone->getHeight(x, y));
+	Vector3 targetPos(x, y, 0);
 
 	if (!zone->isWithinBoundaries(targetPos))
 		return false;
+
+	//targetPos.setZ(zone->getHeight(x, y)); not needed
 
 	zone->getInRangeActiveAreas(x, y, &activeAreas, true);
 
