@@ -15,6 +15,10 @@ local TASK_STARTED = 0xABCD
 -- Check if the task has been started for the player.
 -- @param pCreatureObject pointer to the creature object of the player.
 function Task:hasTaskStarted(pCreatureObject)
+	if (pCreatureObject == nil) then
+		return false
+	end
+
 	return CreatureObject(pCreatureObject):getScreenPlayState(self.taskName) == TASK_STARTED
 end
 
@@ -45,10 +49,14 @@ end
 
 -- Start the task.
 -- @param pCreatureObject pointer to the creature object of the player who should get the task started.
-function Task:start(pCreatureObject)
+function Task:start(pCreatureObject, ...)
+	if (pCreatureObject == nil) then
+		return
+	end
+
 	if not self:hasTaskStarted(pCreatureObject) then
 		Logger:log("Starting task " .. self.taskName, LT_INFO)
-		if self:callFunctionIfNotNil(self.taskStart, true, pCreatureObject) then
+		if self:callFunctionIfNotNil(self.taskStart, true, pCreatureObject, unpack({...})) then
 			Logger:log(self.taskName .. " started.", LT_INFO)
 			self:setTaskStarted(pCreatureObject)
 		end
@@ -67,6 +75,10 @@ end
 -- Finish the task.
 -- @param pCreatureObject pointer to the creature object of the player who should get the task finished.
 function Task:finish(pCreatureObject)
+	if (pCreatureObject == nil) then
+		return
+	end
+
 	if self:hasTaskStarted(pCreatureObject) then
 		Logger:log("Finishing task " .. self.taskName, LT_INFO)
 		if self:callFunctionIfNotNil(self.taskFinish, true, pCreatureObject) == true then
