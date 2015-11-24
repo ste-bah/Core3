@@ -73,6 +73,8 @@
 #include "server/zone/managers/player/BadgeList.h"
 #include "server/zone/managers/player/LuaQuestInfo.h"
 #include "server/zone/objects/tangible/misc/FsPuzzlePack.h"
+#include "server/zone/objects/tangible/misc/CustomIngredient.h"
+#include "server/zone/objects/player/sui/LuaSuiPageData.h"
 
 int DirectorManager::DEBUG_MODE = 0;
 int DirectorManager::ERROR_CODE = NO_ERROR;
@@ -91,6 +93,9 @@ DirectorManager::DirectorManager() : Logger("DirectorManager") {
 
 	questStatuses.setNullValue(NULL);
 	questStatuses.setNoDuplicateInsertPlan();
+
+	questVectorMaps.setNullValue(NULL);
+	questVectorMaps.setNoDuplicateInsertPlan();
 }
 
 void DirectorManager::loadPersistentEvents() {
@@ -149,17 +154,24 @@ void DirectorManager::loadPersistentStatus() {
 		while (iterator.getNextKey(objectID)) {
 			Reference<QuestStatus*> status = Core::getObjectBroker()->lookUp(objectID).castTo<QuestStatus*>();
 
-			if (status != NULL)
+			if (status != NULL) {
 				questStatuses.put(status->getKey(), status);
+				continue;
+			}
+
+			Reference<QuestVectorMap*> questMap = Core::getObjectBroker()->lookUp(objectID).castTo<QuestVectorMap*>();
+
+			if (questMap != NULL)
+				questVectorMaps.put(questMap->getKey(), questMap);
 		}
 	} catch (DatabaseException& e) {
 		error("Database exception in DirectorManager::loadPersistentStatus(): "	+ e.getMessage());
 	}
 
-	info(String::valueOf(questStatuses.size()) + " persistent statuses loaded.", true);
+	info(String::valueOf(questStatuses.size() + questVectorMaps.size()) + " persistent statuses loaded.", true);
 }
 
-void DirectorManager::setQuestStatus(String keyString, String valString) {
+void DirectorManager::setQuestStatus(const String& keyString, const String& valString) {
 	ManagedReference<QuestStatus*> status = questStatuses.get(keyString);
 
 	if (status == NULL) {
@@ -173,7 +185,7 @@ void DirectorManager::setQuestStatus(String keyString, String valString) {
 	status->setStatus(valString);
 }
 
-String DirectorManager::getQuestStatus(String keyString) {
+String DirectorManager::getQuestStatus(const String& keyString) {
 	String str = "";
 
 	Reference<QuestStatus*> status = questStatuses.get(keyString);
@@ -183,7 +195,7 @@ String DirectorManager::getQuestStatus(String keyString) {
 	return str;
 }
 
-void DirectorManager::removeQuestStatus(String key) {
+void DirectorManager::removeQuestStatus(const String& key) {
 	ManagedReference<QuestStatus*> status = NULL;
 
 	status = questStatuses.get(key);
@@ -309,6 +321,9 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	lua_register(luaEngine->getLuaState(), "removeQuestStatus", removeQuestStatus);
 	lua_register(luaEngine->getLuaState(), "getControllingFaction", getControllingFaction);
 	lua_register(luaEngine->getLuaState(), "playClientEffectLoc", playClientEffectLoc);
+	lua_register(luaEngine->getLuaState(), "getQuestVectorMap", getQuestVectorMap);
+	lua_register(luaEngine->getLuaState(), "createQuestVectorMap", createQuestVectorMap);
+	lua_register(luaEngine->getLuaState(), "removeQuestVectorMap", removeQuestVectorMap);
 
 	luaEngine->setGlobalInt("POSITIONCHANGED", ObserverEventType::POSITIONCHANGED);
 	luaEngine->setGlobalInt("CLOSECONTAINER", ObserverEventType::CLOSECONTAINER);
@@ -463,6 +478,9 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	Luna<LuaTicketObject>::Register(luaEngine->getLuaState());
 	Luna<LuaQuestInfo>::Register(luaEngine->getLuaState());
 	Luna<LuaFsPuzzlePack>::Register(luaEngine->getLuaState());
+	Luna<LuaResourceSpawn>::Register(luaEngine->getLuaState());
+	Luna<LuaCustomIngredient>::Register(luaEngine->getLuaState());
+	Luna<LuaSuiPageData>::Register(luaEngine->getLuaState());
 }
 
 int DirectorManager::loadScreenPlays(Lua* luaEngine) {
@@ -1983,7 +2001,7 @@ int DirectorManager::spawnActiveArea(lua_State* L) {
 		area->setCellObjectID(cellID);
 
 		Locker zoneLocker(zone);
-		
+
 		zone->transferObject(area, -1, true);
 
 		area->_setUpdated(true); //mark updated so the GC doesnt delete it while in LUA
@@ -2415,7 +2433,7 @@ int DirectorManager::getSpawnPoint(lua_State* L) {
 	}
 
     float maximumDistance, minimumDistance, y, x;
-    CreatureObject* creatureObject;
+    String zoneName;
     bool forceSpawn = false;
 
     if (numberOfArguments == 5) {
@@ -2423,21 +2441,38 @@ int DirectorManager::getSpawnPoint(lua_State* L) {
 		minimumDistance = lua_tonumber(L, -2);
 		y = lua_tonumber(L, -3);
 		x = lua_tonumber(L, -4);
-		creatureObject = (CreatureObject*) lua_touserdata(L, -5);
+		zoneName = lua_tostring(L, -5);
     } else {
     	forceSpawn = lua_toboolean(L, -1);
     	maximumDistance = lua_tonumber(L, -2);
 		minimumDistance = lua_tonumber(L, -3);
 		y = lua_tonumber(L, -4);
 		x = lua_tonumber(L, -5);
-		creatureObject = (CreatureObject*) lua_touserdata(L, -6);
+		zoneName = lua_tostring(L, -6);
     }
 
-	if (creatureObject == NULL || creatureObject->getZone() == NULL) {
+    Zone* zone = ServerCore::getZoneServer()->getZone(zoneName);
+
+	if (zone == NULL) {
+		instance()->error("Zone is NULL in DirectorManager::getSpawnPoint");
 		return 0;
 	}
 
-	Vector3 position = generateSpawnPoint(creatureObject->getZone()->getZoneName(), x, y, minimumDistance, maximumDistance, 5.0, 20, forceSpawn);
+	bool found = false;
+	Vector3 position;
+	int retries = 50;
+
+	while (!found && retries > 0) {
+		position = generateSpawnPoint(zoneName, x, y, minimumDistance, maximumDistance, 5.0, 20, false);
+
+		if (position != Vector3(0, 0, 0))
+			found = true;
+
+		retries--;
+	}
+
+	if (!found && forceSpawn)
+		position = generateSpawnPoint(zoneName, x, y, minimumDistance, maximumDistance, 5.0, 20, true);
 
 	if (position != Vector3(0, 0, 0)) {
 		lua_newtable(L);
@@ -2466,7 +2501,7 @@ int DirectorManager::getSpawnArea(lua_State* L) {
     float maximumHeightDifference, areaSize, maximumDistance, minimumDistance, y, x;
     Zone* zone = NULL;
     bool forceSpawn = false;
-    CreatureObject* creatureObject = NULL;
+  	String zoneName;
 
     if (numberOfArguments == 8) {
     	forceSpawn = lua_toboolean(L, -1);
@@ -2476,7 +2511,7 @@ int DirectorManager::getSpawnArea(lua_State* L) {
     	minimumDistance = lua_tonumber(L, -5);
     	y = lua_tonumber(L, -6);
     	x = lua_tonumber(L, -7);
-    	creatureObject = (CreatureObject*) lua_touserdata(L, -8);
+    	zoneName = lua_tostring(L, -8);
     } else {
     	maximumHeightDifference = lua_tonumber(L, -1);
     	areaSize = lua_tonumber(L, -2);
@@ -2484,23 +2519,22 @@ int DirectorManager::getSpawnArea(lua_State* L) {
     	minimumDistance = lua_tonumber(L, -4);
     	y = lua_tonumber(L, -5);
     	x = lua_tonumber(L, -6);
-    	creatureObject = (CreatureObject*) lua_touserdata(L, -7);
+    	zoneName = lua_tostring(L, -7);
     }
 
-	if (creatureObject == NULL)
-		return 0;
+	zone = ServerCore::getZoneServer()->getZone(zoneName);
 
-	zone = creatureObject->getZone();
-
-	if (zone == NULL)
+	if (zone == NULL) {
+		instance()->error("Zone is NULL in DirectorManager::getSpawnArea");
 		return 0;
+	}
 
 	bool found = false;
 	Vector3 position;
-	int retries = 40;
+	int retries = 50;
 
 	while (!found && retries > 0) {
-		position = generateSpawnPoint(zone->getZoneName(), x, y, minimumDistance, maximumDistance, areaSize + 5.0, areaSize + 20, forceSpawn);
+		position = generateSpawnPoint(zoneName, x, y, minimumDistance, maximumDistance, areaSize + 5.0, areaSize + 20, false);
 
 		int x0 = position.getX() - areaSize;
 		int x1 = position.getX() + areaSize;
@@ -2509,6 +2543,17 @@ int DirectorManager::getSpawnArea(lua_State* L) {
 
 		found = zone->getPlanetManager()->getTerrainManager()->getHighestHeightDifference(x0, y0, x1, y1) <= maximumHeightDifference;
 		retries--;
+	}
+
+	if (!found && forceSpawn) {
+		position = generateSpawnPoint(zoneName, x, y, minimumDistance, maximumDistance, areaSize + 5.0, areaSize + 20, true);
+
+		int x0 = position.getX() - areaSize;
+		int x1 = position.getX() + areaSize;
+		int y0 = position.getY() - areaSize;
+		int y1 = position.getY() + areaSize;
+
+		found = zone->getPlanetManager()->getTerrainManager()->getHighestHeightDifference(x0, y0, x1, y1) <= maximumHeightDifference;
 	}
 
 	if (found) {
@@ -2803,4 +2848,88 @@ int DirectorManager::getQuestInfo(lua_State* L) {
 		lua_pushlightuserdata(L, questInfo);
 
 	return 1;
+}
+
+int DirectorManager::getQuestVectorMap(lua_State* L) {
+	if (checkArgumentCount(L, 1) == 1) {
+		instance()->error("incorrect number of arguments passed to DirectorManager::getQuestVectorMap");
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	String keyString = lua_tostring(L, -1);
+
+	Reference<QuestVectorMap*> questMap = instance()->getQuestVectorMap(keyString);
+
+	if (questMap == NULL)
+		lua_pushnil(L);
+	else
+		lua_pushlightuserdata(L, questMap);
+
+	return 1;
+}
+
+int DirectorManager::createQuestVectorMap(lua_State* L) {
+	if (checkArgumentCount(L, 2) == 1) {
+		instance()->error("incorrect number of arguments passed to DirectorManager::createQuestVectorMap");
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	String keyString = lua_tostring(L, -1);
+
+	Reference<QuestVectorMap*> questMap = instance()->createQuestVectorMap(keyString);
+
+	if (questMap == NULL)
+		lua_pushnil(L);
+	else
+		lua_pushlightuserdata(L, questMap);
+
+	return 1;
+}
+
+int DirectorManager::removeQuestVectorMap(lua_State* L) {
+	if (checkArgumentCount(L, 1) == 1) {
+		instance()->error("incorrect number of arguments passed to DirectorManager::removeQuestVectorMap");
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	String keyString = lua_tostring(L, -1);
+
+	instance()->removeQuestVectorMap(keyString);
+
+	return 0;
+}
+
+
+QuestVectorMap* DirectorManager::createQuestVectorMap(const String& keyString) {
+	Reference<QuestVectorMap*> questMap = questVectorMaps.get(keyString);
+
+	if (questMap == NULL) {
+		questMap = new QuestVectorMap();
+		questMap->setKey(keyString);
+		questVectorMaps.put(keyString, questMap);
+
+		ObjectManager::instance()->persistObject(questMap, 1, "questdata");
+	}
+
+	return questMap;
+}
+
+QuestVectorMap* DirectorManager::getQuestVectorMap(const String& keyString) {
+	Reference<QuestVectorMap*> questMap = questVectorMaps.get(keyString);
+
+	return questMap;
+}
+
+void DirectorManager::removeQuestVectorMap(const String& keyString) {
+	Reference<QuestVectorMap*> questMap = NULL;
+
+	questMap = questVectorMaps.get(keyString);
+
+	questVectorMaps.drop(keyString);
+
+	if (questMap != NULL)
+		ObjectManager::instance()->destroyObjectFromDatabase(questMap->_getObjectID());
 }

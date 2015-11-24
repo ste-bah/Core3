@@ -665,17 +665,19 @@ class PlayerObject extends IntangibleObject {
 	}
 	
 	public native void clearScreenPlayData(final string screenPlay);
-	
+
 	public native void activateRecovery();
 
 	public native void activateForcePowerRegen();
-	
+
 	public native void doRecovery(int latency);
-	
+
+	private native void checkForNewSpawns();
+
 	public native void disconnect(boolean closeClient, boolean doLock);
-	
+
 	public native void reload(ZoneClientSession client);
-	
+
 	public void setOffline() {
 		if (isLinkDead()) {
 			// clear LD flag
@@ -1208,8 +1210,13 @@ class PlayerObject extends IntangibleObject {
 	}
 
 	@dirty
-	public boolean isPrivileged() {
+	public boolean hasGodMode() {
 		return (adminLevel > 0 && hasAbility("admin"));
+	}
+
+	@dirty
+	public boolean isPrivileged() {
+		return (adminLevel > 6 && hasAbility("admin"));
 	}
 
 	@dirty

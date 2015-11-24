@@ -2499,7 +2499,7 @@ void AiAgentImplementation::fillAttributeList(AttributeListMessage* alm, Creatur
 		}
 	}
 
-	if (player->getPlayerObject() && player->getPlayerObject()->isPrivileged()) {
+	if (player->getPlayerObject() && player->getPlayerObject()->hasGodMode()) {
 		ManagedReference<SceneObject*> home = homeObject.get();
 
 		if (home != NULL) {
@@ -3101,6 +3101,9 @@ bool AiAgentImplementation::isAttackableBy(CreatureObject* object) {
 	}
 
 	if (object->isAiAgent()) {
+		if ((creatureBitmask & CreatureFlag::NOAIAGGRO) && !object->isPet())
+			return false;
+
 		AiAgent* ai = object->asAiAgent();
 
 		CreatureTemplate* targetTemplate = ai->getCreatureTemplate();
@@ -3148,6 +3151,11 @@ void AiAgentImplementation::sendReactionChat(int type, int state, bool force) {
 	if (reactionManager != NULL)
 		reactionManager->sendChatReaction(asAiAgent(), type, state, force);
 }
+
+void AiAgentImplementation::setMaxHAM(int type, int value, bool notifyClient) {
+		CreatureObjectImplementation::setMaxHAM(type, value, notifyClient);
+		activateRecovery();
+	}
 
 float AiAgentImplementation::getEffectiveResist() {
 	if (!isSpecialProtection(WeaponObject::ACID) && getAcid() > 0)

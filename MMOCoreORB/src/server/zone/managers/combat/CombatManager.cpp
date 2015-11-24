@@ -1813,7 +1813,7 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 		xpType = weapon->getXpType();
 
 	if (poolsToDamage & HEALTH) {
-		healthDamage = getArmorReduction(attacker, weapon, defender, damage, HEALTH, data) * damageMultiplier * data.getHealthDamageMultiplier();
+		healthDamage = getArmorReduction(attacker, weapon, defender, damage * data.getHealthDamageMultiplier(), HEALTH, data) * damageMultiplier;
 		defender->inflictDamage(attacker, CreatureAttribute::HEALTH, (int)healthDamage, true, xpType);
 
 		if (System::random(100) < ratio)
@@ -1827,7 +1827,7 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 	}
 
 	if (poolsToDamage & ACTION) {
-		actionDamage = getArmorReduction(attacker, weapon, defender, damage, ACTION, data) * damageMultiplier * data.getActionDamageMultiplier();
+		actionDamage = getArmorReduction(attacker, weapon, defender, damage * data.getActionDamageMultiplier(), ACTION, data) * damageMultiplier;
 		defender->inflictDamage(attacker, CreatureAttribute::ACTION, (int)actionDamage, true, xpType);
 
 		if (System::random(100) < ratio)
@@ -1841,7 +1841,7 @@ int CombatManager::applyDamage(TangibleObject* attacker, WeaponObject* weapon, C
 	}
 
 	if (poolsToDamage & MIND) {
-		mindDamage = getArmorReduction(attacker, weapon, defender, damage, MIND, data) * damageMultiplier * data.getMindDamageMultiplier();
+		mindDamage = getArmorReduction(attacker, weapon, defender, damage * data.getMindDamageMultiplier(), MIND, data) * damageMultiplier;
 		defender->inflictDamage(attacker, CreatureAttribute::MIND, (int)mindDamage, true, xpType);
 
 		if (System::random(100) < ratio)
@@ -2361,7 +2361,13 @@ int CombatManager::doAreaCombatAction(CreatureObject* attacker, WeaponObject* we
 	int range = data.getAreaRange();
 
 	if (data.getCommand()->isConeAction()) {
-		range = data.getRange();
+		int coneRange = data.getConeRange();
+
+		if(coneRange > -1) {
+			range = coneRange;
+		} else {
+			range = data.getRange();
+		}
 	}
 
 	if (range < 0) {
