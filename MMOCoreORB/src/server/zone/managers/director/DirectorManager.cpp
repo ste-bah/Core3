@@ -75,6 +75,7 @@
 #include "server/zone/objects/tangible/misc/FsPuzzlePack.h"
 #include "server/zone/objects/tangible/misc/CustomIngredient.h"
 #include "server/zone/objects/player/sui/LuaSuiPageData.h"
+#include "server/zone/objects/player/sui/SuiBoxPage.h"
 
 int DirectorManager::DEBUG_MODE = 0;
 int DirectorManager::ERROR_CODE = NO_ERROR;
@@ -247,6 +248,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	lua_register(luaEngine->getLuaState(), "createEventActualTime", createEventActualTime);
 	lua_register(luaEngine->getLuaState(), "createServerEvent", createServerEvent);
 	lua_register(luaEngine->getLuaState(), "hasServerEvent", hasServerEvent);
+	lua_register(luaEngine->getLuaState(), "getServerEventID", getServerEventID);
 	lua_register(luaEngine->getLuaState(), "getServerEventTimeLeft", getServerEventTimeLeft);
 	lua_register(luaEngine->getLuaState(), "createObserver", createObserver);
 	lua_register(luaEngine->getLuaState(), "dropObserver", dropObserver);
@@ -481,6 +483,8 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	Luna<LuaResourceSpawn>::Register(luaEngine->getLuaState());
 	Luna<LuaCustomIngredient>::Register(luaEngine->getLuaState());
 	Luna<LuaSuiPageData>::Register(luaEngine->getLuaState());
+	Luna<LuaQuestVectorMap>::Register(luaEngine->getLuaState());
+	Luna<LuaSuiBoxPage>::Register(luaEngine->getLuaState());
 }
 
 int DirectorManager::loadScreenPlays(Lua* luaEngine) {
@@ -1081,6 +1085,26 @@ int DirectorManager::getServerEventTimeLeft(lua_State* L) {
 		int timeLeft = origTime + timeStamp - currentTime;
 
 		lua_pushinteger(L, timeLeft);
+	}
+
+	return 1;
+}
+
+int DirectorManager::getServerEventID(lua_State* L) {
+	if (checkArgumentCount(L, 1) == 1) {
+		instance()->error("incorrect number of arguments passed to DirectorManager::getServerEventID");
+		ERROR_CODE = INCORRECT_ARGUMENTS;
+		return 0;
+	}
+
+	String eventName = lua_tostring(L, -1);
+
+	Reference<PersistentEvent*> pEvent = getServerEvent(eventName);
+
+	if (pEvent == NULL) {
+		lua_pushnil(L);
+	} else {
+		lua_pushnumber(L, pEvent->_getObjectID());
 	}
 
 	return 1;
@@ -2864,13 +2888,13 @@ int DirectorManager::getQuestVectorMap(lua_State* L) {
 	if (questMap == NULL)
 		lua_pushnil(L);
 	else
-		lua_pushlightuserdata(L, questMap);
+		lua_pushlightuserdata(L, questMap.get());
 
 	return 1;
 }
 
 int DirectorManager::createQuestVectorMap(lua_State* L) {
-	if (checkArgumentCount(L, 2) == 1) {
+	if (checkArgumentCount(L, 1) == 1) {
 		instance()->error("incorrect number of arguments passed to DirectorManager::createQuestVectorMap");
 		ERROR_CODE = INCORRECT_ARGUMENTS;
 		return 0;
