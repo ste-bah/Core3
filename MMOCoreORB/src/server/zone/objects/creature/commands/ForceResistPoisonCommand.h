@@ -23,19 +23,14 @@ public:
 		if (!checkInvalidLocomotions(creature))
 			return INVALIDLOCOMOTION;
 
+		if (creature->hasAttackDelay() || !creature->checkPostureChangeDelay())
+			return GENERALERROR;
 
 		if (isWearingArmor(creature)) {
 			return NOJEDIARMOR;
 		}
 
-
-
 		uint32 buffcrc = BuffCRC::JEDI_RESIST_POISON;
-
-		if(creature->hasBuff(buffcrc)) {
-			creature->sendSystemMessage("@jedi_spam:force_buff_present");
-			return GENERALERROR;
-		}
 
 		// Force cost of skill.
 		int forceCost = 250;

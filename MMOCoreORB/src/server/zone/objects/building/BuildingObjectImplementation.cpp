@@ -46,7 +46,7 @@
 #include "server/zone/objects/installation/components/TurretDataComponent.h"
 #include "server/zone/managers/creature/CreatureManager.h"
 #include "server/zone/objects/creature/CreatureObject.h"
-#include "server/zone/objects/creature/AiAgent.h"
+#include "server/zone/objects/creature/ai/AiAgent.h"
 
 #include "server/zone/managers/planet/MapLocationType.h"
 
@@ -725,7 +725,7 @@ void BuildingObjectImplementation::updateCellPermissionsTo(CreatureObject* creat
 void BuildingObjectImplementation::ejectObject(CreatureObject* creature) {
 	PlayerObject* ghost = creature->getPlayerObject();
 
-	if (ghost != NULL && ghost->isPrivileged())
+	if (ghost != NULL && ghost->hasGodMode())
 		return;
 
 	Vector3 ejectionPoint = getEjectionPoint();

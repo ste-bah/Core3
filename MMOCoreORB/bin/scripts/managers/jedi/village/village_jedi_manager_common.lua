@@ -40,7 +40,7 @@ function VillageJediManagerCommon.unlockBranch(pPlayer, branch)
 
 	local questStatusTemp = CreatureObject(pPlayer):getScreenPlayState("VillageUnlockScreenPlay:" .. branch)
 	if (questStatusTemp == 0) then
-		CreatureObject(pPlayer):setScreenPlayState(1, "VillageUnlockScreenPlay:" .. branch)
+		CreatureObject(pPlayer):setScreenPlayState(2, "VillageUnlockScreenPlay:" .. branch)
 	end
 
 	local stringTO = "@quest/force_sensitive/utils:" .. branch
@@ -48,6 +48,54 @@ function VillageJediManagerCommon.unlockBranch(pPlayer, branch)
 	local messageString = LuaStringIdChatParameter("@quest/force_sensitive/utils:branch_selected_unlock")
 	messageString:setTO(stringTO)
 	CreatureObject(pPlayer):sendSystemMessage(messageString:_getObject())
+end
+
+function VillageJediManagerCommon.hasUnlockedBranch(pPlayer, branch)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	return CreatureObject(pPlayer):hasScreenPlayState(2, "VillageUnlockScreenPlay:" .. branch)
+end
+
+function VillageJediManagerCommon.hasActiveQuestThisPhase(pPlayer)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	local phaseID = VillageJediManagerTownship:getCurrentPhaseID()
+	local lastActiveQuest = tonumber(getQuestStatus(SceneObject(pPlayer):getObjectID() .. ":village:lastActiveQuest"))
+
+	return phaseID == lastActiveQuest
+end
+
+function VillageJediManagerCommon.setActiveQuestThisPhase(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local phaseID = VillageJediManagerTownship:getCurrentPhaseID()
+	setQuestStatus(SceneObject(pPlayer):getObjectID() .. ":village:lastActiveQuest", phaseID)
+end
+
+function VillageJediManagerCommon.hasCompletedQuestThisPhase(pPlayer)
+	if (pPlayer == nil) then
+		return false
+	end
+
+	local phaseID = VillageJediManagerTownship:getCurrentPhaseID()
+	local lastCompletedQuest = tonumber(getQuestStatus(SceneObject(pPlayer):getObjectID() .. ":village:lastCompletedQuest"))
+
+	return phaseID == lastCompletedQuest
+end
+
+function VillageJediManagerCommon.setCompletedQuestThisPhase(pPlayer)
+	if (pPlayer == nil) then
+		return
+	end
+
+	local phaseID = VillageJediManagerTownship:getCurrentPhaseID()
+	setQuestStatus(SceneObject(pPlayer):getObjectID() .. ":village:lastCompletedQuest", phaseID)
 end
 
 return VillageJediManagerCommon

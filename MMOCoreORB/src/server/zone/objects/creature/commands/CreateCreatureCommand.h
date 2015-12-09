@@ -6,7 +6,7 @@
 #define CREATECREATURECOMMAND_H_
 
 #include "server/zone/objects/scene/SceneObject.h"
-#include "server/zone/objects/creature/AiAgent.h"
+#include "server/zone/objects/creature/ai/AiAgent.h"
 #include "server/zone/Zone.h"
 #include "server/zone/managers/creature/CreatureManager.h"
 #include "server/zone/managers/creature/AiMap.h"
@@ -97,7 +97,20 @@ public:
 				event = true;
 
 				if (tokenizer.hasMoreTokens()) {
-					level = tokenizer.getIntToken();
+					String levelToken;
+
+					tokenizer.getStringToken(levelToken);
+
+					int idx = levelToken.indexOf("-");
+
+					if (idx == -1) {
+						level = Integer::valueOf(levelToken);
+					} else {
+						int minLevel = Integer::valueOf(levelToken.subString(0, idx));
+						int maxLevel = Integer::valueOf(levelToken.subString(idx + 1));
+
+						level = minLevel + System::random(maxLevel - minLevel);
+					}
 
 					if (level > 500)
 						level = 500;

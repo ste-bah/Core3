@@ -82,8 +82,17 @@ public:
 	}
 
 	int sendMail(const String& recipient) {
+		ManagedReference<SceneObject*> scene = client->getPlayer();
+
+		if (scene == NULL)
+			return 0;
+
+		CreatureObject* player = cast<CreatureObject*>(scene.get());
+
+		if (player == NULL)
+			return 0;
+
 		if (recipient == "guild") {
-			ManagedReference<CreatureObject*> player = cast<CreatureObject*>( client->getPlayer().get().get());
 			ManagedReference<GuildObject*> guild = player->getGuildObject().get();
 
 			if (guild == NULL)
@@ -122,8 +131,6 @@ public:
 			return 0;
 		}
 		else if (recipient == "citizens") {
-
-			ManagedReference<CreatureObject*> player = cast<CreatureObject*>( client->getPlayer().get().get());
 			PlayerObject* ghost = player->getPlayerObject();
 			if (ghost == NULL)
 				return 0;
@@ -180,8 +187,13 @@ public:
 	}
 
 	int sendMailToPlayer(const String& recipientName) {
-		ManagedReference<CreatureObject*> player = cast<CreatureObject*>( client->getPlayer().get().get());
-		
+		ManagedReference<SceneObject*> scene = client->getPlayer();
+
+		if (scene == NULL)
+			return 0;
+
+		CreatureObject* player = cast<CreatureObject*>(scene.get());
+
 		if (player == NULL)
 			return 0;
 			
@@ -200,17 +212,17 @@ public:
 		if (receiver == NULL || !receiver->isPlayerCreature() || sender == NULL)
 			return 0;
 
-		bool privileged = false;
+		bool godMode = false;
 
-		if (sender->isPrivileged())
-			privileged = true;
+		if (sender->hasGodMode())
+			godMode = true;
 
 		Locker locker(receiver);
 
 		CreatureObject* receiverPlayer = cast<CreatureObject*>(receiver.get());
 		ManagedReference<PlayerObject*> ghost = receiverPlayer->getPlayerObject();
 
-		if (ghost == NULL || (ghost->isIgnoring(player->getFirstName().toLowerCase()) && !privileged)) {
+		if (ghost == NULL || (ghost->isIgnoring(player->getFirstName().toLowerCase()) && !godMode)) {
 			StringIdChatParameter err("ui_pm", "recipient_ignored_prose");
 			err.setTT(recipientName);
 			player->sendSystemMessage(err);
@@ -222,7 +234,12 @@ public:
 	}
 
 	void run() {
-		ManagedReference<CreatureObject*> player = cast<CreatureObject*>( client->getPlayer().get().get());
+		ManagedReference<SceneObject*> scene = client->getPlayer();
+
+		if (scene == NULL)
+			return;
+
+		CreatureObject* player = cast<CreatureObject*>(scene.get());
 
 		if (player == NULL)
 			return;

@@ -25,7 +25,7 @@ function GoToDathomir:onEnteredActiveArea(pCreatureObject)
 	end
 
 	QuestManager.completeQuest(pCreatureObject, QuestManager.quests.FS_VILLAGE_ELDER)
-	self:taskFinish(pCreatureObject)
+	self:finish(pCreatureObject)
 end
 
 -- Event handler for the onSuccessfulSpawn.
@@ -37,6 +37,15 @@ function GoToDathomir:onSuccessfulSpawn(pCreatureObject)
 	end
 
 	QuestManager.activateQuest(pCreatureObject, QuestManager.quests.FS_VILLAGE_ELDER)
+	CreatureObject(pCreatureObject):sendSystemMessage("@quest/force_sensitive/intro:force_sensitive")
+	
+	ObjectManager.withCreaturePlayerObject(pCreatureObject, function(playerObject)
+		if (not playerObject:isJedi()) then
+			playerObject:setJediState(1)
+		end
+	end)
+
+	awardSkill(pCreatureObject, "force_title_jedi_novice")
 end
 
 return GoToDathomir

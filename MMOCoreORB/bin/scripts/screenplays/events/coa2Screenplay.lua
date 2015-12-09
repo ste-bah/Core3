@@ -142,7 +142,7 @@ function Coa2Screenplay:spawnNpc(pSource, template, minDist, maxDist, force)
 	local sourceY = SceneObject(pSource):getWorldPositionY()
 	local planet = SceneObject(pSource):getZoneName()
 
-	local spawnPoint = getSpawnPoint(pSource, sourceX, sourceY, minDist, maxDist, force)
+	local spawnPoint = getSpawnPoint(planet, sourceX, sourceY, minDist, maxDist, force)
 
 	if spawnPoint == nil then
 		return nil
@@ -158,7 +158,7 @@ function Coa2Screenplay:spawnObject(pSource, template, minDist, maxDist)
 	local sourceY = SceneObject(pSource):getWorldPositionY()
 	local planet = SceneObject(pSource):getZoneName()
 
-	local spawnPoint = getSpawnPoint(pSource, sourceX, sourceY, minDist, maxDist)
+	local spawnPoint = getSpawnPoint(planet, sourceX, sourceY, minDist, maxDist)
 
 	if spawnPoint == nil then
 		return nil
@@ -227,6 +227,8 @@ function Coa2Screenplay:startMissionOne(pPlayer, conversingNPC, faction)
 	writeData(playerID .. ":coaCoordinatorID", SceneObject(conversingNPC):getObjectID())
 	writeData(playerID .. ":coaWayID", wayID)
 	writeScreenPlayData(pPlayer, faction .. "_coa2", "state", 2)
+
+	SceneObject(pPlayer):addPendingTask(1800000, "Coa2Screenplay", "timeoutMission")
 end
 
 function Coa2Screenplay:progressMissionOne(pPlayer, faction)
@@ -279,8 +281,6 @@ function Coa2Screenplay:progressMissionOne(pPlayer, faction)
 
 	writeData(playerID .. ":coaWayID", wayID)
 	writeScreenPlayData(pPlayer, faction .. "_coa2", "state", 3)
-
-	SceneObject(pPlayer):addPendingTask(1800000, "Coa2Screenplay", "timeoutMission")
 end
 
 function Coa2Screenplay:finishMissionOne(pPlayer, faction)

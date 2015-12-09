@@ -11,7 +11,7 @@ nightsister_protector = Creature:new {
 	baseHAM = 50000,
 	baseHAMmax = 61000,
 	armor = 2,
-	resists = {55,100,55,100,100,100,100,100,-1},
+	resists = {15,200,15,200,200,200,200,200,-1},
 	meatType = "",
 	meatAmount = 0,
 	hideType = "",
@@ -45,7 +45,7 @@ nightsister_protector = Creature:new {
 	},
 	weapons = {"mixed_force_weapons"},
 	conversationTemplate = "",
-	attacks = merge(brawlermaster,pikemanmaster,forcewielder)
+	attacks = merge(fencermaster,swordsmanmaster,tkamid,brawlermaster,pikemanmaster,forcewielder)
 }
 
 CreatureTemplates:addCreatureTemplate(nightsister_protector, "nightsister_protector")

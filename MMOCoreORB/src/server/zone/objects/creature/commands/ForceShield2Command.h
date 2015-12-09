@@ -24,16 +24,11 @@ public:
 		if (!checkInvalidLocomotions(creature))
 			return INVALIDLOCOMOTION;
 
+		if (creature->hasAttackDelay() || !creature->checkPostureChangeDelay())
+			return GENERALERROR;
+
 		if (isWearingArmor(creature)) {
 			return NOJEDIARMOR;
-		}
-
-		uint32 buffcrc1 = BuffCRC::JEDI_FORCE_SHIELD_1;
-		uint32 buffcrc2 = BuffCRC::JEDI_FORCE_SHIELD_2;
-
-		if(creature->hasBuff(buffcrc1) || creature->hasBuff(buffcrc2)) {
-			creature->sendSystemMessage("@jedi_spam:force_buff_present");
-			return GENERALERROR;
 		}
 
 		// Force cost of skill.
@@ -46,6 +41,13 @@ public:
 			creature->sendSystemMessage("@jedi_spam:no_force_power"); //"You do not have enough Force Power to peform that action.
 
 			return GENERALERROR;
+		}
+
+		uint32 buffcrc1 = BuffCRC::JEDI_FORCE_SHIELD_1;
+		uint32 buffcrc2 = BuffCRC::JEDI_FORCE_SHIELD_2;
+
+		if (creature->hasBuff(buffcrc1)) {
+			creature->removeBuff(buffcrc1);
 		}
 
 		playerObject->setForcePower(playerObject->getForcePower() - forceCost);

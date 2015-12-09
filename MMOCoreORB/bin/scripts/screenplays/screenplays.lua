@@ -4,6 +4,15 @@ require("themeParkLogic")
 require("corvetteTicketGiverLogic")
 require("corvetteTicketTakerLogic")
 
+-- SUI
+--require("sui.SuiSample")
+require("sui.SuiTemplate")
+require("sui.SuiListBox")
+require("sui.SuiMessageBox")
+require("sui.SuiInputBox")
+require("sui.SuiQuestPopup")
+require("sui.SuiRadiationSensor")
+
 -- Theme parks
 includeFile("themepark/conversations/goru_conv_handler.lua")
 includeFile("themepark/conversations/mission_giver_conv_handler.lua")
@@ -20,6 +29,9 @@ includeFile("themepark/jabba/themeParkJabba.lua")
 includeFile("themepark/valarian/themeParkValarian.lua")
 includeFile("themepark/marauder/themeParkMarauder.lua")
 
+-- Staff tools
+includeFile("tools/tools.lua")
+includeFile("tools/shuttle_dropoff.lua")
 
 -- GCW
 includeFile("gcw/newsnet.lua")
@@ -69,11 +81,15 @@ includeFile("dungeon/corellian_corvette/lt_lance.lua")
 -- Village
 includeFile("village/convos/fs_experience_converter_conv_handler.lua")
 includeFile("village/convos/elder_conv_handler.lua")
-includeFile("village/convos/fs_village_convo6_m_conv_handler.lua")
-includeFile("village/convos/fs_village_convo7_conv_handler.lua")
+includeFile("village/convos/fs_surveyor_conv_handler.lua")
+includeFile("village/convos/fs_village_generic_conv_handler.lua")
 includeFile("village/convos/phase1/sarguillo_phase1_conv_handler.lua")
 includeFile("village/convos/phase1/sivarra_phase1_conv_handler.lua")
 includeFile("village/convos/phase1/med_droid_phase1_conv_handler.lua")
+includeFile("village/convos/phase1/whip_phase1_conv_handler.lua")
+includeFile("village/convos/phase1/fs_reflex1_prisoner_conv_handler.lua")
+includeFile("village/convos/phase2/whip_phase2_conv_handler.lua")
+includeFile("village/convos/phase2/dageerin_phase2_conv_handler.lua")
 
 -- Events
 includeFile("events/conversations/bestine_artist_conv_handler.lua")
@@ -153,11 +169,13 @@ includeFile("tasks/naboo/arven_wendik.lua")
 includeFile("tasks/naboo/boss_nass.lua")
 includeFile("tasks/naboo/captain_gavyn_sykes.lua")
 includeFile("tasks/naboo/huff_zinga.lua")
+includeFile("tasks/naboo/kima_nazith.lua")
 includeFile("tasks/naboo/lareen_dantara.lua")
 includeFile("tasks/naboo/leb_slesher.lua")
 includeFile("tasks/naboo/lergo_brazee.lua")
 includeFile("tasks/naboo/librarian.lua")
 includeFile("tasks/naboo/mullud_bombo.lua")
+includeFile("tasks/naboo/pooja_naberrie.lua")
 includeFile("tasks/naboo/rovim_minnoni.lua")
 includeFile("tasks/naboo/tamvar_senzen.lua")
 includeFile("tasks/naboo/vana_sage.lua")
@@ -333,11 +351,13 @@ includeFile("poi/rori_poacher_vs_creature_battle.lua")
 includeFile("poi/rori_rebel_military_base.lua")
 includeFile("poi/talus_corsec_vs_flail_battle.lua")
 includeFile("poi/talus_lost_village_of_durbin.lua")
+includeFile("poi/talus_imperial_vs_rebel_battle.lua")
 includeFile("poi/tatooine_ancient_krayt_dragon_skeleton.lua")
 includeFile("poi/tatooine_ben_kenobis_house.lua")
 includeFile("poi/tatooine_darklighters_estate.lua")
 includeFile("poi/tatooine_fort_tusken.lua")
 includeFile("poi/tatooine_imperial_detachment_hq.lua")
+includeFile("poi/tatooine_imperial_oasis_base.lua")
 includeFile("poi/tatooine_jabbas_palace_mobs.lua")
 includeFile("poi/tatooine_jawa_traders.lua")
 includeFile("poi/tatooine_krayt_graveyard.lua")
@@ -374,8 +394,8 @@ includeFile("treasure_map/TreasureMapMenuComponent.lua")
 --Race Tracks
 includeFile("racetracks/racetracks.lua")
 
--- Space
+--Space
 includeFile("space/space_chassis_dealer_conv_handler.lua")
 
--- Record Keepers
+--Record Keepers
 includeFile("record_keepers/record_keepers.lua")

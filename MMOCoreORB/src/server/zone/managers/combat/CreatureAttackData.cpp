@@ -38,7 +38,9 @@ CreatureAttackData::CreatureAttackData(const CreatureAttackData& data) {
 	healthDamageMultiplier = data.healthDamageMultiplier;
 	actionDamageMultiplier = data.actionDamageMultiplier;
 	mindDamageMultiplier = data.mindDamageMultiplier;
-	damage = data.damage;
+	minDamage = data.minDamage;
+	maxDamage = data.maxDamage;
+	damageType = data.damageType;
 	accuracyBonus = data.accuracyBonus;
 	speedMultiplier = data.speedMultiplier;
 	poolsToDamage = data.poolsToDamage;
@@ -53,6 +55,7 @@ CreatureAttackData::CreatureAttackData(const CreatureAttackData& data) {
 
 	range = data.range;
 	coneAngle = data.coneAngle;
+	coneRange = data.coneRange;
 	areaRange = data.areaRange;
 
 	animationCRC = data.animationCRC;
@@ -67,7 +70,9 @@ CreatureAttackData::CreatureAttackData(const CreatureAttackData& data) {
 
 void CreatureAttackData::fillFromBase() {
 	damageMultiplier = baseCommand->getDamageMultiplier();
-	damage = baseCommand->getDamage();
+	minDamage = baseCommand->getMinDamage();
+	maxDamage = baseCommand->getMaxDamage();
+	damageType = baseCommand->getDamageType();
 	accuracyBonus = baseCommand->getAccuracyBonus();
 	speedMultiplier = baseCommand->getSpeedMultiplier();
 	healthCostMultiplier = baseCommand->getHealthCostMultiplier();
@@ -78,6 +83,7 @@ void CreatureAttackData::fillFromBase() {
 	stateEffects = baseCommand->getStateEffects();
 	dotEffects = baseCommand->getDotEffects();
 	coneAngle = baseCommand->getConeAngle();
+	coneRange = baseCommand->getConeRange();
 	range = baseCommand->getRange();
 	areaRange = baseCommand->getAreaRange();
 	animationCRC = baseCommand->getAnimationCRC();
@@ -95,8 +101,14 @@ void CreatureAttackData::fillFromBase() {
 void CreatureAttackData::setVariable(const String& var, const String& val) {
 	uint32 crc = var.hashCode();
 	switch(crc) {
-	case 0x9E64852D: // STRING_HASHCODE("damage"):
-		damage = Float::valueOf(val);
+	case 0x480C4BA4: // STRING_HASHCODE("minDamage"):
+		minDamage = Float::valueOf(val);
+		break;
+	case 0xDDC00C87: // STRING_HASHCODE("maxDamage"):
+		maxDamage = Float::valueOf(val);
+		break;
+	case 0x6980E997: // STRING_HASHCODE("damageType"):
+		damageType = Integer::valueOf(val);
 		break;
 	case 0xA82FB287: // STRING_HASHCODE("damageMultiplier"):
 		damageMultiplier = Float::valueOf(val);

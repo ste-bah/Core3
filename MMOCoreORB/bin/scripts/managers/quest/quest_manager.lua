@@ -9,6 +9,10 @@ local QUEST_COMPLETED = 1
 -- @param pCreatureObject pointer to the creature object of the player.
 -- @param quest the index number for the quest to activate.
 function QuestManager.activateQuest(pCreatureObject, quest)
+	if (QuestManager.shouldSendSystemMessage(pCreatureObject, quest)) then
+		CreatureObject(pCreatureObject):sendSystemMessage("@quest/quests:quest_journal_updated")
+	end
+
 	ObjectManager.withCreaturePlayerObject(pCreatureObject, function(playerObject)
 		playerObject:setActiveQuestsBit(quest, QUEST_ACTIVE)
 	end)
@@ -27,6 +31,10 @@ end
 -- @param pCreatureObject pointer to the creature object of the player.
 -- @param quest the index number for the quest to complete.
 function QuestManager.completeQuest(pCreatureObject, quest)
+	if (QuestManager.shouldSendSystemMessage(pCreatureObject, quest)) then
+		CreatureObject(pCreatureObject):sendSystemMessage("@quest/quests:task_complete")
+	end
+
 	ObjectManager.withCreaturePlayerObject(pCreatureObject, function(playerObject)
 		playerObject:clearActiveQuestsBit(quest)
 		playerObject:setCompletedQuestsBit(quest, QUEST_ACTIVE)
@@ -52,23 +60,41 @@ function QuestManager.resetQuest(pCreatureObject, quest)
 	end)
 end
 
+function QuestManager.failQuest(pCreatureObject, quest)
+	if (QuestManager.shouldSendSystemMessage(pCreatureObject, quest)) then
+		CreatureObject(pCreatureObject):sendSystemMessage("@quest/quests:task_failure")
+	end
+
+	QuestManager.resetQuest(pCreatureObject, quest)
+end
+
+function QuestManager.shouldSendSystemMessage(pCreatureObject, quest)
+	local pQuest = getQuestInfo(quest)
+
+	if (pQuest == nil) then
+		return false
+	end
+
+	return LuaQuestInfo(pQuest):shouldSendSystemMessage()
+end
+
 function QuestManager.getQuestName(questID)
 	local pQuest = getQuestInfo(questID)
 
 	if (pQuest == nil) then
 		return ""
 	end
-	
+
 	return LuaQuestInfo(pQuest):getQuestName()
 end
 
 function QuestManager.getCurrentQuestID(pPlayer)
 	local id = tonumber(readScreenPlayData(pPlayer, "VillageJediProgression", "CurrentQuestID"))
-	
+
 	if (id == nil) then
 		id = -1
 	end
-	
+
 	return id
 end
 
@@ -166,7 +192,7 @@ QuestManager.quests.DO_NOT_USE_BAD_SLOT 			= 76
 QuestManager.quests.FS_GOTO_DATH 					= 77
 QuestManager.quests.FS_VILLAGE_ELDER 				= 78
 QuestManager.quests.OLD_MAN_FORCE_CRYSTAL 			= 79
-QuestManager.quests.FS_DATH_wOMAN 					= 80
+QuestManager.quests.FS_DATH_WOMAN 					= 80
 QuestManager.quests.FS_PATROL_QUEST_1 				= 81
 QuestManager.quests.FS_PATROL_QUEST_2 				= 82
 QuestManager.quests.FS_PATROL_QUEST_3 				= 83

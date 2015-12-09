@@ -30,8 +30,11 @@ function villageSarguilloPhase1ConvoHandler:getInitialScreen(pPlayer, pNpc, pCon
 		return convoTemplate:getScreen("intro_firstsetinprogress")
 	elseif (currentQuestID >= 91 and currentQuestID <= 100) then
 		return convoTemplate:getScreen("intro_secondsetinprogress")
+	elseif (VillageJediManagerCommon.hasActiveQuestThisPhase(pPlayer)) then
+		return convoTemplate:getScreen("intro_hasotherquest")
+	else
+		return convoTemplate:getScreen("intro")
 	end
-	return convoTemplate:getScreen("intro")
 end
 
 function villageSarguilloPhase1ConvoHandler:runScreenHandlers(conversationTemplate, conversingPlayer, conversingNPC, selectedOption, conversationScreen)
@@ -47,10 +50,15 @@ function villageSarguilloPhase1ConvoHandler:runScreenHandlers(conversationTempla
 	local reachedAllWaypoints = readData(playerID .. ":patrolWaypointsReached") == 8
 
 	if (screenID == "all_eight_points") then
+		VillageJediManagerCommon.setActiveQuestThisPhase(conversingPlayer)
 		QuestManager.setCurrentQuestID(conversingPlayer, QuestManager.quests.FS_PATROL_QUEST_1)
 		QuestManager.activateQuest(conversingPlayer, QuestManager.quests.FS_PATROL_QUEST_START)
 		QuestManager.activateQuest(conversingPlayer, QuestManager.quests.FS_PATROL_QUEST_1)
 		QuestManager.setStoredVillageValue(conversingPlayer, "FsPatrolCompletedCount", 0)
+		FsPatrol:start(conversingPlayer)
+	elseif (screenID == "you_know_the_drill") then
+		QuestManager.setCurrentQuestID(conversingPlayer, QuestManager.quests.FS_PATROL_QUEST_11)
+		QuestManager.activateQuest(conversingPlayer, QuestManager.quests.FS_PATROL_QUEST_11)
 		FsPatrol:start(conversingPlayer)
 	elseif (screenID == "intro_firstsetinprogress") then
 		if (reachedAllWaypoints and completedLastPoint and not failedPatrol) then
@@ -88,6 +96,7 @@ function villageSarguilloPhase1ConvoHandler:runScreenHandlers(conversationTempla
 		QuestManager.completeQuest(conversingPlayer, QuestManager.quests.FS_PATROL_QUEST_20)
 		QuestManager.completeQuest(conversingPlayer, QuestManager.quests.FS_PATROL_QUEST_FINISH)
 		QuestManager.setCurrentQuestID(conversingPlayer, 0)
+		VillageJediManagerCommon.setCompletedQuestThisPhase(conversingPlayer)
 
 		local pInventory = SceneObject(conversingPlayer):getSlottedObject("inventory")
 

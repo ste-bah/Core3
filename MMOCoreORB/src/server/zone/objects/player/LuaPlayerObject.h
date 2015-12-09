@@ -61,12 +61,13 @@ public:
 	int addEventPerk(lua_State* L);
 	int getEventPerkCount(lua_State* L);
 	int getCharacterAgeInDays(lua_State* L);
-	int isPrivileged(lua_State* L);
+	int hasGodMode(lua_State* L);
 	int closeSuiWindowType(lua_State* L);
 	int getExperienceList(lua_State* L);
 	int getExperienceCap(lua_State* L);
 	int activateQuest(lua_State* L);
 	int canActivateQuest(lua_State* L);
+	int getSuiBox(lua_State* L);
 
 private:
 	// The pointer to the 'real object' defined in object.cc

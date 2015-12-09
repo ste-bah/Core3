@@ -27,7 +27,9 @@
 
 class CombatQueueCommand : public QueueCommand {
 protected:
-	float damage;
+	float minDamage;
+	float maxDamage;
+	int damageType;
 	float damageMultiplier;
 	int accuracyBonus;
 	float speedMultiplier;
@@ -40,6 +42,7 @@ protected:
 	float forceCostMultiplier;
 	float forceCost;
 
+	int coneRange;
 	int range;
 
 	String accuracySkillMod;
@@ -66,7 +69,9 @@ public:
 
 	CombatQueueCommand(const String& name, ZoneProcessServer* server) : QueueCommand(name, server) {
 
-		damage = 0;
+		minDamage = 0;
+		maxDamage = 0;
+		damageType = 0;
 		damageMultiplier = 1;
 		accuracyBonus = 0;
 		speedMultiplier = 1;
@@ -82,6 +87,8 @@ public:
 		poolsToDamage = CombatManager::RANDOM;
 
 		coneAngle = 30;
+
+		coneRange = -1;
 
 		//for weapon set -1
 		range = -1;
@@ -246,6 +253,10 @@ public:
 		return mindCostMultiplier;
 	}
 
+	inline int getConeRange() const {
+		return coneRange;
+	}
+
 	inline int getRange() const {
 		return range;
 	}
@@ -402,12 +413,28 @@ public:
 		this->dotEffects = dotEffects;
 	}
 
-	inline float getDamage() const {
-		return damage;
+	inline float getMinDamage() const {
+		return minDamage;
 	}
 
-	void setDamage(float dm) {
-		this->damage = dm;
+	void setMinDamage(float dm) {
+		this->minDamage = dm;
+	}
+
+	inline float getMaxDamage() const {
+		return maxDamage;
+	}
+
+	void setMaxDamage(float dm) {
+		this->maxDamage = dm;
+	}
+
+	inline int getDamageType() const {
+		return damageType;
+	}
+
+	void setDamageType(float dm) {
+		this->damageType = dm;
 	}
 
 	void addDotEffect(DotEffect dotEffect) {
@@ -416,6 +443,10 @@ public:
 
 	DotEffect getDotEffect(uint64 type) {
 		return dotEffects.get(type);
+	}
+
+	void setConeRange(int i) {
+		this->coneRange = i;
 	}
 
 	void setRange(int i) {

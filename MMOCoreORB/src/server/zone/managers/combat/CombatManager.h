@@ -10,7 +10,7 @@
 
 #include "engine/engine.h"
 #include "server/zone/objects/creature/CreatureObject.h"
-#include "server/zone/objects/creature/NonPlayerCreatureObject.h"
+#include "server/zone/objects/creature/ai/NonPlayerCreatureObject.h"
 #include "server/zone/objects/creature/VehicleObject.h"
 #include "server/zone/objects/tangible/weapon/WeaponObject.h"
 #include "server/zone/objects/tangible/wearables/ArmorObject.h"
@@ -235,12 +235,12 @@ protected:
 
 	int doTargetCombatAction(TangibleObject* attacker, WeaponObject* weapon, CreatureObject* defenderObject, const CreatureAttackData& data);
 	int doTargetCombatAction(TangibleObject* attacker, WeaponObject* weapon, TangibleObject* tano, const CreatureAttackData& data);
-	int getArmorObjectReduction(WeaponObject* weapon, ArmorObject* armor);
 	int getArmorReduction(TangibleObject* attacker, WeaponObject* weapon, CreatureObject* defender, float damage, int poolsToDamage, const CreatureAttackData& data);
-	float getArmorPiercing(TangibleObject* defender, WeaponObject* weapon);
-	int getArmorNpcReduction(AiAgent* defender, WeaponObject* weapon);
-	int getArmorVehicleReduction(VehicleObject* defender, WeaponObject* weapon);
-	int getArmorTurretReduction(CreatureObject* attacker, TangibleObject* defender, WeaponObject* weapon);
+	float getArmorPiercing(TangibleObject* defender, int armorPiercing);
+	int getArmorObjectReduction(ArmorObject* armor, int damageType);
+	int getArmorNpcReduction(AiAgent* defender, int damageType);
+	int getArmorVehicleReduction(VehicleObject* defender, int damageType);
+	int getArmorTurretReduction(CreatureObject* attacker, TangibleObject* defender, int damageType);
 
 	ArmorObject* getHealthArmor( CreatureObject* defender);
 	ArmorObject* getActionArmor(CreatureObject* defender);

@@ -3,8 +3,8 @@
 #define PETTHROWCOMMAND_H_
 
 #include "server/zone/objects/creature/commands/QueueCommand.h"
-#include "server/zone/objects/creature/AiAgent.h"
-#include "server/zone/objects/creature/DroidObject.h"
+#include "server/zone/objects/creature/ai/AiAgent.h"
+#include "server/zone/objects/creature/ai/DroidObject.h"
 #include "server/zone/objects/creature/CreatureObject.h"
 #include "server/zone/objects/tangible/components/droid/DroidTrapModuleDataComponent.h"
 #include "server/zone/templates/tangible/TrapTemplate.h"
@@ -49,7 +49,7 @@ public:
 
 		// trap must be a trap
 		ManagedReference<TangibleObject*> trap = module->getTrap();
-		if (!trap->isTrapObject()) {
+		if (trap == NULL || !trap->isTrapObject()) {
 			droid->showFlyText("npc_reaction/flytext","confused", 204, 0, 0);  // "?!!?!?!"
 			return GENERALERROR;
 		}

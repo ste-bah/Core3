@@ -19,7 +19,7 @@
 #include "server/zone/packets/tangible/UpdatePVPStatusMessage.h"
 #include "server/zone/objects/area/ActiveArea.h"
 #include "server/zone/objects/creature/CreatureObject.h"
-#include "server/zone/objects/creature/AiAgent.h"
+#include "server/zone/objects/creature/ai/AiAgent.h"
 #include "server/zone/managers/crafting/CraftingManager.h"
 #include "server/zone/objects/tangible/component/Component.h"
 #include "server/zone/objects/factorycrate/FactoryCrate.h"
@@ -172,6 +172,10 @@ void TangibleObjectImplementation::setPvpStatusBitmask(uint32 bitmask, bool noti
 	broadcastPvpStatusBitmask();
 }
 
+void TangibleObjectImplementation::setIsCraftedEnhancedItem(bool value) {
+	isCraftedEnhancedItem = value;
+}
+
 void TangibleObjectImplementation::setPvpStatusBit(uint32 pvpStatus, bool notifyClient) {
 	if (!(pvpStatusBitmask & pvpStatus)) {
 		setPvpStatusBitmask(pvpStatusBitmask | pvpStatus, notifyClient);
@@ -268,29 +272,25 @@ void TangibleObjectImplementation::setDefender(SceneObject* defender) {
 	int i = 0;
 	for (; i < defenderList.size(); i++) {
 		if (defenderList.get(i) == defender) {
-			if (i == 0)
-				return;
-
-			temp = defenderList.get(0);
-
-			TangibleObjectDeltaMessage6* dtano6 = new TangibleObjectDeltaMessage6(asTangibleObject());
-			dtano6->startUpdate(0x01);
-
-			defenderList.set(0, defender, dtano6, 2);
-			defenderList.set(i, temp, dtano6, 0);
-
-			dtano6->close();
-
-			broadcastMessage(dtano6, true);
-
+			if (i == 0) return;
 			break;
 		}
 	}
 
 	if (i == defenderList.size())
 		addDefender(defender);
-	else
-		setCombatState();
+
+	temp = defenderList.get(0);
+	
+	TangibleObjectDeltaMessage6* dtano6 = new TangibleObjectDeltaMessage6(asTangibleObject());
+	dtano6->startUpdate(0x01);
+
+	defenderList.set(0, defender, dtano6, 2);
+	defenderList.set(i, temp, dtano6, 0);
+
+	dtano6->close();
+
+	broadcastMessage(dtano6, true);
 }
 
 void TangibleObjectImplementation::addDefender(SceneObject* defender) {
@@ -705,8 +705,14 @@ Reference<FactoryCrate*> TangibleObjectImplementation::createFactoryCrate(bool i
 			return NULL;
 		}
 	} else {
-
 		ManagedReference<TangibleObject*> protoclone = cast<TangibleObject*>( objectManager->cloneObject(asTangibleObject()));
+		/*
+		* I really didn't want to do this this way, but I had no other way of making the text on the crate be white
+		* if the item it contained has yellow magic bit set. So I stripped the yellow magic bit off when the item is placed inside
+		* the crate here, and added it back when the item is extracted from the crate if it is a crafted enhanced item.
+		*/
+		if(protoclone->getIsCraftedEnhancedItem())
+			protoclone->removeMagicBit(false);
 
 		if (protoclone == NULL) {
 			crate->destroyObjectFromDatabase(true);

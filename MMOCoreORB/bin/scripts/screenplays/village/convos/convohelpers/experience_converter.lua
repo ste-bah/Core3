@@ -5,7 +5,7 @@ require("screenplays.screenplay")
 
 -- The valid screenPlayState val's for branch unlock are as follows:
 -- 0: Does NOT qualify for branch unlock.
--- 1: Qualifies for branch unlock, not unlocked.
+-- 1: Qualifies for branch unlock, not unlocked. NOTE: This only applies to Hologrinder boxes.
 -- 2: Branch Unlocked.
 -- 4: Branch Mastered.
 
@@ -136,7 +136,7 @@ function ExperienceConverter:getNextUnlockableBranches(pCreatureObject)
 
 
 	foreach(unlockableFSBranches, function(theTable)
-		local checkTrees = CreatureObject(pCreatureObject):getScreenPlayState("VillageUnlockScreenPlay:" .. theTable.topBox)
+		local checkTrees = CreatureObject(pCreatureObject):getScreenPlayState("VillageFreeUnlockScreenPlay:" .. string.sub(theTable.topBox, 0, (string.len(theTable.topBox) - 3)))
 		if (checkTrees == 1) then
 			table.insert(trees, theTable.unlockString)
 		end
@@ -176,9 +176,9 @@ function ExperienceConverter:getExperienceForConversion(pCreature, theType)
 	if (theType == 0 or theType == 3) then
 		inputTable = XpCombat
 	elseif (theType == 1) then
-		inputTable = XpSenses
-	elseif (theType == 2) then
 		inputTable = XpCrafting
+	elseif (theType == 2) then
+		inputTable = XpSenses
 	end
 
 	local expList = {}
@@ -210,9 +210,9 @@ function ExperienceConverter:getExperienceRatio(experienceType, theType)
 	if (theType == 0 or theType == 3) then
 		inputTable = XpCombat
 	elseif (theType == 1) then
-		inputTable = XpSenses
-	elseif (theType == 2) then
 		inputTable = XpCrafting
+	elseif (theType == 2) then
+		inputTable = XpSenses
 	end
 
 
