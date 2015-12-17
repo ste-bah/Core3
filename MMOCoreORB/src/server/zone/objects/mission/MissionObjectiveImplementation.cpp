@@ -168,76 +168,19 @@ void MissionObjectiveImplementation::awardReward() {
 
 	ManagedReference<CreatureObject*> owner = getPlayerOwner();
 
-	ManagedReference<GroupObject*> group = owner->getGroup();
-
-	int playerCount = 1;
-
-	if (group != NULL) {
-		Locker lockerGroup(group, _this.getReferenceUnsafeStaticCast());
-
-		playerCount = group->getNumberOfPlayerMembers();
-
-		for(int i = 0; i < group->getGroupSize(); i++) {
-			Reference<CreatureObject*> groupMember = group->getGroupMember(i)->isPlayerCreature() ? (group->getGroupMember(i)).castTo<CreatureObject*>() : NULL;
-
-			if (groupMember != NULL) {
-				//Play mission complete sound.
-				groupMember->sendMessage(pmm->clone());
-
-				if (groupMember->getWorldPosition().distanceTo(missionEndPoint) < 128) {
-					players.add(groupMember);
-				}
-			}
-		}
-
-		delete pmm;
-	} else {
-		//Play mission complete sound.
-		owner->sendMessage(pmm);
-		players.add(owner);
-	}
-
-	if (players.size() == 0) {
-		players.add(owner);
-	}
+	//Play mission complete sound.
+	owner->sendMessage(pmm);
 
 	ManagedReference<MissionObject* > mission = this->mission.get();
 
-	int divisor = mission->getRewardCreditsDivisor();
-	bool expanded = false;
+	StringIdChatParameter stringId("mission/mission_generic", "success_w_amount");
+	stringId.setDI(mission->getRewardCredits());
+	owner->sendSystemMessage(stringId);
 
-	if (playerCount > divisor) {
-		divisor = playerCount;
-		expanded = true;
-	}
+	Locker lockerPl(owner, _this.getReferenceUnsafeStaticCast());
+	owner->addBankCredits(mission->getRewardCredits(), true);
 
-	if (playerCount > players.size()) {
-		owner->sendSystemMessage("@mission/mission_generic:group_too_far"); // Mission Alert! Some group members are too far away from the group to receive their reward and and are not eligible for reward.
-	}
-
-	int dividedReward = mission->getRewardCredits() / divisor;
-
-	for (int i = 0; i < players.size(); i++) {
-		ManagedReference<CreatureObject*> player = players.get(i);
-		StringIdChatParameter stringId("mission/mission_generic", "success_w_amount");
-		stringId.setDI(dividedReward);
-		player->sendSystemMessage(stringId);
-
-		Locker lockerPl(player, _this.getReferenceUnsafeStaticCast());
-		player->addBankCredits(dividedReward, true);
-	}
-
-	if (group != NULL) {
-		if (expanded) {
-			owner->sendSystemMessage("@mission/mission_generic:group_expanded"); // Group Mission Success! Reward credits have been transmitted to the bank account of all group members in the immediate area. They have been recalculated to reflect the newly added members.
-		} else {
-			owner->sendSystemMessage("@mission/mission_generic:group_success"); // Group Mission Success! Reward credits have been transmitted to the bank account of all group members in the immediate area.
-		}
-	}
-
-	int creditsDistributed = dividedReward * players.size();
-
-	StatisticsManager::instance()->completeMission(mission->getTypeCRC(), creditsDistributed);
+	StatisticsManager::instance()->completeMission(mission->getTypeCRC(), mission->getRewardCredits());
 }
 
 Vector3 MissionObjectiveImplementation::getEndPosition() {
