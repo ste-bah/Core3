@@ -73,19 +73,19 @@ OldCityGracePeriod = 4320
 EnableCityWarn = false
 
 --The number of citizens required to achieve each city rank. (Outpost, Village, Township, City, Metropolis)
-CitizensPerRank = {2, 4, 6, 8, 10}
+CitizensPerRank = {1, 1, 1, 1, 1}
 --CitizensPerRank = {10, 20, 35, 55, 85}
 
 --The radius in meters of the city at each city rank. (Outpost, Village, Township, City, Metropolis)
-RadiusPerRank = {150, 200, 300, 400, 450}
+RadiusPerRank = {150, 200, 300, 400, 600}
 
 -- Maximum for each rank.  ex. rank 1 = DecorationsPerRank * 1, rank 5 = DecorationsPerRank * 5
 DecorationsPerRank = 10
-TrainersPerRank = 3
-MissionTerminalsPerRank = 3
+TrainersPerRank = 10
+MissionTerminalsPerRank = 5
 
 -- Amount to discount city maintenance  float.  1 = 100%, .75 =75%, .5=50% etc
-maintenanceDiscount = 1.0
+maintenanceDiscount = .5
 
 --[[
 	CITIES ALLOWED PER PLANET
@@ -203,7 +203,7 @@ CitySpecializations = {
 		name = "@city/city:city_spec_doctor",
 		cost = 80000,
 		skillMods = {
-			{"private_medical_rating", 10}
+			{"private_medical_rating", 25}
 		}
 	},
 	{--Clone Lab
@@ -217,21 +217,21 @@ CitySpecializations = {
 		name = "@city/city:city_spec_research",
 		cost = 125000,
 		skillMods = {
-			{"private_spec_experimentation", 15}
+			{"private_spec_experimentation", 25}
 		}
 	},
 	{--Improved Job Market
 		name = "@city/city:city_spec_missions",
 		cost = 80000,
 		skillMods = {
-			{"private_spec_missions", 15}
+			{"private_spec_missions", 35}
 		}
 	},
 	{--Entertainment District
 		name = "@city/city:city_spec_entertainer",
 		cost = 80000,
 		skillMods = {
-			{"private_spec_entertainer", 10}
+			{"private_spec_entertainer", 25}
 		}
 	},
 	{--Stronghold

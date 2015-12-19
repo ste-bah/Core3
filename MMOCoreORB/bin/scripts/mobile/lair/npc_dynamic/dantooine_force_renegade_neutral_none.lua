@@ -1,6 +1,6 @@
 dantooine_force_renegade_neutral_none = Lair:new {
 	mobiles = {{"force_sensitive_renegade",1},{"forsaken_force_drifter",1}},
-	spawnLimit = 3,
+	spawnLimit = 5,
 	buildingsVeryEasy = {},
 	buildingsEasy = {},
 	buildingsMedium = {},

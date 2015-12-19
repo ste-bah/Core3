@@ -9,7 +9,7 @@ aakuan_ring = {
 	},
 	customizationStringNames = {},
 	customizationValues = {},
-	skillMods = {{"ranged_defense", 5}}
+	skillMods = {{"ranged_defense",25}}
 }
 
 addLootItemTemplate("aakuan_ring", aakuan_ring)

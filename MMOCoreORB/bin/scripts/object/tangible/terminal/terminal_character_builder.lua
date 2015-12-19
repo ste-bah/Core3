@@ -61,7 +61,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 	itemList = {
 		"Character Options",
 		{
-			"Learn Skill",
+			--[["Learn Skill",
 			{
 				"Architect",
 				{
@@ -202,31 +202,31 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					{
 						"Investigation I", "combat_bountyhunter_investigation_01",
 						"Investigation II", "combat_bountyhunter_investigation_02",
-						"Investigation III", "combat_bountyhunter_investigation_03",
-						"Investigation IV", "combat_bountyhunter_investigation_04"
+						"Investigation III", "combat_bountyhunter_investigation_03"
+			--			"Investigation IV", "combat_bountyhunter_investigation_04"
 					},	
-					"Bounty Carbine",
+			--		"Bounty Carbine",
 					{
-						"Bounty Carbine Specialization I", "combat_bountyhunter_droidcontrol_01",
-						"Bounty Carbine Specialization II", "combat_bountyhunter_droidcontrol_02",
-						"Bounty Carbine Specialization III", "combat_bountyhunter_droidcontrol_03",
-						"Bounty Carbine Specialization IV", "combat_bountyhunter_droidcontrol_04"
+			--			"Bounty Carbine Specialization I", "combat_bountyhunter_droidcontrol_01",
+			--			"Bounty Carbine Specialization II", "combat_bountyhunter_droidcontrol_02",
+			--			"Bounty Carbine Specialization III", "combat_bountyhunter_droidcontrol_03",
+			--			"Bounty Carbine Specialization IV", "combat_bountyhunter_droidcontrol_04"
 					},
-					"Bounty Pistol",
+			--		"Bounty Pistol",
 					{
-						"Bounty Pistol Specialization I", "combat_bountyhunter_droidresponse_01",
-						"Bounty Pistol Specialization II", "combat_bountyhunter_droidresponse_02",
-						"Bounty Pistol Specialization III", "combat_bountyhunter_droidresponse_03",
-						"Bounty Pistol Specialization IV", "combat_bountyhunter_droidresponse_04"
+			--			"Bounty Pistol Specialization I", "combat_bountyhunter_droidresponse_01",
+			--			"Bounty Pistol Specialization II", "combat_bountyhunter_droidresponse_02",
+			--			"Bounty Pistol Specialization III", "combat_bountyhunter_droidresponse_03",
+			--			"Bounty Pistol Specialization IV", "combat_bountyhunter_droidresponse_04"
 					},
-					"Light Lightning Cannon",
+			--		"Light Lightning Cannon",
 					{
-						"Light Lightning Cannon Specialization I", "combat_bountyhunter_support_01",
-						"Light Lightning Cannon Specialization II", "combat_bountyhunter_support_02",
-						"Light Lightning Cannon Specialization III", "combat_bountyhunter_support_03",
-						"Light Lightning Cannon Specialization IV", "combat_bountyhunter_support_04"
+			--			"Light Lightning Cannon Specialization I", "combat_bountyhunter_support_01",
+			--			"Light Lightning Cannon Specialization II", "combat_bountyhunter_support_02",
+			--			"Light Lightning Cannon Specialization III", "combat_bountyhunter_support_03",
+			--			"Light Lightning Cannon Specialization IV", "combat_bountyhunter_support_04"
 					},
-					"Master", "combat_bountyhunter_master"
+			--		"Master", "combat_bountyhunter_master"
 				},
 				"Brawler",
 				{
@@ -1504,22 +1504,22 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					},
 					"Master", "crafting_weaponsmith_master"
 				}
-			},
+			},]]
 			"Unlearn All Skills", "unlearn_all_skills",
 			"Cleanse Character", "cleanse_character",
 			"Enhance Character", "enhance_character",
 			"Reset Buffs", "reset_buffs",
 			"Learn Languages", "language",
-			"Credits", "credits",
-			"Apply DOTs", "apply_dots",
-			"Clear DOTs", "clear_dots",
-			"Max XP", "max_xp",
-			"Become Glowy", "become_glowy",
-			"Faction Points",
+			--"Credits", "credits",
+			--"Apply DOTs", "apply_dots",
+			--"Clear DOTs", "clear_dots",
+			--"Max XP", "max_xp",
+			--"Become Glowy", "become_glowy",
+			--[["Faction Points",
 			{
 				"Imperial", "faction_imperial",
 				"Rebel", "faction_rebel"
-			}
+			} ]]
 		},
 		"Items",
 		{
@@ -1611,7 +1611,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"Singing Mountain Clan Bicep", "object/tangible/wearables/armor/bone/armor_smc_s01_bicep_l.iff"
 			--	}
 			},
-			"Clothes",
+			--[["Clothes",
 			{
 				"Crafting Aprons",
 				{
@@ -1628,7 +1628,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				{
 					"Backpack 01", "object/tangible/wearables/backpack/backpack_s01.iff"
 				}
-			},
+			},]]
 			--"Consumables",
 			--{
 			--	"Desserts",
@@ -2027,7 +2027,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 						}
 					}
 				},
-				"Event Perk Deeds",
+				--[["Event Perk Deeds",
 				{
 					--"Rental: Audience Seating", "object/tangible/deed/event_perk/audience_seating_deed.iff",
 					--"Rental: AT-AT", "object/tangible/deed/event_perk/atat_static_deed.iff",
@@ -2125,7 +2125,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Rental: Web Filled Tree", "object/tangible/deed/event_perk/web_tree.iff",
 					--"Rental: Wrecked Sandcrawler", "object/tangible/deed/event_perk/wrecked_sandcrawler_deed.iff",
 					"Rental: X-Wing", "object/tangible/deed/event_perk/xwing_static_deed.iff",
-				},
+				},]]
 			},
 			"Droids",
 			{
@@ -2143,7 +2143,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				--"Firework 7", "object/tangible/firework/firework_s11.iff",
 				--"Firework 8", "object/tangible/firework/firework_s18.iff",
 			--},
-			"Veteran Rewards (COMPLETE)",
+			--[["Veteran Rewards (COMPLETE)",
 			{
 				--90 Day Rewards
 				--"@veteran_new:poweredharvester","object/tangible/veteran_reward/harvester.iff",
@@ -2230,8 +2230,8 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				"Painting: Smuggler's Run","object/tangible/veteran_reward/one_year_anniversary/painting_07.iff",
 				"Painting: Imperial Oppression (TIE Oppressor)","object/tangible/veteran_reward/one_year_anniversary/painting_08.iff",
 				"Painting: Emperor's Eyes (TIE Sentinel)","object/tangible/veteran_reward/one_year_anniversary/painting_09.iff",
-			},
-			"Furniture",
+			},]]
+			--[["Furniture",
 			{	
 				"Trophies (NEW COMPLETE)",
 				{
@@ -2587,7 +2587,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Street Lamp (Style 3) Red", "object/tangible/furniture/city/streetlamp_med_red_01.iff",
 					"Street Lamp (Style 4) Red", "object/tangible/furniture/city/streetlamp_med_red_02.iff"
 				},
-			},
+			},]]
 			--"Intruments",
 			--{
 				--"Bandfill", "object/tangible/instrument/bandfill.iff",
@@ -2603,46 +2603,46 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--},
 			"Pharmaceutical",
 			{
-				"Small StimPack", "object/tangible/medicine/stimpack_sm_s1.iff",
-				"StimPack A", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_a.iff",
+				--"Small StimPack", "object/tangible/medicine/stimpack_sm_s1.iff",
+				--"StimPack A", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_a.iff",
 				"StimPack B", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_b.iff",
-				"StimPack C", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_c.iff",
-				"StimPack D", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_d.iff",
+				--"StimPack C", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_c.iff",
+				--"StimPack D", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_d.iff",
 				"StimPack E", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_e.iff",
-				"Medpack Grenade Damage A", "object/tangible/medicine/crafted/medpack_grenade_damage_a.iff",
-				"Medpack Grenade Damage B", "object/tangible/medicine/crafted/medpack_grenade_damage_b.iff",
-				"Medpack Grenade Damage C", "object/tangible/medicine/crafted/medpack_grenade_damage_c.iff",
-				"Medpack Grenade Damage D", "object/tangible/medicine/crafted/medpack_grenade_damage_d.iff",
-				"Medpack Grenade Damage E", "object/tangible/medicine/crafted/medpack_grenade_damage_e.iff",
-				"Medpack Grenade Area A", "object/tangible/medicine/crafted/medpack_grenade_area_a.iff",
-				"Medpack Grenade Area B", "object/tangible/medicine/crafted/medpack_grenade_area_b.iff",
-				"Medpack Grenade Area C", "object/tangible/medicine/crafted/medpack_grenade_area_c.iff",
-				"Medpack Enhance Action A", "object/tangible/medicine/crafted/medpack_enhance_action_a.iff",
-				"Medpack Enhance Constitution A", "object/tangible/medicine/crafted/medpack_enhance_constitution_a.iff",
+				--"Medpack Grenade Damage A", "object/tangible/medicine/crafted/medpack_grenade_damage_a.iff",
+				--"Medpack Grenade Damage B", "object/tangible/medicine/crafted/medpack_grenade_damage_b.iff",
+				--"Medpack Grenade Damage C", "object/tangible/medicine/crafted/medpack_grenade_damage_c.iff",
+				--"Medpack Grenade Damage D", "object/tangible/medicine/crafted/medpack_grenade_damage_d.iff",
+				--"Medpack Grenade Damage E", "object/tangible/medicine/crafted/medpack_grenade_damage_e.iff",
+				--"Medpack Grenade Area A", "object/tangible/medicine/crafted/medpack_grenade_area_a.iff",
+				--"Medpack Grenade Area B", "object/tangible/medicine/crafted/medpack_grenade_area_b.iff",
+				--"Medpack Grenade Area C", "object/tangible/medicine/crafted/medpack_grenade_area_c.iff",
+				--"Medpack Enhance Action A", "object/tangible/medicine/crafted/medpack_enhance_action_a.iff",
+				--"Medpack Enhance Constitution A", "object/tangible/medicine/crafted/medpack_enhance_constitution_a.iff",
 				--"Medpack Enhance Disease A", "object/tangible/medicine/crafted/medpack_enhance_disease_a.iff",
-				"Medpack Enhance Health A", "object/tangible/medicine/crafted/medpack_enhance_health_a.iff",
+				--"Medpack Enhance Health A", "object/tangible/medicine/crafted/medpack_enhance_health_a.iff",
 				--"Medpack Enhance Poison A", "object/tangible/medicine/crafted/medpack_enhance_poison_a.iff",
-				"Medpack Enhance Quickness A", "object/tangible/medicine/crafted/medpack_enhance_quickness_a.iff",
-				"Medpack Enhance Stamina A", "object/tangible/medicine/crafted/medpack_enhance_stamina_a.iff",
-				"Medpack Enhance Strength A", "object/tangible/medicine/crafted/medpack_enhance_strength_a.iff",
-				"Fire blanket", "object/tangible/medicine/crafted/medic_fire_blanket.iff",
-				"Medpack Cure Disease A", "object/tangible/medicine/crafted/medpack_cure_disease_a.iff",
-				"Medpack Cure Disease Area A", "object/tangible/medicine/crafted/medpack_cure_disease_area_a.iff",
-				"Medpack Cure Poison A", "object/tangible/medicine/crafted/medpack_cure_poison_a.iff",
-				"Medpack Cure Poison Area A", "object/tangible/medicine/crafted/medpack_cure_poison_area_a.iff",
-				"Disease Health Area A", "object/tangible/medicine/crafted/medpack_disease_area_health_a.iff",
-				"Poison Health Area A", "object/tangible/medicine/crafted/medpack_poison_area_health_a.iff",
-				"Medpack Health Wound", "object/tangible/medicine/medpack_wound_health.iff",
-				"Medpack Blinded", "object/tangible/medicine/crafted/medpack_blinded_a.iff",
-				"Medpack Dizzy", "object/tangible/medicine/crafted/medpack_dizzy_a.iff",
-				"Medpack Intimidated", "object/tangible/medicine/crafted/medpack_intimidated_a.iff",
-				"Medpack Stunned", "object/tangible/medicine/crafted/medpack_stunned_a.iff",
+				--"Medpack Enhance Quickness A", "object/tangible/medicine/crafted/medpack_enhance_quickness_a.iff",
+				--"Medpack Enhance Stamina A", "object/tangible/medicine/crafted/medpack_enhance_stamina_a.iff",
+				--"Medpack Enhance Strength A", "object/tangible/medicine/crafted/medpack_enhance_strength_a.iff",
+				--"Fire blanket", "object/tangible/medicine/crafted/medic_fire_blanket.iff",
+				--"Medpack Cure Disease A", "object/tangible/medicine/crafted/medpack_cure_disease_a.iff",
+				--"Medpack Cure Disease Area A", "object/tangible/medicine/crafted/medpack_cure_disease_area_a.iff",
+				--"Medpack Cure Poison A", "object/tangible/medicine/crafted/medpack_cure_poison_a.iff",
+				--"Medpack Cure Poison Area A", "object/tangible/medicine/crafted/medpack_cure_poison_area_a.iff",
+				--"Disease Health Area A", "object/tangible/medicine/crafted/medpack_disease_area_health_a.iff",
+				--"Poison Health Area A", "object/tangible/medicine/crafted/medpack_poison_area_health_a.iff",
+				--"Medpack Health Wound", "object/tangible/medicine/medpack_wound_health.iff",
+				--"Medpack Blinded", "object/tangible/medicine/crafted/medpack_blinded_a.iff",
+				--"Medpack Dizzy", "object/tangible/medicine/crafted/medpack_dizzy_a.iff",
+				--"Medpack Intimidated", "object/tangible/medicine/crafted/medpack_intimidated_a.iff",
+				--"Medpack Stunned", "object/tangible/medicine/crafted/medpack_stunned_a.iff",
 				"Revive Pack", "object/tangible/medicine/medpack_revive.iff"
 			},
-			"Resources",
-			{
-				"Resource Deed", "object/tangible/veteran_reward/resource.iff"
-			},
+			--"Resources",
+			--{
+				--"Resource Deed", "object/tangible/veteran_reward/resource.iff"
+			--},
 			--"Scout Equipment",
 			--{
 				--"Camokit",
@@ -2733,17 +2733,17 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"DH17 Carbine", "object/weapon/ranged/carbine/carbine_dh17.iff",
 			--		"DH17 Carbine (black)", "object/weapon/ranged/carbine/carbine_dh17_black.iff",
 			--		"DH17 Short Carbine", "object/weapon/ranged/carbine/carbine_dh17_snubnose.iff",
-					"DXR6 Carbine", "object/weapon/ranged/carbine/carbine_dxr6.iff",
+					--"DXR6 Carbine", "object/weapon/ranged/carbine/carbine_dxr6.iff",
 			--		"E11 Carbine", "object/weapon/ranged/carbine/carbine_e11.iff",
 			--		"Enhanced E11 Carbine", "object/weapon/ranged/carbine/carbine_e11_quest.iff",
 			--		"Lithitanium Carbine", "object/weapon/ranged/carbine/carbine_e11_victor_quest.iff",
 			--		"EE3 Carbine", "object/weapon/ranged/carbine/carbine_ee3.iff",
 			--		"Elite Carbine", "object/weapon/ranged/carbine/carbine_elite.iff",
-					"Laser Carbine", "object/weapon/ranged/carbine/carbine_laser.iff",
+					--"Laser Carbine", "object/weapon/ranged/carbine/carbine_laser.iff",
 			--		"Nym's Slug-thrower Carbine", "object/weapon/ranged/carbine/carbine_nym_slugthrower.iff"
 				},
-				"Heavy",
-				{
+				--"Heavy",
+				--{
 			--		"Acid Stream Launcher", "object/weapon/ranged/heavy/heavy_acid_beam.iff",
 			--		"Beam Rifle", "object/weapon/ranged/rifle/rifle_beam.iff",
 					"Flame Thrower", "object/weapon/ranged/rifle/rifle_flame_thrower.iff",
@@ -2752,9 +2752,9 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"Lightning Beam Cannon", "object/weapon/ranged/heavy/heavy_lightning_beam.iff",
 					"Light Lightning Cannon", "object/weapon/ranged/rifle/rifle_lightning.iff",
 			--		"Rocket Launcher", "object/weapon/ranged/heavy/heavy_rocket_launcher.iff"
-				},
-				"One-handed",
-				{
+				--},
+				--"One-handed",
+				--{
 			--		"Sword", "object/weapon/melee/sword/sword_01.iff",
 			--		"Sword (noob)", "object/weapon/melee/sword/sword_01_noob.iff",
 			--		"Curved Sword", "object/weapon/melee/sword/sword_02.iff",
@@ -2770,13 +2770,13 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"Stone Knife (noob)", "object/weapon/melee/knife/knife_stone_noob.iff",
 			--		"Vibroblade", "object/weapon/melee/knife/knife_vibroblade.iff",
 			--		"Jagged Vibroblade", "object/weapon/melee/knife/knife_vibroblade_quest.iff",
-					"Stun Baton", "object/weapon/melee/baton/baton_stun.iff",
-					"Gaderiffi Baton", "object/weapon/melee/baton/baton_gaderiffi.iff",
+					--"Stun Baton", "object/weapon/melee/baton/baton_stun.iff",
+					--"Gaderiffi Baton", "object/weapon/melee/baton/baton_gaderiffi.iff",
 			--		"Black Metal Gaderiffi Baton", "object/weapon/melee/baton/victor_baton_gaderiffi.iff"
-				},
+				--},
 				"Pistols",
 				{
-			--		"CDEF Pistol", "object/weapon/ranged/pistol/pistol_cdef.iff",
+			"CDEF Pistol", "object/weapon/ranged/pistol/pistol_cdef.iff",
 			--		"CDEF Pistol (noob)", "object/weapon/ranged/pistol/pistol_cdef_noob.iff",
 			--		"Corsec CDEF Pistol", "object/weapon/ranged/pistol/pistol_cdef_corsec.iff",
 			--		"D18 Pistol", "object/weapon/ranged/pistol/pistol_d18.iff",
@@ -2785,22 +2785,22 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"DL44 Pistol", "object/weapon/ranged/pistol/pistol_dl44.iff",
 			--		"DL44 Metal Pistol", "object/weapon/ranged/pistol/pistol_dl44_metal.iff",
 			--		"DX2 Pistol", "object/weapon/ranged/pistol/pistol_dx2.iff",
-					"FWG5 Pistol", "object/weapon/ranged/pistol/pistol_fwg5.iff",
+					--"FWG5 Pistol", "object/weapon/ranged/pistol/pistol_fwg5.iff",
 			--		"Featherweight FWG5 Pistol", "object/weapon/ranged/pistol/pistol_fwg5_quest.iff",
 			--		"Geonosian Sonic Blaster", "object/weapon/ranged/pistol/pistol_geonosian_sonic_blaster_loot.iff",
-					"Launcher Pistol", "object/weapon/ranged/pistol/pistol_launcher.iff",
+					--"Launcher Pistol", "object/weapon/ranged/pistol/pistol_launcher.iff",
 			--		"Power5 Pistol", "object/weapon/ranged/pistol/pistol_power5.iff",
-					"Republic Blaster", "object/weapon/ranged/pistol/pistol_republic_blaster.iff",
+					--"Republic Blaster", "object/weapon/ranged/pistol/pistol_republic_blaster.iff",
 			--		"Modified Republic Blaster", "object/weapon/ranged/pistol/pistol_republic_blaster_quest.iff",
-					"Scatter Pistol", "object/weapon/ranged/pistol/pistol_scatter.iff",
+					--"Scatter Pistol", "object/weapon/ranged/pistol/pistol_scatter.iff",
 			--		"Scout Blaster", "object/weapon/ranged/pistol/pistol_scout_blaster.iff",
 			--		"SR Combat Pistol", "object/weapon/ranged/pistol/pistol_srcombat.iff",
 			--		"Striker Pistol", "object/weapon/ranged/pistol/pistol_striker.iff",
 			--		"Striker Pistol (noob)", "object/weapon/ranged/pistol/pistol_striker_noob.iff",
 			--		"Tangle Pistol", "object/weapon/ranged/pistol/pistol_tangle.iff"
 				},
-				"Polearms",
-				{
+				--"Polearms",
+				--{
 			--		"Lance", "object/weapon/melee/polearm/lance_controllerfp.iff",
 			--		"Nightsister Lance", "object/weapon/melee/polearm/lance_controllerfp_nightsister.iff",
 			--		"Nightsister Energy Lance", "object/weapon/melee/polearm/lance_nightsister.iff",
@@ -2810,28 +2810,28 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Long Vibro Axe", "object/weapon/melee/polearm/polearm_vibro_axe.iff",
 			--		"Wood Staff", "object/weapon/melee/polearm/lance_staff_wood_s1.iff",
 			--		"Reinforced Combat Staff", "object/weapon/melee/polearm/lance_staff_wood_s2.iff",
-				},
+				--},
 				"Rifles",
 				{
 			--		"Berserker Rifle", "object/weapon/ranged/rifle/rifle_berserker.iff",
 			--		"Bowcaster", "object/weapon/ranged/rifle/rifle_bowcaster.iff",
-			--		"CDEF Rifle", "object/weapon/ranged/rifle/rifle_cdef.iff",
+					"CDEF Rifle", "object/weapon/ranged/rifle/rifle_cdef.iff",
 			--		"DLT20 Rifle", "object/weapon/ranged/rifle/rifle_dlt20.iff",
 			--		"DLT20a Rifle", "object/weapon/ranged/rifle/rifle_dlt20a.iff",
 			--		"E11 Rifle", "object/weapon/ranged/rifle/rifle_e11.iff",
 			--		"An Ewok Crossbow", "object/weapon/ranged/rifle/rifle_ewok_crossbow.iff",
-					"Jawa Ion Rifle", "object/weapon/ranged/rifle/rifle_jawa_ion.iff",
+					--"Jawa Ion Rifle", "object/weapon/ranged/rifle/rifle_jawa_ion.iff",
 			--		"Laser Rifle", "object/weapon/ranged/rifle/rifle_laser.iff",
 			--		"Laser Rifle (noob)", "object/weapon/ranged/rifle/rifle_laser_noob.iff",
 			--		"Lithitanium Rifle", "object/weapon/ranged/rifle/rifle_victor_tusken.iff",
 			--		"SG82 Rifle", "object/weapon/ranged/rifle/rifle_sg82.iff",
 			--		"Spraystick", "object/weapon/ranged/rifle/rifle_spraystick.iff",
 			--		"Tenloss DXR-6 Disruptor Rifle", "object/weapon/ranged/rifle/rifle_tenloss_dxr6_disruptor_loot.iff",
-					"T21", "object/weapon/ranged/rifle/rifle_t21.iff",
+					--"T21", "object/weapon/ranged/rifle/rifle_t21.iff",
 			--		"Tusken Rifle", "object/weapon/ranged/rifle/rifle_tusken.iff"
 				},
-				"Two-handed",
-				{
+				--"Two-handed",
+				--{
 					"Two-handed Curved Sword", "object/weapon/melee/2h_sword/2h_sword_katana.iff",
 			--		"Grooved Two-handed Sword", "object/weapon/melee/2h_sword/2h_sword_katana_quest.iff",
 			--		"Scythe Blade", "object/weapon/melee/2h_sword/2h_sword_scythe.iff",
@@ -2841,13 +2841,13 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"Gamorrean Battleaxe", "object/weapon/melee/2h_sword/2h_sword_battleaxe_quest.iff",
 			--		"Heavy Axe", "object/weapon/melee/axe/axe_heavy_duty.iff",
 			--		"Vibro Axe", "object/weapon/melee/axe/axe_vibroaxe.iff"
-				},
+				--},
 				"Unarmed",
 				{
 					"Vibro Knuckler", "object/weapon/melee/special/vibroknuckler.iff",
 			--		"A Blacksun Razor Knuckler", "object/weapon/melee/special/blacksun_razor.iff"
 				}
-			},
+			}
 			--"Holocrons",
 			--{
 			--	"Dark Jedi Holocron", "object/tangible/jedi/jedi_holocron_dark.iff",
@@ -2855,13 +2855,13 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--	"Dark Jedi Holocron (gift)", "object/tangible/jedi/no_drop_jedi_holocron_dark.iff",
 			--	"Light Jedi Holocron (gift)", "object/tangible/jedi/no_drop_jedi_holocron_light.iff"
 			--}
-			"DWB Testing (Temporary)",
+			--[["DWB Testing (Temporary)",
 			{
 				"Bounty Hunter Helmet", "object/tangible/wearables/armor/bounty_hunter/armor_bounty_hunter_helmet.iff",
 				"Jet Pack Base", "object/tangible/loot/dungeon/death_watch_bunker/jetpack_base.iff",
 				"Protective Liquid Coating", "object/tangible/loot/dungeon/death_watch_bunker/emulsion_protection.iff",
 				"Binary Liquid", "object/tangible/loot/dungeon/death_watch_bunker/binary_liquid.iff"
-			}
+			}]]
 		}
 	}
 }

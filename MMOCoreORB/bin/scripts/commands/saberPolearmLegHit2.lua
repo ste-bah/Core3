@@ -45,8 +45,8 @@ SaberPolearmLegHit2Command = {
         name = "saberpolearmleghit2",
         
                 
-    damageMultiplier = 1.5,
-	speedMultiplier = 1.25,
+    damageMultiplier = 2.5,
+	speedMultiplier = 1.5,
 	forceCostMultiplier = 1.25,
 
 	animationCRC = hashCode("combo_3b_medium"),

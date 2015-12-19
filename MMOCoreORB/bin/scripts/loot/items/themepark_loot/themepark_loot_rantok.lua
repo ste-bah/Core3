@@ -6,8 +6,8 @@ themepark_loot_rantok = {
 	customObjectName = "",
 	directObjectTemplate = "object/weapon/melee/sword/sword_rantok.iff",
 	craftingValues = {
-		{"mindamage",25,46,0},
-		{"maxdamage",98,182,0},
+		{"mindamage",25,146,0},
+		{"maxdamage",98,382,0},
 		{"attackspeed",6.5,4.5,1},
 		{"woundchance",11,20,0},
 		{"hitpoints",750,1500,0},

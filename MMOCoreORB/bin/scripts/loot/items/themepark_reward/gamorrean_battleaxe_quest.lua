@@ -5,8 +5,8 @@ gamorrean_battleaxe_quest = {
 	customObjectName = "",
 	directObjectTemplate = "object/weapon/melee/2h_sword/2h_sword_battleaxe_quest.iff",
 	craftingValues = {
-		{"mindamage",53,98,0},
-		{"maxdamage",123,228,0},
+		{"mindamage",153,98,0},
+		{"maxdamage",323,328,0},
 		{"attackspeed",6.5,4.5,1},
 		{"woundchance",6,14,0},
 		{"hitpoints",750,1500,0},

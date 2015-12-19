@@ -26,19 +26,19 @@ public:
 		if (!creature->isPlayerCreature())
 			return GENERALERROR;
 
-		PlayerObject* ghost = creature->getPlayerObject();
+		Reference<PlayerObject*> ghost = creature->getPlayerObject();
 
 		if (ghost == NULL)
 			return GENERALERROR;
 
-		if (ghost->getJediState() < 2)
+		if (ghost.get()->getJediState() < 2)
 			return GENERALERROR;
 
 
-		String planet = ghost->getTrainerZoneName();
+		String planet = ghost.get()->getTrainerZoneName();
 		uint32 planetCRC = planet.hashCode();
 
-		Vector3 coords = ghost->getTrainerCoordinates();
+		Vector3 coords = ghost.get()->getTrainerCoordinates();
 
 		String name = "@jedi_spam:trainer_waypoint_name";
 
@@ -50,7 +50,7 @@ public:
 		obj->setPosition(coords.getX(), 0, coords.getY());
 		obj->setCustomObjectName(name, false);
 
-		ghost->addWaypoint(obj, true, true);
+		ghost.get()->addWaypoint(obj, true, true);
 
 		creature->sendSystemMessage("@jedi_spam:waypoint_created_to_trainer");
 

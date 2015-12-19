@@ -1,6 +1,6 @@
 dantooine_force_wilder_neutral_none = Lair:new {
 	mobiles = {{"feral_force_wielder",1}},
-	spawnLimit = 3,
+	spawnLimit = 5,
 	buildingsVeryEasy = {},
 	buildingsEasy = {},
 	buildingsMedium = {},

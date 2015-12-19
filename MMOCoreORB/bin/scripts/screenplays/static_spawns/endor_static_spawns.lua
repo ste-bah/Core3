@@ -36,6 +36,7 @@ function EndorStaticSpawnsScreenPlay:spawnMobiles()
 	spawnMobile("endor", "panshee_warrior", 300, -5465.1, 185.2, -2180.5, -55, 0)
 	spawnMobile("endor", "panshee_warrior", 300, -5466.8, 185.3, -2182.1, -53, 0)
 	spawnMobile("endor", "archaic_panshee_ritualist", 300, -5450.6, 183.8, -2193.6, 114, 0)
+	spawnMobile("endor", "gorax", 3600, 2207.6, 240.0, -1184.0, 171, 0)
 
 	spawnMobile("endor", "tainted_pubam_dark_shaman",300, -6880.6, 205.4, 1364.0, 93, 0)
 

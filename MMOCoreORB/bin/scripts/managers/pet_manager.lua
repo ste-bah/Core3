@@ -44,7 +44,7 @@ which carries forward this exception.
 
 --appearance filename, run speed, gallop speed multiplier, gallop duration (in seconds), gallop cooldown (in seconds)
 mountSpeedData = {
-	{"appearance/bantha_hue.sat", 7, 1.286, 165, 680},
+	{"appearance/bantha_hue.sat", 27, 1.286, 165, 680},
 	{"appearance/bol_hue.sat", 7.5, 1.3, 180, 660},
 	{"appearance/brackaset_hue.sat", 7.5, 1.133, 300, 780},
 	{"appearance/carrion_spat_hue.sat", 7.5, 1.533, 120, 600},

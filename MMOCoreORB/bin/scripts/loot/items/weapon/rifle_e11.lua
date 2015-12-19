@@ -6,8 +6,8 @@ rifle_e11 = {
 	customObjectName = "",
 	directObjectTemplate = "object/weapon/ranged/rifle/rifle_e11.iff",
 	craftingValues = {
-		{"mindamage",36,73,0},
-		{"maxdamage",76,144,0},
+		{"mindamage",60,110,0},
+		{"maxdamage",170,360,0},
 		{"attackspeed",7.4,5.1,0},
 		{"woundchance",14,36,0},
 		{"hitpoints",750,750,0},

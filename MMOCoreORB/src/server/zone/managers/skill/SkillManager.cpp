@@ -708,6 +708,8 @@ bool SkillManager::fullfillsSkillPrerequisites(const String& skillName, Creature
 		}
 	}
 
+	/* Temp DISABLED.
+
 	PlayerObject* ghost = creature->getPlayerObject();
 	if(ghost == NULL || ghost->getJediState() < skill->getJediStateRequired()) {
 		return false;
@@ -732,7 +734,7 @@ bool SkillManager::fullfillsSkillPrerequisites(const String& skillName, Creature
 
 	if(skillName == "force_title_jedi_rank_03" && !knightPrereqsMet(creature, "")) {
 		return false;
-	}
+	} */
 
 	return true;
 }

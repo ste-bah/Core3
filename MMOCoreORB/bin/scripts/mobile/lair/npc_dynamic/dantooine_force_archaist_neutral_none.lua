@@ -1,6 +1,6 @@
 dantooine_force_archaist_neutral_none = Lair:new {
 	mobiles = {{"force_trained_archaist",1}},
-	spawnLimit = 3,
+	spawnLimit = 5,
 	buildingsVeryEasy = {},
 	buildingsEasy = {},
 	buildingsMedium = {},

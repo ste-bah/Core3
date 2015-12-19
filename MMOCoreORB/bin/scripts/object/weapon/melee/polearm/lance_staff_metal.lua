@@ -69,10 +69,10 @@ object_weapon_melee_polearm_lance_staff_metal = object_weapon_melee_polearm_shar
 	attackType = MELEEATTACK,
 
 	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, LIGHTSABER
-	damageType = KINETIC,
+	damageType = BLAST,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = NONE,
+	armorPiercing = MEDIUM,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -114,8 +114,8 @@ object_weapon_melee_polearm_lance_staff_metal = object_weapon_melee_polearm_shar
 	maxRange = 5,
 	maxRangeAccuracy = 0,
 
-	minDamage = 80,
-	maxDamage = 110,
+	minDamage = 150,
+	maxDamage = 400,
 
 	attackSpeed = 5,
 
@@ -126,8 +126,8 @@ object_weapon_melee_polearm_lance_staff_metal = object_weapon_melee_polearm_shar
 	experimentalWeights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "null", "exp_durability", "expRange", "expRange", "null", "expRange", "null", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "hitpoints", "zerorangemod", "maxrangemod", "midrange", "midrangemod", "maxrange", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 56, 95, 6, 7, 750, -5, -5, 3, -5, 5, 9, 66, 39},
-	experimentalMax = {0, 0, 90, 143, 4.2, 7, 1500, 5, 5, 3, 5, 5, 4, 36, 21},
+	experimentalMin = {0, 0, 56, 150, 6, 7, 750, -5, -5, 3, -5, 5, 9, 66, 39},
+	experimentalMax = {0, 0, 175, 500, 4.2, 7, 1500, 5, 5, 3, 5, 5, 4, 36, 21},
 	experimentalPrecision = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }

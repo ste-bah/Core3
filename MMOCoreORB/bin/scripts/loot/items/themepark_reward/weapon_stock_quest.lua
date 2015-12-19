@@ -6,8 +6,8 @@ weapon_stock_quest = {
 	customObjectName = "",
 	directObjectTemplate = "object/tangible/component/weapon/stock_advanced_quest.iff",
 	craftingValues = {
-		{"mindamage",25,25,0},
-		{"maxdamage",30,30,0},
+		{"mindamage",35,35,0},
+		{"maxdamage",45,45,0},
 		{"attackspeed",-0.5,-0.5,1},
 		{"woundchance",10,10,0},
 		{"midrangemod",15,15,0},

@@ -1,6 +1,6 @@
 dantooine_force_mystic_neutral_none = Lair:new {
 	mobiles = {{"novice_force_mystic",1}},
-	spawnLimit = 3,
+	spawnLimit = 5,
 	buildingsVeryEasy = {},
 	buildingsEasy = {},
 	buildingsMedium = {},

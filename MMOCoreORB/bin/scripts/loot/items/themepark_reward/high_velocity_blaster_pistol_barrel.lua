@@ -6,8 +6,8 @@ high_velocity_blaster_pistol_barrel = {
 	customObjectName = "",
 	directObjectTemplate = "object/tangible/component/weapon/blaster_pistol_barrel_quest.iff",
 	craftingValues = {
-		{"mindamage",20,25,0},
-		{"maxdamage",25,25,0},
+		{"mindamage",30,35,0},
+		{"maxdamage",45,45,0},
 		{"attackspeed",-0.7,-0.7,1},
 		{"hitpoints",0,100,0},
 		{"zerorangemod",0,0,0},

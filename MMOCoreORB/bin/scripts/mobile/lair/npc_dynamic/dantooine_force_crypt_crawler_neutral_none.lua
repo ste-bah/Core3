@@ -1,6 +1,6 @@
 dantooine_force_crypt_crawler_neutral_none = Lair:new {
 	mobiles = {{"force_sensitive_crypt_crawler",1}},
-	spawnLimit = 3,
+	spawnLimit = 5,
 	buildingsVeryEasy = {},
 	buildingsEasy = {},
 	buildingsMedium = {},

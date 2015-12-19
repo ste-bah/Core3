@@ -482,7 +482,7 @@ CreatureObject* CreatureManagerImplementation::createCreature(uint32 templateCRC
 }
 
 void CreatureManagerImplementation::placeCreature(CreatureObject* creature, float x, float z, float y, uint64 parentID) {
-	if (creature == NULL)
+	if (creature == NULL || zone == NULL)
 		return;
 
 	Reference<SceneObject*> cellParent = NULL;

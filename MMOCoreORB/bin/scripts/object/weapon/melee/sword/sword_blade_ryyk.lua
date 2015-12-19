@@ -69,10 +69,10 @@ object_weapon_melee_sword_sword_blade_ryyk = object_weapon_melee_sword_shared_sw
 	attackType = MELEEATTACK,
 
 	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, LIGHTSABER
-	damageType = KINETIC,
+	damageType = BLAST,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = NONE,
+	armorPiercing = MEDIUM,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -114,8 +114,8 @@ object_weapon_melee_sword_sword_blade_ryyk = object_weapon_melee_sword_shared_sw
 	maxRange = 4,
 	maxRangeAccuracy = -15,
 
-	minDamage = 25,
-	maxDamage = 140,
+	minDamage = 100,
+	maxDamage = 450,
 
 	attackSpeed = 3.3,
 
@@ -126,8 +126,8 @@ object_weapon_melee_sword_sword_blade_ryyk = object_weapon_melee_sword_shared_sw
 	experimentalWeights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "exp_durability", "expRange", "expRange", "null", "expRange", "null", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "hitpoints", "zerorangemod", "maxrangemod", "midrange", "midrangemod", "maxrange", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 18, 98, 4.3, 15, 750, -20, -20, 3, -20, 4, 51, 39, 33},
-	experimentalMax = {0, 0, 33, 132, 3, 29, 1500, -10, -10, 3, -10, 4, 27, 21, 18},
+	experimentalMin = {0, 0, 50, 250, 4.3, 15, 750, -20, -20, 3, -20, 4, 51, 39, 33},
+	experimentalMax = {0, 0, 100, 450, 3, 29, 1500, -10, -10, 3, -10, 4, 27, 21, 18},
 	experimentalPrecision = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }

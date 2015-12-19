@@ -2665,6 +2665,11 @@ void PlayerManagerImplementation::updateSwimmingState(CreatureObject* player, fl
 }
 
 int PlayerManagerImplementation::checkSpeedHackFirstTest(CreatureObject* player, float parsedSpeed, ValidatedPosition& teleportPosition, float errorMultiplier) {
+	if (player == NULL)
+		return 0;
+
+	Locker locker(player);
+
 	float allowedSpeedMod = player->getSpeedMultiplierMod();
 	float allowedSpeedBase = player->getRunSpeed();
 	ManagedReference<SceneObject*> parent = player->getParent();

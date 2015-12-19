@@ -23,6 +23,9 @@ public:
 		if (!sui->isListBox() || cancelPressed)
 			return;
 
+		if (creature == NULL)
+			return;
+
 		SuiListBox* listBox = cast<SuiListBox*>( sui);
 
 		ManagedReference<SceneObject*> obj = sui->getUsingObject();

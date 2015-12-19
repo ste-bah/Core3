@@ -60,7 +60,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.environment</key>
-					<value></value>
+					<value>CLASSPATH=/home/cerberus/git/PublicEngine/MMOEngine/bin/idlc.jar|</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.stopOnError</key>
@@ -89,4 +89,15 @@
 		<nature>org.eclipse.cdt.make.core.ScannerConfigNature</nature>
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1449260418647</id>
+			<name></name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-utils</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

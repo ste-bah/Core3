@@ -1,6 +1,6 @@
 dantooine_force_crystal_hunter_neutral_none = Lair:new {
 	mobiles = {{"force_crystal_hunter",1}},
-	spawnLimit = 3,
+	spawnLimit = 5,
 	buildingsVeryEasy = {},
 	buildingsEasy = {},
 	buildingsMedium = {},

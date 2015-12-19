@@ -21,7 +21,7 @@ DNAMatchesRequired = 23
 destructionTimer = 600
 
 -- maximum bases per planet
-maxBases = 25
+maxBases = 50
 
 -- time in seconds that a player must be overt before aborting a facility shutdown
 overtCooldown = 300
@@ -36,7 +36,7 @@ reactvationTimer = 300
 -- X seconds after the last manual activity the turret will be able to auto fire
 turretAutoFireTimeout = 20
 
-maxBasesPerPlayer = 3
+maxBasesPerPlayer = 10
 
 -- xp bonus for faction controlling a planet
 bonusXP = 15

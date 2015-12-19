@@ -69,10 +69,10 @@ object_weapon_ranged_pistol_pistol_republic_blaster_quest = object_weapon_ranged
 	attackType = RANGEDATTACK,
 
 	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, LIGHTSABER
-	damageType = ENERGY,
+	damageType = BLAST,
 
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = LIGHT,
+	armorPiercing = MEDIUM,
 
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -114,8 +114,8 @@ object_weapon_ranged_pistol_pistol_republic_blaster_quest = object_weapon_ranged
 	maxRange = 64,
 	maxRangeAccuracy = 5,
 
-	minDamage = 21,
-	maxDamage = 98,
+	minDamage = 100,
+	maxDamage = 350,
 
 	attackSpeed = 4.6,
 
@@ -126,8 +126,8 @@ object_weapon_ranged_pistol_pistol_republic_blaster_quest = object_weapon_ranged
 	experimentalWeights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	experimentalGroupTitles = {"null", "null", "expDamage", "expDamage", "expDamage", "expDamage", "exp_durability", "expRange", "expEffeciency", "expEffeciency", "expEffeciency"},
 	experimentalSubGroupTitles = {"null", "null", "mindamage", "maxdamage", "attackspeed", "woundchance", "hitpoints", "midrangemod", "attackhealthcost", "attackactioncost", "attackmindcost"},
-	experimentalMin = {0, 0, 21, 98, 4.6, 10, 750, -52, 20, 52, 20},
-	experimentalMax = {0, 0, 39, 182, 3.1, 20, 1500, -28, 10, 28, 10},
+	experimentalMin = {0, 0, 121, 200, 4.6, 10, 750, -52, 20, 52, 20},
+	experimentalMax = {0, 0, 239, 400, 3.1, 20, 1500, -28, 10, 28, 10},
 	experimentalPrecision = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
 	experimentalCombineType = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }

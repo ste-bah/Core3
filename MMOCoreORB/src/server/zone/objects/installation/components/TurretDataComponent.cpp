@@ -130,7 +130,9 @@ void TurretDataComponent::rescheduleFireTask(float secondsToWait, bool manual) {
 			setManualTarget(NULL);
 		}
 	} else {
-		turretFireTask->schedule(secondsToWait * 1000);
+		if (turretFireTask == NULL) {
+			turretFireTask->schedule(secondsToWait * 1000);
+		}
 	}
 }
 
