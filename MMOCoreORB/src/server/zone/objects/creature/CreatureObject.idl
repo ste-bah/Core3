@@ -1250,7 +1250,7 @@ class CreatureObject extends TangibleObject {
 	public native void setBlindedState(int durationSeconds = 5);
 
 	@preLocked
-	public native void setIntimidatedState(unsigned int mod, unsigned int crc, int durationSeconds = 15);
+	public native void setIntimidatedState(int durationSeconds = 15);
 
 	@preLocked
 	public native void setSnaredState(int durationSeconds = 20);
@@ -1839,11 +1839,6 @@ class CreatureObject extends TangibleObject {
 	@dirty
 	public boolean isNextActionPast() {
 		return nextAction.isPast();
-	}
-
-	@dirty
-	public abstract boolean isTrainerCreature() {
-		return false;
 	}
 
 	@read

@@ -484,6 +484,14 @@ void AiAgentImplementation::initializeTransientMembers() {
 
 void AiAgentImplementation::notifyPositionUpdate(QuadTreeEntry* entry) {
 	CreatureObjectImplementation::notifyPositionUpdate(entry);
+
+	SceneObject* object = static_cast<SceneObject*>(entry);
+
+	CreatureObject* creo = object->asCreatureObject();
+
+	if (creo != NULL && creo->isPlayerCreature() && !creo->isInvisible()) {
+		activateAwarenessEvent();
+	}
 }
 
 bool AiAgentImplementation::runAwarenessLogicCheck(SceneObject* pObject) {
@@ -653,8 +661,9 @@ int AiAgentImplementation::checkForReactionChat(SceneObject* pObject) {
 }
 
 void AiAgentImplementation::doAwarenessCheck() {
-	if (numberOfPlayersInRange.get() <= 0)
-		return;
+	int oldCount = numberOfPlayersInRange.get();
+
+	int newPlayerCount = -1;
 
 	CloseObjectsVector* vec = (CloseObjectsVector*) getCloseObjects();
 	if (vec == NULL)
@@ -667,6 +676,7 @@ void AiAgentImplementation::doAwarenessCheck() {
 
 	if (current != NULL) {
 		AiAgent* thisObject = asAiAgent();
+		newPlayerCount = 0;
 
 		for (int i = 0; i < closeObjects.size(); ++i) {
 			SceneObject* scene = static_cast<SceneObject*>(closeObjects.get(i));
@@ -681,15 +691,25 @@ void AiAgentImplementation::doAwarenessCheck() {
 
 			//Locker crossLocker(target, thisObject); lets do dirty reads
 
+			if (target->isPlayerCreature() && !target->isInvisible())
+				++newPlayerCount;
+
 			if (current->doAwarenessCheck(target)) {
 				interrupt(target, ObserverEventType::OBJECTINRANGEMOVED);
 			}
 		}
 	}
 
-	if (numberOfPlayersInRange.get() > 0) {
-		activateAwarenessEvent();
+	if (newPlayerCount != -1) {
+		bool success = numberOfPlayersInRange.compareAndSet(oldCount, newPlayerCount);
+
+		if (success && !newPlayerCount) {
+			return;
+		}
 	}
+
+	if (numberOfPlayersInRange.get() > 0)
+		activateAwarenessEvent();
 }
 
 void AiAgentImplementation::doRecovery(int latency) {
@@ -1418,16 +1438,30 @@ void AiAgentImplementation::notifyDissapear(QuadTreeEntry* entry) {
 		if (!creo->isInvisible()) {
 			int32 newValue = (int32) numberOfPlayersInRange.decrement();
 
+			if (newValue < 0) {
+				int oldValue;
+
+				do {
+					oldValue = (int)numberOfPlayersInRange.get();
+
+					newValue = oldValue;
+
+					if (newValue < 0)
+						newValue = 0;
+				} while (!numberOfPlayersInRange.compareAndSet((uint32)oldValue, (uint32)newValue));
+			}
+
 			if (newValue == 0) {
 				if (despawnOnNoPlayerInRange && (despawnEvent == NULL) && !isPet()) {
 					despawnEvent = new DespawnCreatureOnPlayerDissappear(asAiAgent());
 					despawnEvent->schedule(30000);
 				}
 
+				/*Locker locker(&awarenessEventMutex);
 				if (awarenessEvent != NULL) {
 					awarenessEvent->cancel();
 					awarenessEvent = NULL;
-				}
+				}*/
 			} else if (newValue < 0) {
 				error("numberOfPlayersInRange below 0");
 			}
@@ -1442,6 +1476,11 @@ void AiAgentImplementation::activateAwarenessEvent(uint64 delay) {
 #ifdef DEBUG
 	info("Starting activateAwarenessEvent check", true);
 #endif
+	CloseObjectsVector* vec = (CloseObjectsVector*) getCloseObjects();
+
+	if (vec == NULL)
+		return;
+
 	Locker locker(&awarenessEventMutex);
 
 	if (awarenessEvent == NULL) {
