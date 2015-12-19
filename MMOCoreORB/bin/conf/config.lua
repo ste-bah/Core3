@@ -50,11 +50,11 @@ MakeWeb = 0
 
 ORB = ""
 
-DBHost = "37.59.116.199"
+DBHost = ---
 DBPort = 3306
 DBName = "sunfall"
 DBUser = "root"
-DBPass = "sunfall123456"
+DBPass = ---
 DBSecret = "swgemus3cr37!" -- Change this! This value should be unique and of reasonable length.
 
 LoginPort = 44453
