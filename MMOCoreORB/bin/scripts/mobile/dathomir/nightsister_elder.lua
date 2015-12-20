@@ -31,16 +31,6 @@ nightsister_elder = Creature:new {
 		{
 			groups = {
 				{group = "crystals_premium", chance = 800000},
-<<<<<<< HEAD
-				{group = "nightsister_common", chance = 200000},
-				{group = "armor_attachments", chance = 2000000},
-				{group = "clothing_attachments", chance = 2000000},
-				{group = "pistols", chance = 1000000},
-				{group = "rifles", chance = 1000000},
-				{group = "carbines", chance = 1000000},
-				{group = "melee_weapons", chance = 1000000},
-				{group = "wearables_scarce", chance = 1000000}
-=======
 				{group = "nightsister_common", chance = 2200000},
 				{group = "junk", chance = 1000000},
 				{group = "armor_attachments", chance = 500000},
@@ -50,7 +40,6 @@ nightsister_elder = Creature:new {
 				{group = "carbines", chance = 900000},
 				{group = "melee_weapons", chance = 2000000},
 				{group = "wearables_scarce", chance = 500000}
->>>>>>> refs/remotes/unstable/unstable
 			}
 		}
 	},
