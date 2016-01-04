@@ -1,5 +1,5 @@
 murm = Creature:new {
-	customName = "Mirm",
+	customName = "Guardian of Sunfall Mirm",
 	socialGroup = "",
 	faction = "",
 	level = 250,

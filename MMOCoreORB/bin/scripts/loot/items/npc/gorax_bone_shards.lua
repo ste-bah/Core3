@@ -6,7 +6,7 @@ gorax_bone_shards = {
 	customObjectName = "",
 	directObjectTemplate = "object/tangible/component/weapon/projectile_feed_mechanism_enhancement_gorax.iff",
 	craftingValues = {
-		{"maxdamage",40,85,0},
+		{"maxdamage",70,100,0},
 		{"attackspeed",0,-1,1},
 		{"useCount",1,6,0},
 	},

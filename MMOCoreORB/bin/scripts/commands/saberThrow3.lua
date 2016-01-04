@@ -46,7 +46,7 @@ SaberThrow3Command = {
         
                 
         
-	damageMultiplier = 2.0,
+	damageMultiplier = 4.0,
 	speedMultiplier = 4.5,
 	coneAngle = 30,
 	coneAction = true,

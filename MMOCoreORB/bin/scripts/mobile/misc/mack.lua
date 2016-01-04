@@ -1,5 +1,5 @@
 mack = Creature:new {
-	customName = "Mac",
+	customName = "Protector of Sunfall Mac",
 	socialGroup = "",
 	faction = "",
 	level = 250,

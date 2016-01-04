@@ -62,7 +62,7 @@ object_tangible_powerup_weapon_ranged_scope = object_tangible_powerup_weapon_sha
 		{"actionAttackCost", "Tracking", "cat_pup.pup_wpn_attack_cost_action"}
 	},
 
-	factoryCrateSize = 10,
+	factoryCrateSize = 100,
 
 
 	numberExperimentalProperties = {1, 1, 1, 1},

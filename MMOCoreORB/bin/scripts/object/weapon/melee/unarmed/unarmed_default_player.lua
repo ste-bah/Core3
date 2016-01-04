@@ -70,10 +70,10 @@ object_weapon_melee_unarmed_unarmed_default_player = object_weapon_melee_unarmed
 	weaponType = UNARMEDWEAPON,
 	
 	-- ENERGY, KINETIC, ELECTRICITY, STUN, BLAST, HEAT, COLD, ACID, LIGHTSABER
-	damageType = KINETIC,
+	damageType = ENERGY,
 	
 	-- NONE, LIGHT, MEDIUM, HEAVY
-	armorPiercing = NONE, 
+	armorPiercing = LIGHT, 
 	
 	-- combat_rangedspecialize_bactarifle, combat_rangedspecialize_rifle, combat_rangedspecialize_pistol, combat_rangedspecialize_heavy, combat_rangedspecialize_carbine
 	-- combat_meleespecialize_unarmed, combat_meleespecialize_twohand, combat_meleespecialize_polearm, combat_meleespecialize_onehand, combat_general,
@@ -117,10 +117,10 @@ object_weapon_melee_unarmed_unarmed_default_player = object_weapon_melee_unarmed
 	maxRange = 5,
 	maxRangeAccuracy = 5,
 
-	minDamage = 10,
-	maxDamage = 50,
+	minDamage = 50,
+	maxDamage = 150,
 	
-	attackSpeed = 2,
+	attackSpeed = 1,
 	
 	woundsRatio = 5
 }

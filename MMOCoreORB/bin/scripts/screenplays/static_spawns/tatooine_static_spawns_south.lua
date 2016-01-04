@@ -67,7 +67,7 @@ function TatooineStaticSpawnsSouthScreenPlay:spawnMobiles()
 	spawnMobile("tatooine", "jabba_enforcer", 300, -3388.6, 0.0, -4917.6, -98, 0)--Sunfall by City Hall
 	spawnMobile("tatooine", "mack", 7200, -3460.3, 0.8, -5119.5, 27, 0)--Sunfall Northeast Mound
 	spawnMobile("tatooine", "murm", 7200, -3324.9, 0.0, -5138.0, 103, 0)--Sunfall by Nothwest mound
-	spawnMobile("tatooine", "rebel_battle_droid", 1200, -3396.1, 0.0, -5108.7, -82, 0)--Sunfall West mound
+	--spawnMobile("tatooine", "rebel_battle_droid", 10, -3396.1, 0.0, -5108.7, -82, 0)--Sunfall By Shuttle
 	spawnMobile("tatooine", "rebel_recruiter", 1, -3379, 0.0, -5084.9, -8, 0)--Sunfall by GH Rebel Term
 	spawnMobile("tatooine", "imperial_recruiter", 1, -3412.2, 0.0, -5084.9, -17, 0)--Sunfall by GH Imp Term
 	spawnMobile("tatooine", "jabba_scout", 300, -3338.1, 0.0, -4980.4, -124, 0)--Sunfall east of shuttle
@@ -82,6 +82,7 @@ function TatooineStaticSpawnsSouthScreenPlay:spawnMobiles()
 	spawnMobile("tatooine", "jabba_scout", 300, -3443.6, 0.0, -4977.7, -85, 0)--Sunfall West of shuttle
 	spawnMobile("corellia", "vader", 1, -160.0, 28.0, -4722.9,94, 0)--Coronet vader
 	spawnMobile("tatooine", "vader", 1, 3523.5, 5.0, -4802.3,91, 0)--Eisley vader
+	spawnMobile("naboo", "vader", 1, 4864.5, 6.0, 4156.6,31, 0)--Theed vader
 	spawnMobile("yavin4", "axkva_min", 1, -5575.7, 87.7, 4908.4,-3, 0)--light enclave doorway
 	spawnMobile("yavin4", "axkva_min", 1, -5576.6, 87.7, 4907.8,-161, 0)--light enclave doorway
 	spawnMobile("yavin4", "nightsister_elder", 1, -5574.3, 87.7, 4908.3,0, 0)--light enclave doorway

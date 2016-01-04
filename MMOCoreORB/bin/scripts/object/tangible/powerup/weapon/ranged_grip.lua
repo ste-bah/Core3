@@ -63,7 +63,7 @@ object_tangible_powerup_weapon_ranged_grip = object_tangible_powerup_weapon_shar
 		{"healthAttackCost", "Recoil-Deadening", "cat_pup.pup_wpn_attack_cost_health"}
 	},
 
-	factoryCrateSize = 10,
+	factoryCrateSize = 100,
 
 	numberExperimentalProperties = {1, 1, 1, 1},
 	experimentalProperties = {"XX", "XX", "XX", "OQ"},

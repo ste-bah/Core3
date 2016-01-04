@@ -1838,6 +1838,16 @@ BountyTargetListElement* MissionManagerImplementation::getRandomPlayerBounty(Cre
 		int index = System::random(playerBountyList.size() - 1);
 		BountyTargetListElement* randomTarget = playerBountyList.get(index);
 
+	    uint64 oid = randomTarget->getTargetId();
+	    Reference<SceneObject*> targetPlayer = player->getZoneServer()->getObject(oid);
+
+	    uint64 accountID = targetPlayer->getClient()->getAccountID();
+
+	    // Don't get same account jedi.
+		if (accountID == player->getClient()->getAccountID()) {
+			found = false;
+		}
+
 		if (randomTarget->getCanHaveNewMissions() && randomTarget->numberOfActiveMissions() < 6 &&
 				randomTarget->getTargetId() != player->getObjectID()) {
 			return randomTarget;

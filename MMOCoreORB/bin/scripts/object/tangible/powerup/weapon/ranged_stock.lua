@@ -62,7 +62,7 @@ object_tangible_powerup_weapon_ranged_stock = object_tangible_powerup_weapon_sha
 		{"attackSpeed", "Loading", "cat_pup.pup_wpn_attack_speed"}
 	},
 
-	factoryCrateSize = 10,
+	factoryCrateSize = 100,
 
 	numberExperimentalProperties = {1, 1, 1, 1},
 	experimentalProperties = {"XX", "XX", "XX", "OQ"},
