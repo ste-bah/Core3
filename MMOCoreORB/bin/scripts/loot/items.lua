@@ -470,6 +470,12 @@ includeFile("items/painting/valley_view_painting.lua")
 --quest sub-folder
 includeFile("items/quest/waypoint_datapad.lua")
 includeFile("items/quest/theater_datapad.lua")
+includeFile("items/quest/village_ardanium_ii.lua")
+includeFile("items/quest/village_endrine.lua")
+includeFile("items/quest/village_ostrine.lua")
+includeFile("items/quest/village_rudic.lua")
+includeFile("items/quest/village_wind_crystal.lua")
+includeFile("items/quest/village_medic_puzzle_ice_pendant.lua")
 
 --recycler sub-folder
 includeFile("items/recycler/agitator_motor_schematic.lua")

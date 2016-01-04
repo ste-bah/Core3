@@ -1,6 +1,7 @@
 nightsister_sentinel = Creature:new {
 	objectName = "@mob/creature_names:nightsister_sentinal",
-	randomNameType = NAME_GENERIC_TAG,
+	randomNameType = NAME_GENERIC,
+	randomNameTag = true,
 	socialGroup = "nightsister",
 	faction = "nightsister",
 	level = 88,
@@ -38,7 +39,7 @@ nightsister_sentinel = Creature:new {
 				{group = "pistols", chance = 1000000},
 				{group = "carbines", chance = 1000000},
 				{group = "wearables_common", chance = 500000},
-				{group = "wearables_uncommon", chance = 500000}
+				{group = "tailor_components", chance = 500000}
 			}
 		}
 	},

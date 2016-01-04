@@ -1,6 +1,7 @@
 force_crystal_hunter = Creature:new {
 	objectName = "@mob/creature_names:dark_force_crystal_hunter",
-	randomNameType = NAME_GENERIC_TAG,
+	randomNameType = NAME_GENERIC,
+	randomNameTag = true,
 	socialGroup = "kun",
 	faction = "",
 	level = 115,
@@ -30,15 +31,16 @@ force_crystal_hunter = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "junk", chance = 3500000},
-				{group = "crystals_poor", chance = 500000},
-				{group = "color_crystals", chance = 500000},
+				{group = "junk", chance = 3000000},
+				{group = "crystals_poor", chance = 800000},
+				{group = "color_crystals", chance = 700000},
 				{group = "holocron_dark", chance = 500000},
 				{group = "holocron_light", chance = 500000},
 				{group = "melee_weapons", chance = 1000000},
 				{group = "armor_attachments", chance = 1000000},
 				{group = "clothing_attachments", chance = 1000000},
-				{group = "wearables_all", chance = 1500000}
+				{group = "wearables_all", chance = 1400000},
+				{group = "force_hunter_rare", chance = 100000}
 			}
 		}
 	},

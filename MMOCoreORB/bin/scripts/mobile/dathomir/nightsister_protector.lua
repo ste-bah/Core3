@@ -1,6 +1,7 @@
 nightsister_protector = Creature:new {
 	objectName = "@mob/creature_names:nightsister_protector",
-	randomNameType = NAME_GENERIC_TAG,
+	randomNameType = NAME_GENERIC,
+	randomNameTag = true,
 	socialGroup = "nightsister",
 	faction = "nightsister",
 	level = 131,
@@ -39,7 +40,12 @@ nightsister_protector = Creature:new {
 				{group = "rifles", chance = 1000000},
 				{group = "pistols", chance = 1000000},
 				{group = "carbines", chance = 1000000},
+<<<<<<< HEAD
 				{group = "wearables_all", chance = 100000}
+=======
+				{group = "wearables_common", chance = 500000},
+				{group = "tailor_components", chance = 500000}
+>>>>>>> refs/remotes/UNSTABLE/unstable
 			}
 		}
 	},

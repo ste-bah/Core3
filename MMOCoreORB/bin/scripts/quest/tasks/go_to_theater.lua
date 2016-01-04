@@ -33,6 +33,7 @@ GoToTheater = Task:new {
 	waypointDescription = "",
 	createWaypoint = true,
 	mobileList = {},
+	mobileListWithLoc = {},
 	despawnTime = 0,
 	activeAreaRadius = 0,
 	onFailedSpawn = nil,
@@ -47,6 +48,11 @@ function GoToTheater:getSpawnedMobileList(pCreatureObject)
 	Logger:log("Getting the spawned mobile list for " .. self.taskName .. " theater.", LT_INFO)
 	local theaterId = readData(SceneObject(pCreatureObject):getObjectID() .. self.taskName .. THEATER_ID_STRING)
 	local pTheater = getSceneObject(theaterId)
+
+	if pTheater == nil then
+		return nil
+	end
+
 	return SpawnMobiles.getSpawnedMobiles(pTheater, self.taskName)
 end
 
@@ -118,7 +124,12 @@ function GoToTheater:taskStart(pCreatureObject)
 
 			Logger:log("Spawning mobiles for " .. self.taskName .. " theater.", LT_INFO)
 			local spawnedMobilesList = SpawnMobiles.spawnMobiles(pTheater, self.taskName, self.mobileList, true)
-
+			local spawnedMobilesWithLocList = SpawnMobiles.spawnMobilesWithLoc(pTheater, self.taskName, self.mobileListWithLoc)
+			
+			if (spawnedMobilesList == nil and spawnedMobilesWithLocList ~= nil) then
+				spawnedMobilesList = spawnedMobilesWithLocList
+			end
+			
 			if spawnedMobilesList ~= nil then
 				if self:setupActiveArea(pCreatureObject, spawnPoint) then
 					local waypointId

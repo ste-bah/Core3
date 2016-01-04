@@ -63,10 +63,8 @@ void SuiPageData::addChildWidget(const String& parent, const String& type, const
 }
 
 void SuiPageData::subscribeToEvent(const byte& eventType, const String& parent, const String& callback) {
-	if (callbacks.contains(eventType)) {
-		warning("SuiPageData::addCommand attempt to add duplicate SCT_subscribeToEvent command.");
-		return;
-	}
+	if (callbacks.contains(eventType))
+		callbacks.drop(eventType);
 
 	SuiCommand* command = new SuiCommand(SuiCommand::SCT_subscribeToEvent);
 	command->addNarrowParameter(parent);
@@ -142,8 +140,9 @@ void SuiPageData::sendTo(CreatureObject* creo) {
 
 void SuiPageData::sendUpdateTo(CreatureObject* creo) {
 	PlayerObject* playerObject = creo->getPlayerObject();
+	ZoneClientSession* client = creo->getClient();
 
-	if (playerObject != NULL) {
-		creo->getClient()->sendMessage(new SuiUpdatePageMessage(this));
+	if (playerObject != NULL && client != NULL) {
+		client->sendMessage(new SuiUpdatePageMessage(this));
 	}
 }

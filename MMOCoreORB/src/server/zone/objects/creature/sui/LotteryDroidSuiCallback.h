@@ -16,7 +16,9 @@ public:
 		optionalArg = optArg;
 	}
 
-	void run(CreatureObject* player, SuiBox* suiBox, bool cancelPressed, Vector<UnicodeString>* args) {
+	void run(CreatureObject* player, SuiBox* suiBox, uint32 eventIndex, Vector<UnicodeString>* args) {
+		bool cancelPressed = (eventIndex == 1);
+
 		int windowType = suiBox->getWindowType();
 
 		if (cancelPressed) {
@@ -36,6 +38,8 @@ public:
 
 		if (lotteryDroid == NULL)
 			return;
+
+		Locker lotteryDroidGuard(lotteryDroid, player);
 
 		if (args->size() < 1)
 			return;

@@ -43,9 +43,12 @@
 
 Saber2hPhantomCommand = {
         name = "saber2hphantom",
-        
-    damageMultiplier = 4.5,
+
+	damageMultiplier = 4.5,
 	speedMultiplier = 4.0,
+	healthCostMultiplier = 0,
+	actionCostMultiplier = 0,
+	mindCostMultiplier = 0,
 	coneAngle = 45,
 	coneAction = true,
 	forceCostMultiplier = 3.0,
@@ -83,9 +86,9 @@ Saber2hPhantomCommand = {
 	animationCRC = hashCode("combo_jedi_2_light"),
 
 	combatSpam = "saber2hphantom",
-	
+
 	poolsToDamage = RANDOM_ATTRIBUTE,
-	
+
 	weaponType = TWOHANDJEDIWEAPON,
 
 	range = 24

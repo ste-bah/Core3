@@ -1,6 +1,7 @@
 lost_aqualish_marshall = Creature:new {
 	objectName = "@mob/creature_names:lost_aqualish_marshal",
-	randomNameType = NAME_GENERIC_TAG,
+	randomNameType = NAME_GENERIC,
+	randomNameTag = true,
 	socialGroup = "lost_aqualish",
 	faction = "lost_aqualish",
 	level = 25,
@@ -32,11 +33,12 @@ lost_aqualish_marshall = Creature:new {
 	lootGroups = {
 		{
 			groups = {
-				{group = "junk", chance = 3000000},
+				{group = "junk", chance = 2500000},
 				{group = "wearables_common", chance = 2000000},
 				{group = "heavy_weapons", chance = 2000000},
 				{group = "tailor_components", chance = 1500000},
-				{group = "loot_kit_parts", chance = 1500000}
+				{group = "loot_kit_parts", chance = 1500000},
+				{group = "color_crystals", chance = 500000}
 			}
 		}
 	},

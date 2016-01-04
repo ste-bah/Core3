@@ -43,11 +43,19 @@
 
 SaberThrow3Command = {
         name = "saberthrow3",
+<<<<<<< HEAD
         
                 
         
 	damageMultiplier = 4.0,
+=======
+
+	damageMultiplier = 2.0,
+>>>>>>> refs/remotes/UNSTABLE/unstable
 	speedMultiplier = 4.5,
+	healthCostMultiplier = 0,
+	actionCostMultiplier = 0,
+	mindCostMultiplier = 0,
 	coneAngle = 30,
 	coneAction = true,
 	forceCostMultiplier = 2.5,
@@ -67,9 +75,9 @@ SaberThrow3Command = {
 	animationCRC = hashCode("saberthrow_posture_change"),
 
 	combatSpam = "saberthrow3",
-	
+
 	poolsToDamage = RANDOM_ATTRIBUTE,
-	
+
 	weaponType = JEDIWEAPON,
 
 	range = 32
