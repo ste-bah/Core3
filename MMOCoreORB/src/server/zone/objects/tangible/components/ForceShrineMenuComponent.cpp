@@ -74,7 +74,7 @@ int ForceShrineMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, C
 		ghost->setJediState(2);
 
 		// Find a trainer.
-		findTrainerObject(creature);
+		findTrainerObject(creature, ghost.get());
 
 		ManagedReference<SceneObject*> inventory = creature->getSlottedObject("inventory");
 
@@ -115,12 +115,11 @@ int ForceShrineMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, C
 	return 0;
 }
 
-void ForceShrineMenuComponent::findTrainerObject(CreatureObject* player) {
+void ForceShrineMenuComponent::findTrainerObject(CreatureObject* player, PlayerObject* ghost) {
 
 	// Trainer number. Pick a random trainer, there are at least 600 in the galaxy.
 	ZoneServer* zserv = player->getZoneServer();
 	Vector<String> trainerTypes;
-	Reference<PlayerObject*> playerObject = player->getPlayerObject();
 
 	// Map categories defined here.
 	trainerTypes.add("trainer_brawler");
@@ -145,7 +144,6 @@ void ForceShrineMenuComponent::findTrainerObject(CreatureObject* player) {
 		Zone* zone = zserv->getZone(System::random(zserv->getZoneCount() - 1));
 
 		if (zone == NULL || zone->getZoneName() == "tutorial") {
-			//printf("Jedi Trainer Assignment - no or wrong Zone.");
 			continue;
 		}
 
@@ -155,40 +153,34 @@ void ForceShrineMenuComponent::findTrainerObject(CreatureObject* player) {
 		int size = trainers.size();
 
 		if (size <= 0) {
-			//printf("Jedi Trainer Assignment - size is zero.");
 			continue;
 		}
 
 		ManagedReference<SceneObject*> trainer = trainers.get(System::random(size - 1));
 
 		if (trainer == NULL) {
-			//printf("Jedi Trainer Assignment - No trainer found (NULL).");
 			continue;
 		}
 
 		ManagedReference<CreatureObject*> trainerCreo = trainer.castTo<CreatureObject*>();
 
 		if (trainerCreo == NULL) {
-			//printf("Jedi Trainer Assignment - Trainer creature null.");
 			continue;
 		}
-
 
 		ManagedReference<CityRegion*> city = trainerCreo->getCityRegion();
 
 		// Make sure it's not a player-city trainer.
-		if (city != NULL && !city.get()->isClientRegion()){
-			//printf("Jedi Trainer Assignment - It was in a player city..");
+		if (city != NULL && !city->isClientRegion()){
 			continue;
 		}
 
 		zoneName = trainerCreo.get()->getZone()->getZoneName();
 		coords = trainerCreo.get()->getWorldPosition();
 		found = true;
-		//printf("Jedi Trainer Assignment - Trainer found!!!");
+
 	}
 
-	playerObject.get()->setTrainerCoordinates(coords);
-	playerObject.get()->setTrainerZoneName(zoneName); // For the Waypoint.
-	//player->sendSystemMessage("Your trainer assigned to - " + zoneName + ".");
+	ghost->setTrainerCoordinates(coords);
+	ghost->setTrainerZoneName(zoneName); // For the Waypoint.
 }

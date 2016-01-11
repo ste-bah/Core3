@@ -34,6 +34,18 @@ namespace creature {
 
 using namespace server::zone::objects::creature;
 
+namespace server {
+namespace zone {
+namespace objects {
+namespace player {
+	class PlayerObject;
+}
+}
+}
+}
+
+using namespace server::zone::objects::player;
+
 class ForceShrineMenuComponent : public TangibleObjectMenuComponent {
 
 public:
@@ -42,7 +54,7 @@ public:
 	virtual void fillObjectMenuResponse(SceneObject* sceneObject, ObjectMenuResponse* menuResponse, CreatureObject* player);
 
 	// This finds a trainer for jedi unlocks.
-	virtual void findTrainerObject(CreatureObject* player);
+	virtual void findTrainerObject(CreatureObject* player, PlayerObject* ghost);
 
 };
 
