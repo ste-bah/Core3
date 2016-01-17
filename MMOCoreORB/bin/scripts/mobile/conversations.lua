@@ -192,3 +192,19 @@ includeFile("conversations/record_keepers/record_keeper_rebel_conv.lua")
 
 -- Personality Conversations
 includeFile("conversations/pet/pets_conv.lua")
+
+-- Tarkin Travel System
+includeFile("conversations/travel/corellia_shuttle_conv_handler.lua")
+includeFile("conversations/travel/dantooine_shuttle_conv_handler.lua")
+includeFile("conversations/travel/dathomir_shuttle_conv_handler.lua")
+includeFile("conversations/travel/endor_shuttle_conv_handler.lua")
+includeFile("conversations/travel/lok_shuttle_conv_handler.lua")
+includeFile("conversations/travel/naboo_shuttle_conv_handler.lua")
+includeFile("conversations/travel/rori_shuttle_conv_handler.lua")
+includeFile("conversations/travel/talus_shuttle_conv_handler.lua")
+includeFile("conversations/travel/tatooine_shuttle_conv_handler.lua")
+includeFile("conversations/travel/yavin4_shuttle_conv_handler.lua")
+includeFile("conversations/travel/star_pilot_from_theed_conv_handler.lua")
+includeFile("conversations/travel/star_pilot_to_theed_conv_handler.lua")
+includeFile("conversations/travel/wolten_kinhara_to_coronet_conv_handler.lua")
+includeFile("conversations/travel/wolten_kinhara_from_coronet_conv_handler.lua")

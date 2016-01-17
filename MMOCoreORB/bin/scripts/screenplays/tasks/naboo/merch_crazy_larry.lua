@@ -52,11 +52,9 @@ function crazylarry_convo_handler:getNextConversationScreen(conversationTemplate
 			local inventory = LuaSceneObject(pInventory)
 			
 			-- Take action when the player makes a purchase.
-			if (inventory:hasFullContainerObjects() == true) then
-				-- Bail if the player doesn't have enough space in their inventory.
-				-- Plays a chat box message from the NPC as well as a system message.
-				nextConversationScreen = conversation:getScreen("insufficient_space")
-				creature:sendSystemMessage("You do not have enough inventory space")	
+            if (SceneObject(pInventory):isContainerFullRecursive() == true) then
+                nextConversationScreen = conversation:getScreen("insufficient_space")
+				creature:sendSystemMessage("You do not have enough inventory space")
 			elseif (optionLink == "speederbike" and credits < 10000) then				
 				-- Bail if the player doesn't have enough cash on hand.
 				-- Plays a chat box message from the NPC as well as a system message.
@@ -65,7 +63,7 @@ function crazylarry_convo_handler:getNextConversationScreen(conversationTemplate
 			elseif (optionLink == "speederbike" and credits >= 10000) then
 				-- Take 10,000 credits from the player's cash on hand and give player a speederbike.
 				creature:subtractCashCredits(10000)
-				local pItem = giveItem(pInventory, "object/tangible/deed/vehicle_deed/speederbike_swoop_deed.iff", -1)
+				local pItem = giveItem(pInventory, "object/tangible/deed/vehicle_deed/speederbike_deed.iff", -1)
 			end
 		end
 	end

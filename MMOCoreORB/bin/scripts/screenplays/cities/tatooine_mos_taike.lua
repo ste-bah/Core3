@@ -21,6 +21,11 @@ function TatooineMosTaikeScreenPlay:spawnSceneObjects()
 
 end
 
+function TatooineMosTaikeScreenPlay:spawnSceneObjects()
+  -- Shuttleport for Tarkin Travel System
+  spawnSceneObject("tatooine", "object/building/tatooine/shuttleport_tatooine.iff", 3733, 5.5, 2420, 0, 174)
+end
+
 function TatooineMosTaikeScreenPlay:spawnMobiles()
 
 	local pNpc = spawnMobile("tatooine", "vendor",60,4.6,1.0,6.3,-107,1154121)
