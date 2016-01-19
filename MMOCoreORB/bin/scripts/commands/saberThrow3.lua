@@ -43,15 +43,8 @@
 
 SaberThrow3Command = {
         name = "saberthrow3",
-<<<<<<< HEAD
-        
-                
-        
-	damageMultiplier = 4.0,
-=======
 
 	damageMultiplier = 2.0,
->>>>>>> refs/remotes/UNSTABLE/unstable
 	speedMultiplier = 4.5,
 	healthCostMultiplier = 0,
 	actionCostMultiplier = 0,

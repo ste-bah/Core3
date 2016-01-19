@@ -49,7 +49,7 @@ SaberPolearmDervish2Command = {
 	healthCostMultiplier = 0,
 	actionCostMultiplier = 0,
 	mindCostMultiplier = 0,
-	coneAngle = 45,
+	coneAngle = 360,
 	coneAction = true,
 	coneRange = 24,
 	forceCostMultiplier = 3.0,
@@ -96,3 +96,4 @@ SaberPolearmDervish2Command = {
 }
 
 AddCommand(SaberPolearmDervish2Command)
+
