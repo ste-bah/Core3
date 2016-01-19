@@ -26,13 +26,15 @@ public:
 		if (cancelPressed || !suiBox->isListBox() || player == NULL || args->size() <= 0 )
 			return;
 
-		if(player->isDead() || player->isIncapacitated())
+		if (player->isDead() || player->isIncapacitated())
 			return;
 
 		ManagedReference<SceneObject*> obj = suiBox->getUsingObject();
 
-		if(obj == NULL)
+		if (obj == NULL)
 			return;
+
+		TangibleObject* uplinkTerm = cast<TangibleObject*>(obj.get());
 
 		ManagedReference<BuildingObject*> building = cast<BuildingObject*>(obj->getParentRecursively(SceneObjectType::FACTIONBUILDING).get().get());
 
@@ -41,13 +43,12 @@ public:
 
 		GCWManager* gcwMan = player->getZone()->getGCWManager();
 
-		if(gcwMan==NULL)
+		if (gcwMan == NULL)
 			return;
 
 		int index = Integer::valueOf(args->get(0).toString());
 
-		gcwMan->verifyUplinkBand(player, building, index);
-
+		gcwMan->verifyUplinkBand(player, building, index, uplinkTerm);
 	}
 };
 

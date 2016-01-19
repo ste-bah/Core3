@@ -16,6 +16,7 @@
 #include "server/zone/managers/vendor/VendorManager.h"
 #include "server/chat/ChatManager.h"
 #include "server/chat/room/ChatRoom.h"
+#include "server/chat/PersistentMessage.h"
 #include "server/zone/Zone.h"
 #include "server/zone/ZoneServer.h"
 #include "server/zone/ZoneClientSession.h"
@@ -102,7 +103,6 @@ void PlayerObjectImplementation::loadTemplateData(SharedObjectTemplate* template
 
 	forcePower = getForcePower();
 	forcePowerMax = getForcePowerMax();
-	forcePowerRegen = getForcePowerRegen();
 
 	trainerZoneName = getTrainerZoneName();
 
@@ -1699,12 +1699,32 @@ void PlayerObjectImplementation::activateForcePowerRegen() {
 		return;
 	}
 
+	ManagedReference<CreatureObject*> creature = dynamic_cast<CreatureObject*>(parent.get().get());
+
+	if (creature == NULL) {
+		return;
+	}
+
 	if (forceRegenerationEvent == NULL) {
 		forceRegenerationEvent = new ForceRegenerationEvent(_this.getReferenceUnsafeStaticCast());
 	}
 
 	if (!forceRegenerationEvent->isScheduled()) {
-		float timer = ((float) getForcePowerRegen()) / 5.f;
+
+
+
+		float regen = (float)creature->getSkillMod("jedi_force_power_regen");
+		int regenMultiplier = creature->getSkillMod("private_force_regen_multiplier");
+		int regenDivisor = creature->getSkillMod("private_force_regen_divisor");
+
+		if (regenMultiplier != 0)
+			regen *= regenMultiplier;
+
+		if (regenDivisor != 0)
+			regen /= regenDivisor;
+
+		float timer = regen / 5.f;
+
 		float scheduledTime = 10 / timer;
 		uint64 miliTime = static_cast<uint64>(scheduledTime * 1000.f);
 		forceRegenerationEvent->schedule(miliTime);
@@ -1829,6 +1849,16 @@ void PlayerObjectImplementation::maximizeExperience() {
 	}
 }
 
+int PlayerObjectImplementation::getForcePowerRegen() {
+
+	ManagedReference<CreatureObject*> creature = dynamic_cast<CreatureObject*>(parent.get().get());
+
+	if (creature == NULL) {
+		return 0;
+	}
+
+	return creature->getSkillMod("jedi_force_power_regen");
+}
 void PlayerObjectImplementation::activateMissions() {
 	ManagedReference<CreatureObject*> creature = dynamic_cast<CreatureObject*>(parent.get().get());
 
@@ -2131,6 +2161,10 @@ void PlayerObjectImplementation::destroyObjectFromDatabase(bool destroyContained
 
 	removeAllFriends();
 
+	deleteAllPersistentMessages();
+
+	deleteAllWaypoints();
+
 	for (int i = 0; i < currentEventPerks.size(); ++i) {
 		uint64 oid = currentEventPerks.get(i);
 
@@ -2197,6 +2231,30 @@ void PlayerObjectImplementation::destroyObjectFromDatabase(bool destroyContained
 				RemoveSpouseTask* task = new RemoveSpouseTask(spouse);
 				task->execute();
 			}
+		}
+	}
+}
+
+void PlayerObjectImplementation::deleteAllPersistentMessages() {
+	for (int i = persistentMessages.size() - 1; i >= 0; --i) {
+		uint64 messageObjectID = persistentMessages.get(i);
+
+		Reference<PersistentMessage*> mail = Core::getObjectBroker()->lookUp(messageObjectID).castTo<PersistentMessage*>();
+
+		if (mail != NULL) {
+			ObjectManager::instance()->destroyObjectFromDatabase(messageObjectID);
+		}
+
+		dropPersistentMessage(messageObjectID);
+	}
+}
+
+void PlayerObjectImplementation::deleteAllWaypoints() {
+	for (int i = 0; i < waypointList.size(); ++i) {
+		WaypointObject* waypoint = waypointList.getValueAt(i);
+
+		if (waypoint != NULL && waypoint->isPersistent()) {
+			waypoint->destroyObjectFromDatabase(true);
 		}
 	}
 }
@@ -2315,7 +2373,6 @@ void PlayerObjectImplementation::activateQuest(int questID) {
 		creature->sendSystemMessage("@quest/quests:quest_journal_updated");
 }
 
-
 void PlayerObjectImplementation::setActiveQuestsBit(int bitIndex, byte value, bool notifyClient) {
 	activeQuests.setBit(bitIndex, value);
 
@@ -2328,6 +2385,32 @@ void PlayerObjectImplementation::setActiveQuestsBit(int bitIndex, byte value, bo
 	delta->close();
 
 	sendMessage(delta);
+}
+
+void PlayerObjectImplementation::completeQuest(int questID) {
+	if (!hasActiveQuestBitSet(questID))
+		return;
+
+	CreatureObject* creature = cast<CreatureObject*>(getParent().get().get());
+
+	if (creature == NULL)
+		return;
+
+	PlayerManager* playerManager = creature->getZoneServer()->getPlayerManager();
+
+	if (playerManager == NULL)
+		return;
+
+	ManagedReference<QuestInfo*> questInfo = playerManager->getQuestInfo(questID);
+
+	if (questInfo == NULL)
+		return;
+
+	clearActiveQuestsBit(questID);
+	setCompletedQuestsBit(questID, 1);
+
+	if (questInfo->shouldSendSystemMessage())
+		creature->sendSystemMessage("@quest/quests:task_complete");
 }
 
 void PlayerObjectImplementation::setCompletedQuestsBit(int bitIndex, byte value, bool notifyClient) {

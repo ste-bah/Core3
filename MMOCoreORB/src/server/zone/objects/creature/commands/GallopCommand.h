@@ -40,17 +40,18 @@ public:
 
 		uint32 crc = STRING_HASHCODE("gallop");
 
+		if (creature->isInCombat() || mount->isInCombat()) {
+			creature->sendSystemMessage("@combat_effects:no_combat_while_galloping"); // You cannot attack or react to an attack while galloping. Use /gallopStop to stop galloping.
+			return GENERALERROR;
+		}
+
 		if (mount->hasBuff(crc) || creature->hasBuff(crc)) {
+			creature->sendSystemMessage("@combat_effects:already_galloping"); // You are already galloping!
 			return GENERALERROR;
 		}
 
-		if (!creature->checkCooldownRecovery("gallop")) {
+		if (!mount->checkCooldownRecovery("gallop")) {
 			creature->sendSystemMessage("@combat_effects:mount_tired"); // Your mount is too tired to gallop.
-			return GENERALERROR;
-		}
-
-		if (creature->hasBuff(STRING_HASHCODE("burstrun"))) {
-			creature->sendSystemMessage("You cannot gallop while burst run is active.");
 			return GENERALERROR;
 		}
 
@@ -80,26 +81,14 @@ public:
 
 		buff->setSpeedMultiplierMod(magnitude);
 		buff->setAccelerationMultiplierMod(magnitude);
-
+		buff->setStartMessage(startStringId);
+		buff->setEndMessage(endStringId);
 		mount->addBuff(buff);
+;
+		mount->updateCooldownTimer("gallop", (cooldown + duration) * 1000);
 
-		locker.release();
-
-		ManagedReference<GallopBuff*> buff2 = new GallopBuff(creature, crc, duration);
-
-		Locker locker2(buff2);
-
-		buff2->setSpeedMultiplierMod(magnitude);
-		buff2->setAccelerationMultiplierMod(magnitude);
-		buff2->setStartMessage(startStringId);
-		buff2->setEndMessage(endStringId);
-
-		creature->addBuff(buff2);
-
-		creature->updateCooldownTimer("gallop", (cooldown + duration) * 1000);
-
-		Reference<GallopNotifyAvailableEvent*> task = new GallopNotifyAvailableEvent(creature);
-		creature->addPendingTask("gallop_notify", task, (cooldown + duration) * 1000);
+		Reference<GallopNotifyAvailableEvent*> task = new GallopNotifyAvailableEvent(mount);
+		mount->addPendingTask("gallop_notify", task, (cooldown + duration) * 1000);
 
 		return SUCCESS;
 	}
