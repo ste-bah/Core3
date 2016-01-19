@@ -60,7 +60,7 @@ skillModChance = 5 -- 1 in 1,000
 randomDotAttribute = {0, 8} -- See CreatureAttributes.h in src for numbers.
 randomDotStrength = {10, 200} -- Set for disease. Fire will be x1.5, poison x2.
 randomDotDuration = {30, 240} -- Set for poison. Fire will be x1.5, disease x5.
-randomDotPotency = {1, 100}
+randomDotPotency = {10, 100}
 randomDotUses = {250, 9999}
 
 -- Modifier applied to min/max junk values found in loot item lua

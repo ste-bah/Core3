@@ -8,12 +8,13 @@ SuiProcessorPuzzle = {
 		"top.triangles.server.left.2", "top.triangles.server.left.3", "top.triangles.server.left.1"}
 }
 
-function SuiProcessorPuzzle:openPuzzle(pCreatureObject, pArray)
+function SuiProcessorPuzzle:openPuzzle(pCreatureObject, pPuzzle, pCalibrator)
 	local sui = SuiCalibrationGame4.new("SuiProcessorPuzzle", "defaultCallback")
 	local playerID = SceneObject(pCreatureObject):getObjectID()
+	writeData(playerID .. ":calibratorComponentID", SceneObject(pPuzzle):getObjectID())
 
-	sui.setTargetNetworkId(0)
-	sui.setForceCloseDistance(0)
+	sui.setTargetNetworkId(SceneObject(pCalibrator):getObjectID())
+	sui.setForceCloseDistance(10)
 
 	local goal = { 0, 0, 0, 0, 0, 0 }
 	local current = { 0, 0, 0, 0, 0, 0 }
@@ -115,7 +116,7 @@ function SuiProcessorPuzzle:toggleButton(goalTable, button)
 	else
 		goalTable[temp2] = 0
 	end
-	
+
 	return goalTable
 end
 
@@ -145,6 +146,20 @@ function SuiProcessorPuzzle:defaultCallback(pPlayer, pSui, eventIndex, ...)
 	if (cancelPressed) then
 		CreatureObject(pPlayer):sendSystemMessage("@quest/force_sensitive/fs_crafting:phase1_msg_calibration_aborted")
 		self:doDataCleanup(pPlayer)
+		return
+	end
+
+	local puzzleID = readData(playerID .. ":calibratorComponentID")
+	local pPuzzle = getSceneObject(puzzleID)
+
+	if (pPuzzle == nil) then
+		printf("Error in SuiProcessorPuzzle:defaultCallback, pPuzzle nil.\n")
+		return
+	end
+
+	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	if pInventory == nil or SceneObject(pPuzzle):getParentID() ~= SceneObject(pInventory):getObjectID() then
 		return
 	end
 
@@ -187,10 +202,10 @@ function SuiProcessorPuzzle:defaultCallback(pPlayer, pSui, eventIndex, ...)
 		end
 
 		if (wonPuzzle) then
-			writeData(playerID .. ":processorPuzzle:status", 1)
+			LuaFsCraftingComponentObject(pPuzzle):setStatus(1)
 			suiPageData:setProperty("top.description.desc", "Text", "@quest/force_sensitive/fs_crafting:sui_calibration_success")
 		else
-			writeData(playerID .. ":processorPuzzle:status", -1)
+			LuaFsCraftingComponentObject(pPuzzle):setStatus(-1)
 			suiPageData:setProperty("top.description.desc", "Text", "@quest/force_sensitive/fs_crafting:sui_calibration_failure")
 			suiPageData:setProperty("top.description.attempts", "Text", "@quest/force_sensitive/fs_crafting:sui_attempts_remaining" .. " " .. integrity .. "%")
 		end
@@ -199,7 +214,7 @@ function SuiProcessorPuzzle:defaultCallback(pPlayer, pSui, eventIndex, ...)
 	else
 		suiPageData:setProperty("top.description.attempts", "Text", "@quest/force_sensitive/fs_crafting:sui_attempts_remaining" .. " " .. integrity .. "%")
 		writeData(playerID .. ":processorPuzzle:tries", tries)
-		
+
 		for i = 1, 6, 1 do
 			writeData(playerID .. ":processorPuzzle:current" .. i, current[i])
 		end

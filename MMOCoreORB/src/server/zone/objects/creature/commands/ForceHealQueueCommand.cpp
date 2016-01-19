@@ -33,6 +33,7 @@ ForceHealQueueCommand::ForceHealQueueCommand(const String& name, ZoneProcessServ
 	healBattleFatigue = 0;
 	healAmount = 0;
 	healWoundAmount = 0;
+	visMod = 10;
 
 	range = 0;
 
@@ -751,5 +752,8 @@ void ForceHealQueueCommand::applyForceCost(CreatureObject* creature, int calcula
 	} else {
 		playerObject->setForcePower(currentForce - calculatedForceCost);
 	}
+
+	//This seems like a logical place to put this to me
+	VisibilityManager::instance()->increaseVisibility(creature, visMod);
 }
 

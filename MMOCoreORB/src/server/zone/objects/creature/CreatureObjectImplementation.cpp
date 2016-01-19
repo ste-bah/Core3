@@ -63,6 +63,7 @@
 #include "server/zone/objects/creature/buffs/StateBuff.h"
 #include "server/zone/objects/creature/buffs/PrivateBuff.h"
 #include "server/zone/objects/creature/buffs/PrivateSkillMultiplierBuff.h"
+#include "server/zone/objects/creature/buffs/PlayerVehicleBuff.h"
 #include "server/zone/objects/building/hospital/HospitalBuildingObject.h"
 
 #include "server/zone/packets/object/SitOnObject.h"
@@ -597,12 +598,12 @@ void CreatureObjectImplementation::addMountedCombatSlow() {
 
 	uint32 crc = STRING_HASHCODE("mounted_combat_slow");
 
-	if (hasBuff(crc))
-		return;
-
 	ManagedReference<CreatureObject*> parent = getParent().get().castTo<CreatureObject*>();
 
 	if (parent == NULL)
+		return;
+
+	if (parent->hasBuff(crc))
 		return;
 
 	if (parent->isVehicleObject()) {
@@ -613,7 +614,7 @@ void CreatureObjectImplementation::addMountedCombatSlow() {
 	if (!parent->isMount())
 		return;
 
-	if (hasBuff(STRING_HASHCODE("gallop"))) {
+	if (parent->hasBuff(STRING_HASHCODE("gallop"))) {
 		sendSystemMessage("@combat_effects:no_combat_while_galloping"); // You cannot attack or react to an attack while galloping. Use /gallopStop to stop galloping.
 		return;
 	}
@@ -644,49 +645,39 @@ void CreatureObjectImplementation::addMountedCombatSlow() {
 
 			uint32 crc = STRING_HASHCODE("mounted_combat_slow");
 			StringIdChatParameter startStringId("combat_effects", "mount_slow_for_combat"); // Your mount slows down to prepare for combat.
-			StringIdChatParameter endStringId("combat_effects", "mount_speed_after_combat"); // Your mount speeds up.
 
-			ManagedReference<Buff*> buff = new Buff(creo_p, crc, 604800, BuffType::OTHER);
+			ManagedReference<PlayerVehicleBuff*> buff = new PlayerVehicleBuff(parent_p, crc, 604800, BuffType::OTHER);
 
 			Locker blocker(buff);
 
 			buff->setSpeedMultiplierMod(magnitude);
 			buff->setAccelerationMultiplierMod(magnitude);
 			buff->setStartMessage(startStringId);
-			buff->setEndMessage(endStringId);
 
-			creo_p->addBuff(buff);
-
-			blocker.release();
-
-			ManagedReference<Buff*> buff2 = new Buff(parent_p, crc, 604800, BuffType::OTHER);
-
-			Locker blocker2(buff2);
-
-			buff2->setSpeedMultiplierMod(magnitude);
-			buff2->setAccelerationMultiplierMod(magnitude);
-
-			parent_p->addBuff(buff2);
+			parent_p->addBuff(buff);
 	});
 }
 
-void CreatureObjectImplementation::removeMountedCombatSlow() {
+
+void CreatureObjectImplementation::removeMountedCombatSlow(bool showEndMessage) {
 	ManagedReference<CreatureObject*> creo = asCreatureObject();
+	ManagedReference<CreatureObject*> vehicle = getParent().get().castTo<CreatureObject*>();
+	if(vehicle == NULL)
+		return;
 
-	EXECUTE_TASK_1(creo, {
-			Locker locker(creo_p);
-
-			uint32 crc = STRING_HASHCODE("mounted_combat_slow");
-			creo_p->removeBuff(crc);
-
-			ManagedReference<CreatureObject*> parent = creo_p->getParent().get().castTo<CreatureObject*>();
-
-			if (parent != NULL) {
-				Locker clocker(parent, creo_p);
-				parent->removeBuff(crc);
+	EXECUTE_TASK_3(vehicle, creo, showEndMessage, {
+		Locker locker(vehicle_p);
+		uint32 buffCRC = STRING_HASHCODE("mounted_combat_slow");
+		bool hasBuff = vehicle_p->hasBuff(buffCRC);
+		if(hasBuff) {
+			vehicle_p->removeBuff(buffCRC);
+			if(showEndMessage_p) {
+				//I don't think we want to show this on dismount, or after a gallop
+				StringIdChatParameter endStringId("combat_effects", "mount_speed_after_combat"); // Your mount speeds up.
+				creo_p->sendSystemMessage(endStringId);
 			}
+		}
 	});
-
 }
 
 void CreatureObjectImplementation::setCombatState() {
@@ -718,7 +709,8 @@ void CreatureObjectImplementation::setCombatState() {
 		if (isEntertaining())
 			stopEntertaining();
 
-		addMountedCombatSlow();
+		if (isRidingMount())
+			addMountedCombatSlow();
 
 		notifyObservers(ObserverEventType::STARTCOMBAT);
 	}
@@ -746,7 +738,8 @@ void CreatureObjectImplementation::clearCombatState(bool removedefenders) {
 	if (removedefenders)
 		removeDefenders();
 
-	removeMountedCombatSlow();
+	if (isRidingMount())
+		removeMountedCombatSlow();
 
 	//info("finished clearCombatState");
 }
@@ -846,10 +839,10 @@ bool CreatureObjectImplementation::setState(uint64 state, bool notifyClient) {
 				playEffect("clienteffect/combat_special_defender_intimidate.cef");
 				break;
 			case CreatureState::IMMOBILIZED:
-				//showFlyText("combat_effects", "go_snare", 0, 0xFF, 0);
+				showFlyText("combat_effects", "go_snare", 0, 0xFF, 0);
 				break;
 			case CreatureState::FROZEN:
-				//showFlyText("combat_effects", "go_rooted", 0, 0xFF, 0);
+				showFlyText("combat_effects", "go_rooted", 0, 0xFF, 0);
 				break;
 			case CreatureState::RALLIED:
 				showFlyText("combat_effects", "go_rally", 0, 0xFF, 0);
@@ -923,10 +916,10 @@ bool CreatureObjectImplementation::clearState(uint64 state, bool notifyClient) {
 		case CreatureState::INTIMIDATED:
 			break;
 		case CreatureState::IMMOBILIZED:
-			//showFlyText("combat_effects", "no_snare", 0, 0xFF, 0);
+			showFlyText("combat_effects", "no_snare", 0, 0xFF, 0);
 			break;
 		case CreatureState::FROZEN:
-			//showFlyText("combat_effects", "no_rooted", 0, 0xFF, 0);
+			showFlyText("combat_effects", "no_rooted", 0, 0xFF, 0);
 			break;
 		case CreatureState::RALLIED:
 			showFlyText("combat_effects", "no_rally", 0xFF, 0, 0);
@@ -2280,36 +2273,39 @@ void CreatureObjectImplementation::setBlindedState(int durationSeconds) {
 }
 
 void CreatureObjectImplementation::setIntimidatedState(int durationSeconds) {
-	if (!hasState(CreatureState::INTIMIDATED)) {
-		Reference<StateBuff*> state = new StateBuff(asCreatureObject(), CreatureState::INTIMIDATED, durationSeconds);
+	Reference<StateBuff*> state = dynamic_cast<StateBuff*>(getBuff(Long::hashCode(CreatureState::INTIMIDATED)));
 
-		Locker locker(state);
-
-		state->setStartFlyText("combat_effects", "go_intimidated", 0, 0xFF, 0);
-		state->setEndFlyText("combat_effects", "no_intimidated", 0xFF, 0, 0);
-
-		state->setSkillModifier("private_melee_defense", -20);
-		state->setSkillModifier("private_ranged_defense", -20);
-		state->setSkillModifier("private_damage_divisor", 2);
-
-		addBuff(state);
-	} else { // already have the intimidated state, so extend it.
-		Reference<Buff*> state = getBuff(Long::hashCode(CreatureState::INTIMIDATED));
-
-		if (state == NULL) { // this shouldn't happen, so if it does, we want to complain noisily
-			error("no intimidate state buff in setIntimidatedState");
-			clearState(CreatureState::INTIMIDATED);
-			setIntimidatedState(durationSeconds);
-			return;
-		}
-		// the intimidate flytext should show up everytime it succeeds
+	if (state != NULL) {
 		showFlyText("combat_effects", "go_intimidated", 0, 0xFF, 0);
-
 		Locker locker(state);
 
 		if (state->getTimeLeft() < durationSeconds)
 			state->renew(durationSeconds);
+
+		return;
 	}
+	
+	state = new StateBuff(asCreatureObject(), CreatureState::INTIMIDATED, durationSeconds, STRING_HASHCODE("intimidatedstate"));
+
+	Locker locker(state);
+
+	state->setStartFlyText("combat_effects", "go_intimidated", 0, 0xFF, 0);
+	state->setEndFlyText("combat_effects", "no_intimidated", 0xFF, 0, 0);
+
+	state->setSkillModifier("private_melee_defense", -20);
+	state->setSkillModifier("private_ranged_defense", -20);
+
+	addBuff(state);
+
+	locker.release();
+
+	Reference<PrivateSkillMultiplierBuff*> multBuff = new PrivateSkillMultiplierBuff(asCreatureObject(), STRING_HASHCODE("intimidatedstate"), durationSeconds, BuffType::STATE);
+
+	Locker blocker(multBuff);
+
+	multBuff->setSkillModifier("private_damage_divisor", 2);
+
+	addBuff(multBuff);
 }
 
 void CreatureObjectImplementation::setSnaredState(int durationSeconds) {

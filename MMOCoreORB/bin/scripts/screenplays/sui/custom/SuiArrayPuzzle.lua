@@ -1,12 +1,13 @@
 local ObjectManager = require("managers.object.object_manager")
 
 SuiArrayPuzzle = {}
-function SuiArrayPuzzle:openPuzzle(pCreatureObject, pArray)
+function SuiArrayPuzzle:openPuzzle(pCreatureObject, pPuzzle, pCalibrator)
 	local sui = SuiCalibrationGame1.new("SuiArrayPuzzle", "defaultCallback")
+	local playerID = SceneObject(pCreatureObject):getObjectID()
+	writeData(playerID .. ":calibratorComponentID", SceneObject(pPuzzle):getObjectID())
 
-	sui.setTargetNetworkId(0)
-
-	sui.setForceCloseDistance(0)
+	sui.setTargetNetworkId(SceneObject(pCalibrator):getObjectID())
+	sui.setForceCloseDistance(10)
 
 	local goal = getRandomNumber(100)
 	local cur = { 0, 0, 0, 0, 0 }
@@ -94,9 +95,21 @@ function SuiArrayPuzzle:defaultCallback(pPlayer, pSui, eventIndex, ...)
 
 	if (cancelPressed) then
 		CreatureObject(pPlayer):sendSystemMessage("@quest/force_sensitive/fs_crafting:phase1_msg_calibration_aborted")
-
 		self:doDataCleanup(pPlayer)
+		return
+	end
 
+	local puzzleID = readData(playerID .. ":calibratorComponentID")
+	local pPuzzle = getSceneObject(puzzleID)
+
+	if (pPuzzle == nil) then
+		printf("Error in SuiArrayPuzzle:defaultCallback, pPuzzle nil.\n")
+		return
+	end
+
+	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	if pInventory == nil or SceneObject(pPuzzle):getParentID() ~= SceneObject(pInventory):getObjectID() then
 		return
 	end
 
@@ -154,10 +167,10 @@ function SuiArrayPuzzle:defaultCallback(pPlayer, pSui, eventIndex, ...)
 		suiPageData:setProperty("btnOk", "Visible", "false")
 
 		if (wonPuzzle) then
-			writeData(playerID .. ":arrayPuzzle:status", 1)
+			LuaFsCraftingComponentObject(pPuzzle):setStatus(1)
 			suiPageData:setProperty("description.desc", "Text", "@quest/force_sensitive/fs_crafting:sui_calibration_success")
 		else
-			writeData(playerID .. ":arrayPuzzle:status", -1)
+			LuaFsCraftingComponentObject(pPuzzle):setStatus(-1)
 			suiPageData:setProperty("description.desc", "Text", "@quest/force_sensitive/fs_crafting:sui_calibration_failure")
 			suiPageData:setProperty("description.attempts", "Text", "@quest/force_sensitive/fs_crafting:sui_attempts_remaining" .. " " .. integrity .. "%")
 		end

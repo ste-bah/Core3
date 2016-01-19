@@ -171,17 +171,24 @@ void AuctionManagerImplementation::doAuctionMaint(TerminalListVector* items) {
 			if (item == NULL)
 				continue;
 
+			Locker locker(item);
+
 			ManagedReference<SceneObject*> vendor = zoneServer->getObject(item->getVendorID());
-			uint64 objectId = item->getAuctionedItemObjectID();
 
 			if(vendor == NULL || vendor->getZone() == NULL) {
+				uint64 objectId = item->getAuctionedItemObjectID();
+
 				auctionMap->deleteItem(vendor, item);
+
+				ManagedReference<SceneObject*> sceno = zoneServer->getObject(objectId);
+
+				if (sceno != NULL) {
+					Locker locker(sceno);
+					sceno->destroyObjectFromDatabase(true);
+				}
+
 				continue;
 			}
-
-			String vuid = getVendorUID(vendor);
-
-			Locker locker(item);
 
 			if (item->getExpireTime() <= currentTime) {
 				if (item->getStatus() == AuctionItem::EXPIRED) {
@@ -192,7 +199,6 @@ void AuctionManagerImplementation::doAuctionMaint(TerminalListVector* items) {
 			if (item->getStatus() == AuctionItem::RETRIEVED) {
 
 				auctionMap->deleteItem(vendor, item);
-
 			}
 		}
 	}
@@ -1659,7 +1665,16 @@ void AuctionManagerImplementation::deleteExpiredSale(AuctionItem* item) {
 		cman->sendMail(sender, sellerSubject, sellerBody, item->getOwnerName(), waypoint);
 	}
 
+	uint64 oid = item->getAuctionedItemObjectID();
+
 	auctionMap->deleteItem(vendor, item);
+
+	ManagedReference<SceneObject*> sceno = zoneServer->getObject(oid);
+
+	if (sceno != NULL) {
+		Locker locker(sceno);
+		sceno->destroyObjectFromDatabase(true);
+	}
 }
 
 void AuctionManagerImplementation::displayInfo(CreatureObject* player) {
@@ -1723,7 +1738,9 @@ void AuctionManagerImplementation::sendVendorUpdateMail(SceneObject* vendor, boo
 		body.setTO(vendor->getDisplayedName());
 		cman->sendMail(sender, subject, body, owner->getFirstName());
 		vendorData->setEmpty();
-		VendorManager::instance()->handleUnregisterVendor(owner, cast<TangibleObject*>(vendor));
+
+		if (vendorData->isRegistered())
+			VendorManager::instance()->handleUnregisterVendor(owner, cast<TangibleObject*>(vendor));
 	} else {
 		StringIdChatParameter body("@auction:vendor_status_normal");
 		body.setTO(vendor->getDisplayedName());

@@ -52,9 +52,13 @@ function crazylarry_convo_handler:getNextConversationScreen(conversationTemplate
 			local inventory = LuaSceneObject(pInventory)
 			
 			-- Take action when the player makes a purchase.
-            if (SceneObject(pInventory):isContainerFullRecursive() == true) then
-                nextConversationScreen = conversation:getScreen("insufficient_space")
-				creature:sendSystemMessage("You do not have enough inventory space")
+<<<<<<< HEAD
+			if (SceneObject(pInventory):isContainerFullRecursive() == true) then
+				-- Bail if the player doesn't have enough space in their inventory.
+				-- Plays a chat box message from the NPC as well as a system message.
+				nextConversationScreen = conversation:getScreen("insufficient_space")
+				creature:sendSystemMessage("You do not have enough inventory space")	
+>>>>>>> 928639d7c38806e527ab563b67536860d0560c00
 			elseif (optionLink == "speederbike" and credits < 10000) then				
 				-- Bail if the player doesn't have enough cash on hand.
 				-- Plays a chat box message from the NPC as well as a system message.

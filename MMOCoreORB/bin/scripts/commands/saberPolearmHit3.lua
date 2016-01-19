@@ -43,14 +43,6 @@
 
 SaberPolearmHit3Command = {
         name = "saberpolearmhit3",
-<<<<<<< HEAD
-        
-                        
-    damageMultiplier = 3.5,
-	speedMultiplier = 3.5,
-	forceCostMultiplier = 1.0,
-	
-=======
   
 	damageMultiplier = 2.5,
 	speedMultiplier = 2.5,
@@ -58,8 +50,8 @@ SaberPolearmHit3Command = {
 	actionCostMultiplier = 0,
 	mindCostMultiplier = 0,
 	forceCostMultiplier = 2.0,
+	visMod = 25,
 
->>>>>>> refs/remotes/UNSTABLE/unstable
 	stateEffects = {
 	  StateEffect( 
 		STUN_EFFECT, 

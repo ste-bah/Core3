@@ -43,12 +43,6 @@
 
 SaberPolearmLegHit3Command = {
         name = "saberpolearmleghit3",
-<<<<<<< HEAD
-        
-    damageMultiplier = 3.25,
-	speedMultiplier = 3.25,
-	forceCostMultiplier = 1.5,
-=======
 
 	damageMultiplier = 2.25,
 	speedMultiplier = 2.25,
@@ -56,7 +50,7 @@ SaberPolearmLegHit3Command = {
 	actionCostMultiplier = 0,
 	mindCostMultiplier = 0,
 	forceCostMultiplier = 1.75,
->>>>>>> refs/remotes/UNSTABLE/unstable
+	visMod = 25,
 
 	animationCRC = hashCode("combo_3d_medium"),
 

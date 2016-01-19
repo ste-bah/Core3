@@ -1,11 +1,13 @@
 local ObjectManager = require("managers.object.object_manager")
 
 SuiAmpPuzzle = {}
-function SuiAmpPuzzle:openPuzzle(pCreatureObject, pArray)
+function SuiAmpPuzzle:openPuzzle(pCreatureObject, pPuzzle, pCalibrator)
 	local sui = SuiCalibrationGame2.new("SuiAmpPuzzle", "defaultCallback")
+	local playerID = SceneObject(pCreatureObject):getObjectID()
+	writeData(playerID .. ":calibratorComponentID", SceneObject(pPuzzle):getObjectID())
 
-	sui.setTargetNetworkId(0)
-	sui.setForceCloseDistance(0)
+	sui.setTargetNetworkId(SceneObject(pCalibrator):getObjectID())
+	sui.setForceCloseDistance(10)
 
 	local bar1 = getRandomNumber(0, 2)
 	local bar2 = getRandomNumber(0, 1)
@@ -142,6 +144,20 @@ function SuiAmpPuzzle:defaultCallback(pPlayer, pSui, eventIndex, ...)
 		return
 	end
 
+	local puzzleID = readData(playerID .. ":calibratorComponentID")
+	local pPuzzle = getSceneObject(puzzleID)
+
+	if (pPuzzle == nil) then
+		printf("Error in SuiAmpPuzzle:defaultCallback, pPuzzle nil.\n")
+		return
+	end
+
+	local pInventory = CreatureObject(pPlayer):getSlottedObject("inventory")
+
+	if pInventory == nil or SceneObject(pPuzzle):getParentID() ~= SceneObject(pInventory):getObjectID() then
+		return
+	end
+
 	ObjectManager.withCreaturePlayerObject(pPlayer, function(playerObject)
 		playerObject:addSuiBox(pSui)
 	end)
@@ -209,10 +225,10 @@ function SuiAmpPuzzle:defaultCallback(pPlayer, pSui, eventIndex, ...)
 		suiPageData:setProperty("btnOk", "Visible", "false")
 
 		if (wonPuzzle) then
-			writeData(playerID .. ":ampPuzzle:status", 1)
+			LuaFsCraftingComponentObject(pPuzzle):setStatus(1)
 			suiPageData:setProperty("description.desc", "Text", "@quest/force_sensitive/fs_crafting:sui_calibration_success")
 		else
-			writeData(playerID .. ":ampPuzzle:status", -1)
+			LuaFsCraftingComponentObject(pPuzzle):setStatus(-1)
 			suiPageData:setProperty("description.desc", "Text", "@quest/force_sensitive/fs_crafting:sui_calibration_failure")
 			suiPageData:setProperty("description.attempts", "Text", "@quest/force_sensitive/fs_crafting:sui_attempts_remaining" .. " " .. integrity .. "%")
 		end
