@@ -46,6 +46,10 @@ includeFile("tools/tools.lua")
 includeFile("tools/shuttle_dropoff.lua")
 includeFile("tools/firework_event.lua")
 
+--City Updates
+includeFile("cities/tatooine_mos_eisley_hive_scum_villany.lua")
+includeFile("cities/tatooine_mos_entha_hive_scum_villany.lua")
+
 -- GCW
 includeFile("gcw/newsnet.lua")
 includeFile("gcw/recruiters/recruiterConvoHandler.lua")
@@ -416,3 +420,22 @@ includeFile("space/space_chassis_dealer_conv_handler.lua")
 
 --Record Keepers
 includeFile("record_keepers/record_keepers.lua")
+
+-- Tarkin Travel System
+
+includeFile("travel/dungeon_travel_from_coronet.lua")
+includeFile("travel/dungeon_travel_to_coronet.lua")
+includeFile("travel/galactic_travel_from_theed.lua")
+includeFile("travel/galactic_travel_to_theed.lua")
+includeFile("travel/imperialZephyr.lua")
+includeFile("travel/rebelZephyr.lua")
+includeFile("travel/planetary_travel_naboo.lua")
+includeFile("travel/planetary_travel_corellia.lua")
+includeFile("travel/planetary_travel_tatooine.lua")
+includeFile("travel/planetary_travel_talus.lua")
+includeFile("travel/planetary_travel_rori.lua")
+includeFile("travel/planetary_travel_dantooine.lua")
+includeFile("travel/planetary_travel_dathomir.lua")
+includeFile("travel/planetary_travel_endor.lua")
+includeFile("travel/planetary_travel_yavin4.lua")
+includeFile("travel/planetary_travel_lok.lua")

@@ -428,7 +428,9 @@ bool FactoryObjectImplementation::startFactory() {
 			return false;
 	}
 
-	timer = ((int)schematic->getComplexity()) * 2;
+	timer = ((int)schematic->getComplexity()) / 4;
+	if (timer < 1)
+		timer = 1; 
 
 	if(!populateSchematicBlueprint(schematic))
 		return false;

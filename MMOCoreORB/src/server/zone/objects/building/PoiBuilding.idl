@@ -11,8 +11,7 @@ include engine.util.u3d.CloseObjectsVector;
 include engine.util.u3d.QuadTreeEntry;
 
 class PoiBuilding extends BuildingObject {
-	@dereferenced
-	protected transient AtomicInteger numberOfPlayersInRange;
+	protected int numberOfPlayersInRange;
 	protected boolean despawnOnNoPlayersInRange;
 
 	protected transient DespawnLairOnPlayerDisappear despawnEvent;
@@ -23,12 +22,13 @@ class PoiBuilding extends BuildingObject {
 		super.closeobjects = new CloseObjectsVector();
 		super.closeobjects.setNoDuplicateInsertPlan();
 
+		numberOfPlayersInRange = 0;
 		despawnOnNoPlayersInRange = false;
 	}
 
-	@dirty
+	@read
 	public int getNumberOfPlayersInRange() {
-		return numberOfPlayersInRange.get();
+		return numberOfPlayersInRange;
 	}
 
 	@read
@@ -50,7 +50,7 @@ class PoiBuilding extends BuildingObject {
 		if (obj.isPlayerCreature()) {
 			CreatureObject creo = (CreatureObject) obj;
 			if (!creo.isInvisible()) {
-				numberOfPlayersInRange.increment();
+				numberOfPlayersInRange++;
 				clearDespawnEvent();
 			}
 		}
@@ -65,9 +65,9 @@ class PoiBuilding extends BuildingObject {
 		if (obj.isPlayerCreature()) {
 			CreatureObject creo = (CreatureObject) obj;
 			if (!creo.isInvisible()) {
-				int val = numberOfPlayersInRange.decrement();
+				numberOfPlayersInRange = numberOfPlayersInRange - 1;
 
-				if (val <= 0 && despawnOnNoPlayersInRange)
+				if (numberOfPlayersInRange <= 0 && despawnOnNoPlayersInRange)
 					activateDespawnEvent();
 			}
 		}

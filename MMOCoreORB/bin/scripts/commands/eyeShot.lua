@@ -44,8 +44,8 @@
 EyeShotCommand = {
         name = "eyeshot",
 
-	damageMultiplier = 3.0,
-	speedMultiplier = 2.0,
+	damageMultiplier = 4.0,
+	speedMultiplier = 3.0,
 	healthCostMultiplier = 1,
 	actionCostMultiplier = 1,
 	mindCostMultiplier = 1,
@@ -60,7 +60,7 @@ EyeShotCommand = {
 		{ "jedi_state_defense" }, 
 		100, 
 		0, 
-		40 
+		50 
 	  )
 	},
 
