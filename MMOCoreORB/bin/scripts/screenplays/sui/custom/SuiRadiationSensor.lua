@@ -26,7 +26,7 @@ function SuiRadiationSensor:openSensor(pCreatureObject, pSensor)
 	local pageId = sui.sendTo(pCreatureObject)
 	writeData(SceneObject(pCreatureObject):getObjectID() .. ":radiationSensorPid", pageId)
 
-	createEvent(3 * 1000, "SuiRadiationSensor", "updateSensor", pCreatureObject)
+	createEvent(3 * 1000, "SuiRadiationSensor", "updateSensor", pCreatureObject, "")
 end
 
 function SuiRadiationSensor:defaultCallback(pPlayer, pSui, eventIndex, args)
@@ -124,7 +124,7 @@ function SuiRadiationSensor:updateSensor(pCreature)
 	end
 
 	suiPageData:sendUpdateTo(pCreature)
-	createEvent(3 * 1000, "SuiRadiationSensor", "updateSensor", pCreature)
+	createEvent(3 * 1000, "SuiRadiationSensor", "updateSensor", pCreature, "")
 
 end
 
@@ -217,6 +217,11 @@ function SuiRadiationSensor:calculateSensorResult(pCreature)
 	local targetLoc = self:getLocation(pCreature)
 
 	local sensorFactor = readData(SceneObject(pCreature):getObjectID() .. ":radiationSensorFactor")
+
+	if (sensorFactor == 0) then
+		sensorFactor = getRandomNumber(3,7)
+		writeData(SceneObject(pCreature):getObjectID() .. ":radiationSensorFactor", sensorFactor)
+	end
 
 	local distance = math.sqrt(((curX - targetLoc[1]) ^ 2) + ((curY - targetLoc[2]) ^ 2))
 	distance = 5000 - distance

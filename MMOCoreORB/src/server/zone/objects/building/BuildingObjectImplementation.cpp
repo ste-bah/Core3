@@ -49,6 +49,7 @@
 #include "server/zone/objects/creature/ai/AiAgent.h"
 
 #include "server/zone/managers/planet/MapLocationType.h"
+#include "server/zone/objects/building/components/GCWBaseContainerComponent.h"
 
 void BuildingObjectImplementation::initializeTransientMembers() {
 	StructureObjectImplementation::initializeTransientMembers();
@@ -369,8 +370,9 @@ bool BuildingObjectImplementation::isCityBanned(CreatureObject* player){
 
 
 bool BuildingObjectImplementation::isAllowedEntry(CreatureObject* player) {
+	GCWBaseContainerComponent* conComp = containerComponent.castTo<GCWBaseContainerComponent*>();
 
-	if(isGCWBase()) {
+	if (conComp != NULL) {
 		if (factionBaseType == GCWManager::STATICFACTIONBASE)
 			return true;
 
@@ -833,7 +835,7 @@ void BuildingObjectImplementation::onExit(CreatureObject* player, uint64 parenti
 uint32 BuildingObjectImplementation::getMaximumNumberOfPlayerItems() {
 	SharedStructureObjectTemplate* ssot = dynamic_cast<SharedStructureObjectTemplate*> (templateObject.get());
 	if (isCivicStructure() )
-		return 1000;
+		return 250;
 
 	if (ssot == NULL)
 		return 0;
@@ -845,11 +847,7 @@ uint32 BuildingObjectImplementation::getMaximumNumberOfPlayerItems() {
 	if (lots == 0)
 		return MAXPLAYERITEMS;
 
-	return MIN(MAXPLAYERITEMS, lots * 300);
-}
-
-bool BuildingObjectImplementation::transferObject(SceneObject* object, int containmentType, bool notifyClient, bool allowOverflow) {
-	return StructureObjectImplementation::transferObject(object, containmentType, notifyClient, allowOverflow);
+	return MIN(MAXPLAYERITEMS, lots * 100);
 }
 
 int BuildingObjectImplementation::notifyObjectInsertedToChild(SceneObject* object, SceneObject* child, SceneObject* oldParent) {

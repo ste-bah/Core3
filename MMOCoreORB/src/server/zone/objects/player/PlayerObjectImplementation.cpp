@@ -1512,7 +1512,11 @@ void PlayerObjectImplementation::logout(bool doLock) {
 		if (disconnectEvent == NULL) {
 			info("creating disconnect event");
 
-			disconnectEvent = new PlayerDisconnectEvent(_this.getReferenceUnsafeStaticCast());
+			Reference<CreatureObject*> creature = dynamic_cast<CreatureObject*>(parent.get().get());
+
+			int isInSafeArea = creature->getSkillMod("private_safe_logout");
+
+			disconnectEvent = new PlayerDisconnectEvent(_this.getReferenceUnsafeStaticCast(), isInSafeArea);
 
 			if (isLoggingOut()) {
 				disconnectEvent->schedule(10);
@@ -1597,19 +1601,21 @@ void PlayerObjectImplementation::doRecovery(int latency) {
 	if (creature->isOnFire() && !damageOverTimeList->hasDot(CreatureState::ONFIRE))
 		creature->clearState(CreatureState::ONFIRE);
 
-	CommandQueueActionVector* commandQueue = creature->getCommandQueue();
+	if (isOnline()) {
+		CommandQueueActionVector* commandQueue = creature->getCommandQueue();
 
-	if (creature->isInCombat() && creature->getTargetID() != 0 && !creature->isPeaced()
-			&& (commandQueue->size() == 0) && creature->isNextActionPast() && !creature->isDead() && !creature->isIncapacitated()) {
-		creature->executeObjectControllerAction(STRING_HASHCODE("attack"), creature->getTargetID(), "");
-	}
+		if (creature->isInCombat() && creature->getTargetID() != 0 && !creature->isPeaced() && !creature->hasBuff(STRING_HASHCODE("private_feign_buff"))
+				&& (commandQueue->size() == 0) && creature->isNextActionPast() && !creature->isDead() && !creature->isIncapacitated()) {
+			creature->executeObjectControllerAction(STRING_HASHCODE("attack"), creature->getTargetID(), "");
+		}
 
-	if (!getZoneServer()->isServerLoading()) {
-		if(creature->getZone() != NULL && creature->getZone()->getPlanetManager() != NULL) {
-			ManagedReference<WeatherManager*> weatherManager = creature->getZone()->getPlanetManager()->getWeatherManager();
+		if (!getZoneServer()->isServerLoading()) {
+			if(creature->getZone() != NULL && creature->getZone()->getPlanetManager() != NULL) {
+				ManagedReference<WeatherManager*> weatherManager = creature->getZone()->getPlanetManager()->getWeatherManager();
 
-			if (weatherManager != NULL)
-				weatherManager->sendWeatherTo(creature);
+				if (weatherManager != NULL)
+					weatherManager->sendWeatherTo(creature);
+			}
 		}
 	}
 
@@ -1695,9 +1701,6 @@ void PlayerObjectImplementation::activateRecovery() {
 }
 
 void PlayerObjectImplementation::activateForcePowerRegen() {
-	if (forcePowerRegen == 0) {
-		return;
-	}
 
 	ManagedReference<CreatureObject*> creature = dynamic_cast<CreatureObject*>(parent.get().get());
 
@@ -1705,15 +1708,18 @@ void PlayerObjectImplementation::activateForcePowerRegen() {
 		return;
 	}
 
+
+	float regen = (float)creature->getSkillMod("jedi_force_power_regen");
+
+	if(regen == 0.0f)
+		return;
+
 	if (forceRegenerationEvent == NULL) {
 		forceRegenerationEvent = new ForceRegenerationEvent(_this.getReferenceUnsafeStaticCast());
 	}
 
 	if (!forceRegenerationEvent->isScheduled()) {
 
-
-
-		float regen = (float)creature->getSkillMod("jedi_force_power_regen");
 		int regenMultiplier = creature->getSkillMod("private_force_regen_multiplier");
 		int regenDivisor = creature->getSkillMod("private_force_regen_divisor");
 
@@ -1731,15 +1737,23 @@ void PlayerObjectImplementation::activateForcePowerRegen() {
 	}
 }
 
-void PlayerObjectImplementation::setLinkDead() {
+void PlayerObjectImplementation::setLinkDead(bool isSafeLogout) {
+	CreatureObject* creature = dynamic_cast<CreatureObject*>(parent.get().get());
+
+	if (creature == NULL)
+		return;
+
 	onlineStatus = LINKDEAD;
 
 	logoutTimeStamp.updateToCurrentTime();
-	logoutTimeStamp.addMiliTime(30000);
+	if(!isSafeLogout)
+		logoutTimeStamp.addMiliTime(180000); // 3 minutes if unsafe
 
 	setCharacterBit(PlayerObjectImplementation::LD, true);
 
 	activateRecovery();
+
+	creature->clearQueueActions(false);
 }
 
 void PlayerObjectImplementation::setOnline() {

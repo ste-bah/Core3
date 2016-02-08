@@ -60,6 +60,14 @@ void BuffImplementation::notifyLoadFromDatabase() {
 	//info("initializeTransientMembers() nextExecutionTime difference from now" + String::valueOf(nextExecutionTime.miliDifference()), true);
 }
 
+void BuffImplementation::renew(float newDuration) {
+	if (newDuration > 0)
+		buffDuration = newDuration;
+
+	clearBuffEvent();
+	scheduleBuffEvent();
+}
+
 void BuffImplementation::sendTo(CreatureObject* player) {
 	if (buffCRC != 0) {
 		AddBuffMessage* abm = new AddBuffMessage(player, buffCRC, getTimeLeft());

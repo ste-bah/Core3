@@ -77,6 +77,7 @@
 #include "server/zone/objects/tangible/misc/FsCraftingComponentObject.h"
 #include "server/zone/objects/player/sui/LuaSuiPageData.h"
 #include "server/zone/objects/player/sui/SuiBoxPage.h"
+#include "server/zone/objects/tangible/powerup/PowerupObject.h"
 
 int DirectorManager::DEBUG_MODE = 0;
 int DirectorManager::ERROR_CODE = NO_ERROR;
@@ -371,6 +372,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->setGlobalInt("FACTIONBASEFLIPPED", ObserverEventType::FACTIONBASEFLIPPED);
 	luaEngine->setGlobalInt("LOOTCREATURE", ObserverEventType::LOOTCREATURE);
 	luaEngine->setGlobalInt("SCREENPLAYSTATECHANGED", ObserverEventType::SCREENPLAYSTATECHANGED);
+	luaEngine->setGlobalInt("CREATUREDESPAWNED", ObserverEventType::CREATUREDESPAWNED);
 	luaEngine->setGlobalInt("AIMESSAGE", ObserverEventType::AIMESSAGE);
 	luaEngine->setGlobalInt("STARTENTERTAIN", ObserverEventType::STARTENTERTAIN);
 	luaEngine->setGlobalInt("CHANGEENTERTAIN", ObserverEventType::CHANGEENTERTAIN);
@@ -448,6 +450,10 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->setGlobalInt("REACTION_MID", ReactionManager::MID);
 	luaEngine->setGlobalInt("REACTION_MEAN", ReactionManager::MEAN);
 
+	luaEngine->setGlobalLong("FACTIONNEUTRAL", FactionManager::FACTIONNEUTRAL);
+	luaEngine->setGlobalLong("FACTIONIMPERIAL", FactionManager::FACTIONIMPERIAL);
+	luaEngine->setGlobalLong("FACTIONREBEL", FactionManager::FACTIONREBEL);
+
 	// Badges
 	VectorMap<unsigned int, const Badge*>* badges = BadgeList::instance()->getMap();
 	const int vectorSize = badges->size();
@@ -488,6 +494,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	Luna<LuaSuiPageData>::Register(luaEngine->getLuaState());
 	Luna<LuaQuestVectorMap>::Register(luaEngine->getLuaState());
 	Luna<LuaSuiBoxPage>::Register(luaEngine->getLuaState());
+	Luna<LuaPowerupObject>::Register(luaEngine->getLuaState());
 }
 
 int DirectorManager::loadScreenPlays(Lua* luaEngine) {
@@ -922,25 +929,25 @@ int DirectorManager::writeStringSharedMemory(lua_State* L) {
 }
 
 int DirectorManager::createEvent(lua_State* L) {
-	if (checkArgumentCount(L, 4) == 1) {
+	int numberOfArguments = lua_gettop(L);
+	if (numberOfArguments != 5 && numberOfArguments != 6) {
 		instance()->error("incorrect number of arguments passed to DirectorManager::createEvent");
 		ERROR_CODE = INCORRECT_ARGUMENTS;
 		return 0;
 	}
 
-	SceneObject* obj = (SceneObject*) lua_touserdata(L, -1);
-	String key = lua_tostring(L, -2);
-	String play = lua_tostring(L, -3);
-	uint32 mili = lua_tonumber(L, -4);
-
-	int parameterCount = lua_gettop(L);
+	String args = lua_tostring(L, -1);
+	SceneObject* obj = (SceneObject*) lua_touserdata(L, -2);
+	String key = lua_tostring(L, -3);
+	String play = lua_tostring(L, -4);
+	uint32 mili = lua_tonumber(L, -5);
 
 	//System::out << "scheduling task with mili:" << mili << endl;
 
-	Reference<ScreenPlayTask*> task = new ScreenPlayTask(obj, key, play);
+	Reference<ScreenPlayTask*> task = new ScreenPlayTask(obj, key, play, args);
 
-	if (parameterCount > 4) {
-		bool save = lua_toboolean(L, -5);
+	if (numberOfArguments == 6) {
+		bool save = lua_toboolean(L, -6);
 
 		if (save && obj != NULL) {
 			Time expireTime;
@@ -950,6 +957,7 @@ int DirectorManager::createEvent(lua_State* L) {
 			pevent->setObject(obj);
 			pevent->setKey(key);
 			pevent->setScreenplay(play);
+			pevent->setArgs(args);
 			pevent->setTimeStamp(mili);
 			pevent->setCurTime(currentTime);
 
@@ -988,7 +996,7 @@ int DirectorManager::createEventActualTime(lua_State* L) {
 	String key = lua_tostring(L, -1);
 	String play = lua_tostring(L, -2);
 	uint32 timeInMinutes = lua_tonumber(L, -3);
-	ManagedReference<ScreenPlayTask*> task = new ScreenPlayTask(obj, key, play);
+	ManagedReference<ScreenPlayTask*> task = new ScreenPlayTask(obj, key, play, "");
 	Time actualTime = Time(timeInMinutes);
 	Time now;
 	uint64 days=now.getMiliTime()/(24*60*60000);
@@ -1024,7 +1032,7 @@ int DirectorManager::createServerEvent(lua_State* L) {
 	Time expireTime;
 	uint64 currentTime = expireTime.getMiliTime();
 
-	Reference<ScreenPlayTask*> task = new ScreenPlayTask(NULL, key, play);
+	Reference<ScreenPlayTask*> task = new ScreenPlayTask(NULL, key, play, "");
 
 	Reference<PersistentEvent*> pevent = new PersistentEvent();
 	pevent->setTimeStamp(mili);
@@ -2276,6 +2284,7 @@ void DirectorManager::activateEvent(ScreenPlayTask* task) {
 	ManagedReference<SceneObject*> obj = task->getSceneObject();
 	String play = task->getScreenPlay();
 	String key = task->getTaskKey();
+	String args = task->getArgs();
 
 	Reference<PersistentEvent*> persistentEvent = task->getPersistentEvent();
 
@@ -2297,6 +2306,7 @@ void DirectorManager::activateEvent(ScreenPlayTask* task) {
 	try {
 		LuaFunction startScreenPlay(lua->getLuaState(), play, key, 0);
 		startScreenPlay << obj;
+		startScreenPlay << args;
 
 		startScreenPlay.callFunction();
 	} catch (Exception& e) {

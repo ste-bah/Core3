@@ -13,12 +13,16 @@ void EventPerkMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, Ob
 
 	EventPerkDataComponent* data = cast<EventPerkDataComponent*>(sceneObject->getDataObjectComponent()->get());
 
-	if (sceneObject->getGameObjectType() == SceneObjectType::EVENTPERK) {
+	if (sceneObject->getGameObjectType() == SceneObjectType::EVENTPERK || data == NULL) {
 		ContainerPermissions* permissions = sceneObject->getContainerPermissions();
 		uint64 objectID = permissions->getOwnerID();
 
 		Reference<SceneObject*> owner = Core::getObjectBroker()->lookUp(objectID).castTo<SceneObject*>();
 
+		if (owner == NULL) {
+			player->sendSystemMessage("Error: perk parent object is NULL.");
+			return;
+		}
 		data = cast<EventPerkDataComponent*>(owner->getDataObjectComponent()->get());
 	}
 
@@ -40,9 +44,11 @@ void EventPerkMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, Ob
 		menuResponse->addRadialMenuItem(132, 3, "@event_perk:mnu_show_exp_time"); // Show Expiration Time
 		menuResponse->addRadialMenuItem(128, 3, "@event_perk:mnu_redeed"); // Reclaim Rental Deed
 
-		menuResponse->addRadialMenuItem(51, 1, "@event_perk:mnu_rotate"); // Rotate
-		menuResponse->addRadialMenuItemToRadialID(51, 52, 3, "@event_perk:mnu_rot_left"); // Rotate Left
-		menuResponse->addRadialMenuItemToRadialID(51, 53, 3, "@event_perk:mnu_rot_right"); // Rotate Right
+		if (deed->getPerkType() != EventPerkDeedTemplate::HONORGUARD && deed->getPerkType() != EventPerkDeedTemplate::RECRUITER) {
+			menuResponse->addRadialMenuItem(51, 1, "@event_perk:mnu_rotate"); // Rotate
+			menuResponse->addRadialMenuItemToRadialID(51, 52, 3, "@event_perk:mnu_rot_left"); // Rotate Left
+			menuResponse->addRadialMenuItemToRadialID(51, 53, 3, "@event_perk:mnu_rot_right"); // Rotate Right
+		}
 	} else if (player->getPlayerObject() != NULL && player->getPlayerObject()->isPrivileged()) {
 		menuResponse->addRadialMenuItem(132, 3, "@event_perk:mnu_show_exp_time"); // Show Expiration Time
 	}
@@ -51,7 +57,7 @@ void EventPerkMenuComponent::fillObjectMenuResponse(SceneObject* sceneObject, Ob
 int EventPerkMenuComponent::handleObjectMenuSelect(SceneObject* sceneObject, CreatureObject* player, byte selectedID) {
 	EventPerkDataComponent* data = cast<EventPerkDataComponent*>(sceneObject->getDataObjectComponent()->get());
 
-	if (sceneObject->getGameObjectType() == SceneObjectType::EVENTPERK) {
+	if (sceneObject->getGameObjectType() == SceneObjectType::EVENTPERK || data == NULL) {
 		ContainerPermissions* permissions = sceneObject->getContainerPermissions();
 		uint64 objectID = permissions->getOwnerID();
 

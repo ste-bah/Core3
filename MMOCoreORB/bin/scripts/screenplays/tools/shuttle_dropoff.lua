@@ -86,13 +86,13 @@ function ShuttleDropoff:spawnShuttle(pPlayer, manualControl)
 	writeData(playerID .. ":ShuttleDropoff:shuttleID", SceneObject(pShuttle):getObjectID())
 
 	if (manualControl) then
-		writeData(playerID .. ":ShuttleDropoff:shuttleStatus", -1) -- Spawned
-		createEvent(5 * 1000, "ShuttleDropoff", "allowManualControl", pPlayer)
+		writeData(playerID .. ":ShuttleDropoff:shuttleStatus", -1) -- Creating shuttle
+		createEvent(5 * 1000, "ShuttleDropoff", "allowManualControl", pPlayer, "")
 	else
 		writeData(playerID .. ":ShuttleDropoff:shuttleStatus", 1) -- Spawned
 	end
 
-	createEvent(self.shuttleCleanup * 1000, "ShuttleDropoff", "cleanUp", pPlayer)
+	createEvent(self.shuttleCleanup * 1000, "ShuttleDropoff", "cleanUp", pPlayer, "")
 
 	return pShuttle
 end
@@ -108,8 +108,8 @@ function ShuttleDropoff:doFlyby(pPlayer)
 	local type = readData(SceneObject(pPlayer):getObjectID() .. ":ShuttleDropoff:shuttleType")
 	CreatureObject(pPlayer):sendSystemMessage("Beginning flyby.")
 
-	createEvent(6 * 1000, "ShuttleDropoff", "landShuttle", pPlayer)
-	createEvent((self.shuttleLandingTime[type] + 9) * 1000, "ShuttleDropoff", "doTakeOff", pPlayer)
+	createEvent(6 * 1000, "ShuttleDropoff", "landShuttle", pPlayer, "")
+	createEvent((self.shuttleLandingTime[type] + 9) * 1000, "ShuttleDropoff", "doTakeOff", pPlayer, "")
 end
 
 function ShuttleDropoff:landShuttle(pPlayer)
@@ -130,7 +130,7 @@ function ShuttleDropoff:landShuttle(pPlayer)
 	end
 
 	writeData(playerID .. ":ShuttleDropoff:shuttleStatus", 2) -- Landing
-	createEvent(self.shuttleLandingTime[type] * 1000, "ShuttleDropoff", "dropOffNpcs", pPlayer)
+	createEvent(self.shuttleLandingTime[type] * 1000, "ShuttleDropoff", "dropOffNpcs", pPlayer, "")
 	CreatureObject(pPlayer):sendSystemMessage("Shuttle Update: Shuttle is now landing..")
 end
 
@@ -189,7 +189,7 @@ function ShuttleDropoff:doTakeOff(pPlayer)
 	end
 
 	writeData(playerID .. ":ShuttleDropoff:shuttleStatus", 4) -- Taking off
-	createEvent(20 * 1000, "ShuttleDropoff", "cleanUp", pPlayer)
+	createEvent(20 * 1000, "ShuttleDropoff", "cleanUp", pPlayer, "")
 	CreatureObject(pPlayer):sendSystemMessage("Shuttle Update: Shuttle has taken off.")
 end
 
@@ -210,7 +210,7 @@ function ShuttleDropoff:allowManualControl(pPlayer)
 		return
 	end
 
-	writeData(SceneObject(pPlayer) .. ":ShuttleDropoff:shuttleStatus", 1)
+	writeData(SceneObject(pPlayer):getObjectID() .. ":ShuttleDropoff:shuttleStatus", 1)
 end
 
 function ShuttleDropoff:suiShuttleDropoffMainCallback(pPlayer, pSui, eventIndex, args)

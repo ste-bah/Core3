@@ -40,11 +40,6 @@ public:
 
 		uint32 crc = STRING_HASHCODE("gallop");
 
-		if (creature->isInCombat() || mount->isInCombat()) {
-			creature->sendSystemMessage("@combat_effects:no_combat_while_galloping"); // You cannot attack or react to an attack while galloping. Use /gallopStop to stop galloping.
-			return GENERALERROR;
-		}
-
 		if (mount->hasBuff(crc) || creature->hasBuff(crc)) {
 			creature->sendSystemMessage("@combat_effects:already_galloping"); // You are already galloping!
 			return GENERALERROR;
@@ -84,7 +79,7 @@ public:
 		buff->setStartMessage(startStringId);
 		buff->setEndMessage(endStringId);
 		mount->addBuff(buff);
-;
+
 		mount->updateCooldownTimer("gallop", (cooldown + duration) * 1000);
 
 		Reference<GallopNotifyAvailableEvent*> task = new GallopNotifyAvailableEvent(mount);
