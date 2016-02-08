@@ -224,7 +224,7 @@ CitySpecializations = {
 		name = "@city/city:city_spec_missions",
 		cost = 80000,
 		skillMods = {
-			{"private_spec_missions", 35}
+			{"private_spec_missions", 45}
 		}
 	},
 	{--Entertainment District

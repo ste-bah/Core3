@@ -137,8 +137,9 @@ ZonesEnabled = {
 TrePath = "/home/cerberus/tres"
 
 TreFiles = {
-        "patch_sunfall_skills_00.tre",
-        "patch_taanab_shared.tre",
+    "patch_sunfall_skills_01.tre",
+    "patch_sunfall_skills_00.tre",
+    "patch_taanab_shared.tre",
 	"default_patch.tre",
 	"patch_sku1_14_00.tre",
 	"patch_14_00.tre",

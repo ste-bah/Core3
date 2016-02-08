@@ -30,7 +30,7 @@ starpilotfromtheed_from_theed_start = ConvoScreen:new {
   stopConversation = "false",
   options = {
     {"Corellia (1000)", "corellia"},
-    {"Danootine (5000)", "dantooine"},
+    {"Dantooine (5000)", "dantooine"},
     {"Dathomir (6500)", "dathomir"},
     {"Endor (4000)", "endor"},
     {"Lok (3500)", "lok"},

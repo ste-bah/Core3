@@ -98,7 +98,7 @@ function LizardCaveScreenPlay:spawnMobiles()
 	
 	-- Cell 8535546 (Final Alcove)
 	--spawnMobile("dantooine", "nightsister_elder", 2400, 186.706, -65.422, -93.972, -105.512, 8535546)
-	spawnMobile("dantooine", "gorax", 1800, 193.557, -66.871, -101.828, -105.995, 8535546)
+	spawnMobile("dantooine", "gorax", 7200, 193.557, -66.871, -101.828, -105.995, 8535546)
 
 	-- Cell 8535547
 	spawnMobile("dantooine", "merek_deaths_head", 600, 47.770, -51.878, -87.259, 5.884, 8535547)
