@@ -33,7 +33,7 @@ murm = Creature:new {
 				{group = "holocron_dark", chance = 400000},
 				{group = "holocron_light", chance = 400000},
 				{group = "crystals_premium", chance = 400000},
-				{group = "color_crystals", chance = 1000000},
+				{group = "color_crystals_special", chance = 1000000},
 				{group = "rifles", chance = 300000},
 				{group = "pistols", chance = 300000},
 				{group = "melee_weapons", chance = 1300000},

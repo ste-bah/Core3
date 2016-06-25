@@ -30,6 +30,7 @@ Luna<LuaPlayerObject>::RegType LuaPlayerObject::Register[] = {
 		{ "removeWaypointBySpecialType", &LuaPlayerObject::removeWaypointBySpecialType },
 		{ "addRewardedSchematic", &LuaPlayerObject::addRewardedSchematic },
 		{ "removeRewardedSchematic", &LuaPlayerObject::removeRewardedSchematic },
+		{ "hasSchematic", &LuaPlayerObject::hasSchematic },
 		{ "addPermissionGroup", &LuaPlayerObject::addPermissionGroup },
 		{ "removePermissionGroup", &LuaPlayerObject::removePermissionGroup },
 		{ "hasPermissionGroup", &LuaPlayerObject::hasPermissionGroup },
@@ -41,6 +42,8 @@ Luna<LuaPlayerObject>::RegType LuaPlayerObject::Register[] = {
 		{ "getForcePowerMax", &LuaPlayerObject::getForcePowerMax },
 		{ "setForcePower", &LuaPlayerObject::setForcePower },
 		{ "isJedi", &LuaPlayerObject::isJedi },
+		{ "isJediLight", &LuaPlayerObject::isJediLight },
+		{ "isJediDark", &LuaPlayerObject::isJediDark },
 		{ "setJediState", &LuaPlayerObject::setJediState },
 		{ "isOnline", &LuaPlayerObject::isOnline },
 		{ "setActiveQuestsBit", &LuaPlayerObject::setActiveQuestsBit },
@@ -236,6 +239,15 @@ int LuaPlayerObject::addRewardedSchematic(lua_State* L){
 	return 0;
 }
 
+int LuaPlayerObject::hasSchematic(lua_State* L) {
+	String templateString = lua_tostring(L, -1);
+	DraftSchematic* schematic = SchematicMap::instance()->get(templateString.hashCode());
+
+	lua_pushboolean(L, realObject->hasSchematic(schematic));
+
+	return 1;
+}
+
 int LuaPlayerObject::removeRewardedSchematic(lua_State* L){
 	String templateString = lua_tostring(L, -2);
 	bool notifyClient = lua_toboolean(L, -1);
@@ -334,6 +346,18 @@ int LuaPlayerObject::setForcePower(lua_State* L) {
 
 int LuaPlayerObject::isJedi(lua_State* L) {
 	lua_pushboolean(L, realObject->isJedi());
+
+	return 1;
+}
+
+int LuaPlayerObject::isJediLight(lua_State* L) {
+	lua_pushboolean(L, realObject->isJediLight());
+
+	return 1;
+}
+
+int LuaPlayerObject::isJediDark(lua_State* L) {
+	lua_pushboolean(L, realObject->isJediDark());
 
 	return 1;
 }

@@ -177,14 +177,17 @@ void LightsaberCrystalComponentImplementation::updateCrystal(int value){
 }
 
 void LightsaberCrystalComponentImplementation::updateCraftingValues(CraftingValues* values, bool firstUpdate) {
-
+	int colorMin = values->getMinValue("color");
 	int colorMax = values->getMaxValue("color");
 	int color = values->getCurrentValue("color"); 
 
 	setMaxCondition(values->getCurrentValue("hitpoints"));
 
-	if (colorMax != 31) {
-		int finalColor = MIN(color, 11);
+	if (color != 31) { // Need to cap.
+		int finalColor = MAX(colorMin, MIN(colorMax, color));
+		if (finalColor > colorMax)
+			finalColor = colorMax;
+
 		setColor(finalColor);
 		updateCrystal(finalColor);
 	} 

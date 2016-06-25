@@ -367,6 +367,7 @@ void CommandConfigManager::registerGlobals() {
 	setGlobalLong("TUMBLING_STATE", CreatureState::TUMBLING);
 	setGlobalLong("RALLIED_STATE", CreatureState::RALLIED);
 	setGlobalLong("STUNNED_STATE", CreatureState::STUNNED);
+	setGlobalLong("FEIGNDEATH_STATE", CreatureState::FEIGNDEATH);
 	setGlobalLong("BLINDED_STATE", CreatureState::BLINDED);
 	setGlobalLong("DIZZY_STATE", CreatureState::DIZZY);
 	setGlobalLong("INTIMIDATED_STATE", CreatureState::INTIMIDATED);
@@ -463,6 +464,9 @@ void CommandConfigManager::registerGlobals() {
 	setGlobalInt("MINDDEGRADE_EFFECT", CommandEffect::MINDDEGRADE);
 	setGlobalInt("REMOVE_COVER_EFFECT", CommandEffect::REMOVECOVER);
 	setGlobalInt("FORCECHOKE", CommandEffect::FORCECHOKE);
+	setGlobalInt("ATTACKER_FORCE_STANDING", CommandEffect::ATTACKER_FORCE_STAND);
+	setGlobalInt("ATTACKER_FORCE_CROUCH", CommandEffect::ATTACKER_FORCE_CROUCH);
+	setGlobalInt("ATTACKER_FORCE_PRONE", CommandEffect::ATTACKER_FORCE_PRONE);
 
 	// trails
 	setGlobalInt("NOTRAIL", CombatManager::NOTRAIL);
@@ -487,7 +491,11 @@ void CommandConfigManager::registerGlobals() {
 	setGlobalInt("COLD_DAMAGE", WeaponObject::COLD);
 	setGlobalInt("ACID_DAMAGE", WeaponObject::ACID);
 	setGlobalInt("ELECTRICITY_DAMAGE", WeaponObject::ELECTRICITY);
-
+    
+	// JediQueueCommand buff types
+	setGlobalInt("BASE_BUFF", JediQueueCommand::BASE_BUFF);
+	setGlobalInt("SINGLE_USE_BUFF", JediQueueCommand::SINGLE_USE_BUFF);
+    
 	// force heal targets
 	setGlobalInt("FORCE_HEAL_TARGET_SELF", ForceHealQueueCommand::TARGET_SELF);
 	setGlobalInt("FORCE_HEAL_TARGET_OTHER", ForceHealQueueCommand::TARGET_OTHER);
@@ -591,6 +599,8 @@ void CommandConfigManager::parseVariableData(String varName, LuaObject &command,
 			combatCommand->setForceCostMultiplier(Lua::getFloatParameter(L));
 		else if (varName == "forceCost")
 			combatCommand->setForceCost(Lua::getFloatParameter(L));
+		else if (varName == "visMod")
+			combatCommand->setVisMod(Lua::getIntParameter(L));
 		else if (varName == "coneRange")
 			combatCommand->setConeRange(Lua::getIntParameter(L));
 		else if (varName == "range")
@@ -654,6 +664,10 @@ void CommandConfigManager::parseVariableData(String varName, LuaObject &command,
 		JediQueueCommand* jediCommand = cast<JediQueueCommand*>(slashCommand);
 		if (varName == "forceCost")
 			jediCommand->setForceCost(Lua::getIntParameter(L));
+		else if(varName == "buffClass")
+			jediCommand->setBuffClass(Lua::getIntParameter(L));
+		else if(varName == "visMod")
+			jediCommand->setVisMod(Lua::getIntParameter(L));
 		else if (varName == "duration")
 			jediCommand->setDuration(Lua::getIntParameter(L));
 		else if (varName == "animationCRC")

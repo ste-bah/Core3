@@ -41,6 +41,7 @@ protected:
 	float mindCostMultiplier;
 	float forceCostMultiplier;
 	float forceCost;
+	int visMod;
 
 	int coneRange;
 	int range;
@@ -58,7 +59,7 @@ protected:
 	String effectString;
 
 	VectorMap<uint8, StateEffect> stateEffects;
-	VectorMap<uint64, DotEffect> dotEffects;
+	Vector<DotEffect> dotEffects;
 
 	uint8 attackType;
 	uint8 trails;
@@ -83,6 +84,7 @@ public:
 		// Force Power is only set in Jedi-skills.
 		forceCostMultiplier = 0;
 		forceCost = 0;
+		visMod = 0;
 
 		poolsToDamage = CombatManager::RANDOM;
 
@@ -166,6 +168,21 @@ public:
 			return GENERALERROR;
 		}
 
+		if (creature->isPlayerCreature() && !targetObject->isPlayerCreature() && targetObject->getParentID() != 0 && creature->getParentID() != targetObject->getParentID()) {
+			Reference<CellObject*> targetCell = targetObject->getParent().castTo<CellObject*>();
+
+			if (targetCell != NULL) {
+				ContainerPermissions* perms = targetCell->getContainerPermissions();
+
+				if (!perms->hasInheritPermissionsFromParent()) {
+					if (!targetCell->checkContainerPermission(creature, ContainerPermissions::WALKIN)) {
+						creature->sendSystemMessage("@container_error_message:container18");
+						return GENERALERROR;
+					}
+				}
+			}
+		}
+
 		CombatManager* combatManager = CombatManager::instance();
 
 		bool shouldTef = false;
@@ -193,7 +210,7 @@ public:
 		}
 
 		try {
-			int res = combatManager->doCombatAction(creature, weapon, cast<TangibleObject*>(targetObject.get()), CreatureAttackData(arguments, this));
+			int res = combatManager->doCombatAction(creature, weapon, cast<TangibleObject*>(targetObject.get()), CreatureAttackData(arguments, this, target));
 
 			switch (res) {
 			case -1:
@@ -381,7 +398,7 @@ public:
 		return &(const_cast<CombatQueueCommand*>(this)->stateEffects);
 	}
 
-	inline VectorMap<uint64, DotEffect>* getDotEffects() const {
+	inline Vector<DotEffect>* getDotEffects() const {
 		return &(const_cast<CombatQueueCommand*>(this)->dotEffects);
 	}
 
@@ -409,7 +426,7 @@ public:
 		return const_cast<CombatQueueCommand*>(this)->stateEffects.get(type);
 	}
 
-	void setDotEffects(VectorMap<uint64, DotEffect> dotEffects) {
+	void setDotEffects(Vector<DotEffect> dotEffects) {
 		this->dotEffects = dotEffects;
 	}
 
@@ -438,11 +455,7 @@ public:
 	}
 
 	void addDotEffect(DotEffect dotEffect) {
-		dotEffects.put(dotEffect.getDotType(), dotEffect);
-	}
-
-	DotEffect getDotEffect(uint64 type) {
-		return dotEffects.get(type);
+		dotEffects.add(dotEffect);
 	}
 
 	void setConeRange(int i) {
@@ -470,7 +483,7 @@ public:
 	}
 
 	// this goes in command in order to allow for overriding for special commands
-	virtual void applyEffect(CreatureObject* creature, uint8 effectType, uint32 mod) const {
+	virtual void applyEffect(CreatureObject* attacker, CreatureObject* defender, uint8 effectType, uint32 mod) const {
 		CombatManager* combatManager = CombatManager::instance();
 		StateEffect effect = getStateEffect(effectType);
 		Reference<Buff*> buff = NULL;
@@ -478,7 +491,7 @@ public:
 		Vector<String> defenseMods = effect.getDefenderStateDefenseModifiers();
 		float targetDefense = 0.f;
 		for (int j = 0; j < defenseMods.size(); j++)
-			targetDefense += creature->getSkillMod(defenseMods.get(j));
+			targetDefense += defender->getSkillMod(defenseMods.get(j));
 
 		targetDefense -= mod;
 
@@ -486,120 +499,129 @@ public:
 
 		switch (effectType) {
 		case CommandEffect::BLIND:
-			creature->setBlindedState(duration);
+			defender->setBlindedState(duration);
 			break;
 		case CommandEffect::DIZZY:
-			creature->setDizziedState(duration);
+			defender->setDizziedState(duration);
 			break;
 		case CommandEffect::INTIMIDATE:
-			creature->setIntimidatedState(duration);
+			defender->setIntimidatedState(duration);
 			break;
 		case CommandEffect::STUN:
-			creature->setStunnedState(duration);
+			defender->setStunnedState(duration);
 			break;
 		case CommandEffect::KNOCKDOWN:
-			if (!creature->checkKnockdownRecovery()) {
-				if (creature->getPosture() != CreaturePosture::UPRIGHT)
-					creature->setPosture(CreaturePosture::UPRIGHT);
+			if (!defender->checkKnockdownRecovery()) {
+				if (defender->getPosture() != CreaturePosture::UPRIGHT)
+					defender->setPosture(CreaturePosture::UPRIGHT, false, false);
 				break;
 			}
 
-			if (creature->isRidingMount()) {
-				creature->updateCooldownTimer("mount_dismount", 0);
-				creature->dismount();
+			if (defender->isRidingMount()) {
+				defender->updateCooldownTimer("mount_dismount", 0);
+				defender->dismount();
 			}
 
-			if (!creature->isDead() && !creature->isIncapacitated())
-				creature->setPosture(CreaturePosture::KNOCKEDDOWN);
+			if (!defender->isDead() && !defender->isIncapacitated())
+				defender->setPosture(CreaturePosture::KNOCKEDDOWN, false, false);
 
-			creature->updateKnockdownRecovery();
-			creature->updatePostureChangeDelay(5000);
-			creature->removeBuff(STRING_HASHCODE("burstrun"));
-			creature->removeBuff(STRING_HASHCODE("retreat"));
-			creature->sendSystemMessage("@cbt_spam:posture_knocked_down");
-			creature->sendStateCombatSpam("cbt_spam", "posture_knocked_down", 0, 0, false);
+			defender->updateKnockdownRecovery();
+			defender->updatePostureChangeDelay(5000);
+			defender->removeBuff(STRING_HASHCODE("burstrun"));
+			defender->removeBuff(STRING_HASHCODE("retreat"));
+			defender->sendSystemMessage("@cbt_spam:posture_knocked_down");
+			defender->sendStateCombatSpam("cbt_spam", "posture_knocked_down", 0, 0, false);
 			break;
 		case CommandEffect::POSTUREUP:
-			if (!creature->checkPostureUpRecovery()) {
-				if (creature->getPosture() != CreaturePosture::UPRIGHT)
-					creature->setPosture(CreaturePosture::UPRIGHT);
+			if (!defender->checkPostureUpRecovery()) {
+				if (defender->getPosture() != CreaturePosture::UPRIGHT)
+					defender->setPosture(CreaturePosture::UPRIGHT, false, false);
 				break;
 			}
 
-			if (creature->isRidingMount()) {
-				creature->updateCooldownTimer("mount_dismount", 0);
-				creature->dismount();
+			if (defender->isRidingMount()) {
+				defender->updateCooldownTimer("mount_dismount", 0);
+				defender->dismount();
 			}
 
-			if (creature->getPosture() == CreaturePosture::PRONE) {
-				creature->setPosture(CreaturePosture::CROUCHED);
-				creature->sendSystemMessage("@cbt_spam:force_posture_change_1");
-				creature->sendStateCombatSpam("cbt_spam", "force_posture_change_1", 0, 0, false);
-			} else if (creature->getPosture() == CreaturePosture::CROUCHED) {
-				creature->setPosture(CreaturePosture::UPRIGHT);
-				creature->sendSystemMessage("@cbt_spam:force_posture_change_0");
-				creature->sendStateCombatSpam("cbt_spam", "force_posture_change_0", 0, 0, false);
+			if (defender->getPosture() == CreaturePosture::PRONE) {
+				defender->setPosture(CreaturePosture::CROUCHED, false, false);
+				defender->sendSystemMessage("@cbt_spam:force_posture_change_1");
+				defender->sendStateCombatSpam("cbt_spam", "force_posture_change_1", 0, 0, false);
+			} else if (defender->getPosture() == CreaturePosture::CROUCHED) {
+				defender->setPosture(CreaturePosture::UPRIGHT, false, false);
+				defender->sendSystemMessage("@cbt_spam:force_posture_change_0");
+				defender->sendStateCombatSpam("cbt_spam", "force_posture_change_0", 0, 0, false);
 			}
 
-			creature->updatePostureUpRecovery();
-			creature->updatePostureChangeDelay(2500);
-			creature->removeBuff(STRING_HASHCODE("burstrun"));
-			creature->removeBuff(STRING_HASHCODE("retreat"));
+			defender->updatePostureUpRecovery();
+			defender->updatePostureChangeDelay(2500);
+			defender->removeBuff(STRING_HASHCODE("burstrun"));
+			defender->removeBuff(STRING_HASHCODE("retreat"));
 			break;
 		case CommandEffect::POSTUREDOWN:
-			if (!creature->checkPostureDownRecovery()) {
-				if (creature->getPosture() != CreaturePosture::UPRIGHT)
-					creature->setPosture(CreaturePosture::UPRIGHT);
+			if (!defender->checkPostureDownRecovery()) {
+				if (defender->getPosture() != CreaturePosture::UPRIGHT)
+					defender->setPosture(CreaturePosture::UPRIGHT, false, false);
 				break;
 			}
 
-			if (creature->isRidingMount()) {
-				creature->updateCooldownTimer("mount_dismount", 0);
-				creature->dismount();
+			if (defender->isRidingMount()) {
+				defender->updateCooldownTimer("mount_dismount", 0);
+				defender->dismount();
 			}
 
-			if (creature->getPosture() == CreaturePosture::UPRIGHT) {
-				creature->setPosture(CreaturePosture::CROUCHED);
-				creature->sendSystemMessage("@cbt_spam:force_posture_change_1");
-				creature->sendStateCombatSpam("cbt_spam", "force_posture_change_1", 0, 0, false);
-			} else if (creature->getPosture() == CreaturePosture::CROUCHED) {
-				creature->setPosture(CreaturePosture::PRONE);
-				creature->sendSystemMessage("@cbt_spam:force_posture_change_2");
-				creature->sendStateCombatSpam("cbt_spam", "force_posture_change_2", 0, 0, false);
+			if (defender->getPosture() == CreaturePosture::UPRIGHT) {
+				defender->setPosture(CreaturePosture::CROUCHED, false, false);
+				defender->sendSystemMessage("@cbt_spam:force_posture_change_1");
+				defender->sendStateCombatSpam("cbt_spam", "force_posture_change_1", 0, 0, false);
+			} else if (defender->getPosture() == CreaturePosture::CROUCHED) {
+				defender->setPosture(CreaturePosture::PRONE, false, false);
+				defender->sendSystemMessage("@cbt_spam:force_posture_change_2");
+				defender->sendStateCombatSpam("cbt_spam", "force_posture_change_2", 0, 0, false);
 			}
 
-			creature->updatePostureDownRecovery();
-			creature->updatePostureChangeDelay(2500);
-			creature->removeBuff(STRING_HASHCODE("burstrun"));
-			creature->removeBuff(STRING_HASHCODE("retreat"));
+			defender->updatePostureDownRecovery();
+			defender->updatePostureChangeDelay(2500);
+			defender->removeBuff(STRING_HASHCODE("burstrun"));
+			defender->removeBuff(STRING_HASHCODE("retreat"));
 			break;
 		case CommandEffect::NEXTATTACKDELAY:
-			creature->setNextAttackDelay(mod, duration);
+			defender->setNextAttackDelay(mod, duration);
 			break;
 		case CommandEffect::HEALTHDEGRADE:
-			buff = new Buff(creature, STRING_HASHCODE("healthdegrade"), duration, BuffType::STATE);
+			buff = new Buff(defender, STRING_HASHCODE("healthdegrade"), duration, BuffType::STATE);
 			buff->setAttributeModifier(CreatureAttribute::CONSTITUTION, -1*effect.getStateStrength());
 			buff->setAttributeModifier(CreatureAttribute::STRENGTH, -1*effect.getStateStrength());
-			creature->addBuff(buff);
+			defender->addBuff(buff);
 			break;
 		case CommandEffect::ACTIONDEGRADE:
-			buff = new Buff(creature, STRING_HASHCODE("actiondegrade"), duration, BuffType::STATE);
+			buff = new Buff(defender, STRING_HASHCODE("actiondegrade"), duration, BuffType::STATE);
 			buff->setAttributeModifier(CreatureAttribute::QUICKNESS, -1*effect.getStateStrength());
 			buff->setAttributeModifier(CreatureAttribute::STAMINA, -1*effect.getStateStrength());
-			creature->addBuff(buff);
+			defender->addBuff(buff);
 			break;
 		case CommandEffect::MINDDEGRADE:
-			buff = new Buff(creature, STRING_HASHCODE("minddegrade"), duration, BuffType::STATE);
+			buff = new Buff(defender, STRING_HASHCODE("minddegrade"), duration, BuffType::STATE);
 			buff->setAttributeModifier(CreatureAttribute::FOCUS, -1*effect.getStateStrength());
 			buff->setAttributeModifier(CreatureAttribute::WILLPOWER, -1*effect.getStateStrength());
-			creature->addBuff(buff);
+			defender->addBuff(buff);
 			break;
 		case CommandEffect::REMOVECOVER:
-			if (creature->hasState(CreatureState::COVER)) {
-				creature->clearState(CreatureState::COVER);
-				creature->sendSystemMessage("@combat_effects:strafe_system");
-				creature->setNextAttackDelay(mod, duration);
+			if (defender->hasState(CreatureState::COVER)) {
+				defender->clearState(CreatureState::COVER);
+				defender->sendSystemMessage("@combat_effects:strafe_system");
+				defender->setNextAttackDelay(mod, duration);
 			}
+			break;
+		case CommandEffect::ATTACKER_FORCE_STAND:
+			attacker->setPosture(CreaturePosture::UPRIGHT, false, false);
+			break;
+		case CommandEffect::ATTACKER_FORCE_CROUCH:
+			attacker->setPosture(CreaturePosture::CROUCHED, false, false);
+			break;
+		case CommandEffect::ATTACKER_FORCE_PRONE:
+			attacker->setPosture(CreaturePosture::PRONE, false, false);
 			break;
 		default:
 			break;
@@ -667,6 +689,14 @@ public:
 
 	bool validateWeapon(WeaponObject* weapon) {
 		return true;
+	}
+
+	void setVisMod(int vm) {
+		visMod = vm;
+	}
+
+	int getVisMod() const {
+		return visMod;
 	}
 
 };

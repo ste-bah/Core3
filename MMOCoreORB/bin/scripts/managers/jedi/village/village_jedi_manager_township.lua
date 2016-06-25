@@ -13,9 +13,9 @@ VillageJediManagerTownship = ScreenPlay:new {
 	screenplayName = "VillageJediManagerTownship"
 }
 
-VILLAGE_TOTAL_NUMBER_OF_PHASES = 2 -- Temporarily set to 2 for testing until other phases begin development
+VILLAGE_TOTAL_NUMBER_OF_PHASES = 3 -- Temporarily set to 3 for testing until fourth phase begins development
 
-local VILLAGE_PHASE_CHANGE_TIME = 24 * 60 * 60 * 1000 -- Testing value.
+local VILLAGE_PHASE_CHANGE_TIME = 48 * 60 * 60 * 1000 -- Testing value.
 --local VILLAGE_PHASE_CHANGE_TIME = 5 * 60 * 1000
 --local VILLAGE_PHASE_CHANGE_TIME = 3 * 7 * 24 * 60 * 60 * 1000 -- Three Weeks.
 
@@ -65,6 +65,7 @@ function VillageJediManagerTownship:switchToNextPhase()
 	VillageJediManagerTownship:handlePhaseChangeActiveQuests(phaseID, currentPhase)
 
 	currentPhase = currentPhase + 1
+
 	if currentPhase > VILLAGE_TOTAL_NUMBER_OF_PHASES then
 		currentPhase = 1
 	end
@@ -73,6 +74,7 @@ function VillageJediManagerTownship:switchToNextPhase()
 	VillageJediManagerTownship.setCurrentPhaseID(phaseID + 1)
 	VillageJediManagerTownship:spawnMobiles(currentPhase, false)
 	VillageJediManagerTownship:spawnSceneObjects(currentPhase, false)
+
 	Logger:log("Switching village phase to " .. currentPhase, LT_INFO)
 
 	-- Schedule another persistent event.
@@ -96,7 +98,7 @@ function VillageJediManagerTownship:spawnMobiles(currentPhase, spawnStaticMobs)
 	if (spawnStaticMobs == true) then
 		local mobileTable = villageMobileSpawns[0]
 
-		for i = 1, table.getn(mobileTable), 1 do
+		for i = 1, #mobileTable, 1 do
 			local mobile = mobileTable[i]
 			local pMobile = spawnMobile("dathomir", mobile[1], 0, mobile[2], mobile[3], mobile[4], mobile[5], 0)
 			if (pMobile ~= nil) then
@@ -114,16 +116,16 @@ function VillageJediManagerTownship:spawnMobiles(currentPhase, spawnStaticMobs)
 
 	local mobileTable = villageMobileSpawns[currentPhase]
 
-	for i = 1, table.getn(mobileTable), 1 do
+	for i = 1, #mobileTable, 1 do
 		local mobile = mobileTable[i]
 		local pMobile = spawnMobile("dathomir", mobile[1], 0, mobile[2], mobile[3], mobile[4], mobile[5], 0)
 
 		if (pMobile ~= nil) then
 			CreatureObject(pMobile):setPvpStatusBitmask(0)
-			if (mobile[6] ~= "") then
+			if (mobile[6] ~= nil and mobile[6] ~= "") then
 				self[mobile[6]](pMobile)
 			end
-			if (mobile[7] ~= "") then
+			if (mobile[7] ~= nil and mobile[7] ~= "") then
 				CreatureObject(pMobile):setOptionsBitmask(136)
 				AiAgent(pMobile):setConvoTemplate(mobile[7])
 			end
@@ -136,7 +138,7 @@ end
 -- Despawn and cleanup current phase mobiles.
 function VillageJediManagerTownship:despawnMobiles(currentPhase)
 	local mobileTable = villageMobileSpawns[currentPhase]
-	for i = 1, table.getn(mobileTable), 1 do
+	for i = 1, #mobileTable, 1 do
 		local objectID = readData("village:npc:object:" .. i)
 		local pMobile = getSceneObject(objectID)
 
@@ -151,14 +153,14 @@ function VillageJediManagerTownship:spawnSceneObjects(currentPhase, spawnStaticO
 	if (spawnStaticObjects == true) then
 		local objectTable = villageObjectSpawns[0]
 		foreach(objectTable, function(sceneObject)
-			spawnSceneObject("dathomir", sceneObject[1], sceneObject[2], sceneObject[3], sceneObject[4], 0, sceneObject[5])
+			spawnSceneObject("dathomir", sceneObject[1], sceneObject[2], sceneObject[3], sceneObject[4], 0, math.rad(sceneObject[5]))
 		end)
 	end
 
 	local objectTable = villageObjectSpawns[currentPhase]
-	for i = 1, table.getn(objectTable), 1 do
+	for i = 1, #objectTable, 1 do
 		local sceneObject = objectTable[i]
-		local pObject = spawnSceneObject("dathomir", sceneObject[1], sceneObject[2], sceneObject[3], sceneObject[4], 0, sceneObject[5])
+		local pObject = spawnSceneObject("dathomir", sceneObject[1], sceneObject[2], sceneObject[3], sceneObject[4], 0, math.rad(sceneObject[5]))
 
 		if (pObject ~= nil) then
 			local objectID = SceneObject(pObject):getObjectID()
@@ -170,7 +172,7 @@ end
 -- Despawn and cleanup current phase scene objects.
 function VillageJediManagerTownship:despawnSceneObjects(currentPhase)
 	local objectTable = villageObjectSpawns[currentPhase]
-	for i = 1, table.getn(objectTable), 1 do
+	for i = 1, #objectTable, 1 do
 		local objectID = readData("village:scene:object:" .. i)
 		local pObject = getSceneObject(objectID)
 
@@ -204,7 +206,7 @@ function VillageJediManagerTownship:handlePhaseChangeActiveQuests(phaseID, curre
 			end)
 		end
 	end
-	
+
 	VillageJediManagerCommon.removeActiveQuestList(phaseID)
 end
 
@@ -217,6 +219,9 @@ function VillageJediManagerTownship:doOnlinePhaseChangeFails(pCreature, currentP
 		FsPatrol:doPhaseChangeFail(pCreature)
 
 		FsMedicPuzzle:doPhaseChange(pCreature)
+
+		local FsCrafting1 = require("managers.jedi.village.phase1.fs_crafting1")
+		FsCrafting1:doPhaseChangeFail(pCreature)
 	elseif (currentPhase == 2) then
 		local FsReflex2 = require("managers.jedi.village.phase2.fs_reflex2")
 		FsReflex2:doPhaseChangeFail(pCreature)
@@ -227,7 +232,7 @@ function VillageJediManagerTownship:doOnlinePhaseChangeFails(pCreature, currentP
 end
 
 function VillageJediManagerTownship.initPukingVillager(pNpc)
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPukingVillager", pNpc) -- 2-5 minute initial delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPukingVillager", pNpc, "") -- 2-5 minute initial delay
 end
 
 function VillageJediManagerTownship:doPukingVillager(pNpc)
@@ -239,11 +244,11 @@ function VillageJediManagerTownship:doPukingVillager(pNpc)
 
 	spatialChat(pNpc, "@quest/force_sensitive/fs_sick:fs_response0" .. getRandomNumber(1,7))
 
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPukingVillager", pNpc) -- 2-5 minute delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPukingVillager", pNpc, "") -- 2-5 minute delay
 end
 
 function VillageJediManagerTownship.initPanickedVillager(pNpc)
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPanickedVillager", pNpc) -- 2-5 minute initial delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPanickedVillager", pNpc, "") -- 2-5 minute initial delay
 end
 
 function VillageJediManagerTownship:doPanickedVillager(pNpc)
@@ -261,7 +266,7 @@ function VillageJediManagerTownship:doPanickedVillager(pNpc)
 		spatialChat(pNpc, "@quest/force_sensitive/fs_panicked:fs_response" .. rand)
 	end
 
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPanickedVillager", pNpc) -- 2-5 minute delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doPanickedVillager", pNpc, "") -- 2-5 minute delay
 end
 
 function VillageJediManagerTownship.initWoundedVillager(pNpc)
@@ -270,7 +275,7 @@ function VillageJediManagerTownship.initWoundedVillager(pNpc)
 	end
 
 	CreatureObject(pNpc):setPosture(KNOCKEDDOWN)
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doWoundedVillager", pNpc) -- 2-5 minute initial delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doWoundedVillager", pNpc, "") -- 2-5 minute initial delay
 end
 
 function VillageJediManagerTownship:doWoundedVillager(pNpc)
@@ -286,7 +291,7 @@ function VillageJediManagerTownship:doWoundedVillager(pNpc)
 		spatialChat(pNpc, "@quest/force_sensitive/fs_lamentations:fs_response" .. rand)
 	end
 
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doWoundedVillager", pNpc) -- 2-5 minute delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doWoundedVillager", pNpc, "") -- 2-5 minute delay
 end
 
 function VillageJediManagerTownship.initMedDroid(pNpc)
@@ -296,7 +301,7 @@ function VillageJediManagerTownship.initMedDroid(pNpc)
 end
 
 function VillageJediManagerTownship.initVillageRepairer(pNpc)
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doVillageRepairer", pNpc) -- 2-5 minute initial delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doVillageRepairer", pNpc, "") -- 2-5 minute initial delay
 end
 
 function VillageJediManagerTownship:doVillageRepairer(pNpc)
@@ -319,7 +324,7 @@ function VillageJediManagerTownship:doVillageRepairer(pNpc)
 		spatialChat(pNpc, "@quest/force_sensitive/fs_wall_repair:fs_response0" .. rand)
 	end
 
-	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doVillageRepairer", pNpc) -- 2-5 minute delay
+	createEvent(getRandomNumber(120, 300) * 1000, "VillageJediManagerTownship", "doVillageRepairer", pNpc, "") -- 2-5 minute delay
 end
 
 MedDroidContainerComponent = {}

@@ -53,7 +53,7 @@ class BuildingObject extends StructureObject {
 
 	public boolean publicStructure;
 	
-	public static final int MAXPLAYERITEMS = 400;
+	public static final int MAXPLAYERITEMS = 10000;
 
 	protected unicode signName;
 		
@@ -256,8 +256,6 @@ class BuildingObject extends StructureObject {
 	public int getTotalCellNumber() {
 		return totalCellNumber;
 	}
-
-	public native abstract boolean transferObject(SceneObject object, int containmentType, boolean notifyClient = false, boolean allowOverflow = false);
 
 	public native int notifyObjectInsertedToChild(SceneObject object, SceneObject child, SceneObject oldParent);
 	public native int notifyObjectRemovedFromChild(SceneObject object, SceneObject child);

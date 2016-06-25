@@ -44,7 +44,7 @@
 ConfusionShotCommand = {
         name = "confusionshot",
 
-	damageMultiplier = 3.0,
+	damageMultiplier = 5.0,
 	speedMultiplier = 2.3,
 	healthCostMultiplier = 1,
 	actionCostMultiplier = 1,
@@ -58,7 +58,7 @@ ConfusionShotCommand = {
 		{ "jedi_state_defense" }, 
 		100, 
 		0, 
-		10 
+		50 
 	  ),
 	  StateEffect( 
 		STUN_EFFECT, 
@@ -67,7 +67,7 @@ ConfusionShotCommand = {
 		{ "jedi_state_defense" }, 
 		100, 
 		0, 
-		10 
+		50 
 	  )
 	},
 

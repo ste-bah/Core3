@@ -43,15 +43,8 @@
 
 SaberThrow3Command = {
         name = "saberthrow3",
-<<<<<<< HEAD
-        
-                
-        
-	damageMultiplier = 4.0,
-=======
 
 	damageMultiplier = 2.0,
->>>>>>> refs/remotes/UNSTABLE/unstable
 	speedMultiplier = 4.5,
 	healthCostMultiplier = 0,
 	actionCostMultiplier = 0,
@@ -59,6 +52,7 @@ SaberThrow3Command = {
 	coneAngle = 30,
 	coneAction = true,
 	forceCostMultiplier = 2.5,
+	visMod = 25,
 
 	stateEffects = {
 	   StateEffect( 

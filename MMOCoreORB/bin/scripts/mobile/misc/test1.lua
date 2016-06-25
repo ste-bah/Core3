@@ -35,7 +35,7 @@ test1 = Creature:new {
 				{group = "color_crystals", chance = 1000000},
 				{group = "rifles", chance = 1300000},
 				{group = "pistols", chance = 1300000},
-				{group = "melee_weapons", chance = 1300000},
+				{group = "melee_unarmed", chance = 1300000},
 				{group = "armor_attachments", chance = 900000},
 				{group = "clothing_attachments", chance = 900000},
 				{group = "carbines", chance = 1300000},

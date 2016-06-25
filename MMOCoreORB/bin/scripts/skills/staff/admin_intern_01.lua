@@ -22,6 +22,7 @@ admin_intern_01 = {
 	skillAbility = {},
 	commands = {
 		"teleport",
+		"teleportto",
 	},
 	skillModifiers = {},
 	schematicsGranted = {},

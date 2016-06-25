@@ -43,7 +43,7 @@ snake_king = Creature:new {
 				{group = "carbines", chance = 1300000},
 				{group = "wearables_rare", chance = 800000}
 			},
-			lootChance = 7000000
+			lootChance = 9000000
 		},
 		{
 			groups = {
@@ -55,7 +55,7 @@ snake_king = Creature:new {
 				{group = "armor_attachments", chance = 1500000},
 				{group = "clothing_attachments", chance = 1500000}
 			},
-			lootChance = 6000000
+			lootChance = 9000000
 		},
 		{
 			groups = {
@@ -67,14 +67,14 @@ snake_king = Creature:new {
 				{group = "armor_attachments", chance = 1500000},
 				{group = "clothing_attachments", chance = 1500000}
 			},
-			lootChance = 6000000
+			lootChance = 9000000
 		}
 	},
 	weapons = {"creature_spit_large_toxicgreen"},
 	conversationTemplate = "",
 	attacks = {
-		{"posturedownattack",""},
-		{"strongpoison",""},
+		{"posturedownattack"},
+		{"strongpoison"},
 		{"creatureareacombo","stateAccuracyBonus=100"},
 		{"creatureareaknockdown","stateAccuracyBonus=100"},
 		{"creatureareacombo",""},
@@ -83,7 +83,7 @@ snake_king = Creature:new {
 		{"intimidationattack","intimidationChance=50"},
 		{"creatureareaknockdown","knockdownChance=50"},
 		{"stunattack","stunChance=50"},
-		{"strongdisease",""},
+		{"strongdisease"},
 	}
 }
 

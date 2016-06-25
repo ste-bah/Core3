@@ -45,7 +45,11 @@ Encounter = Task:new {
 }
 
 -- Setup persistent events
-function Encounter:setupSpawnAndDespawnEvents()
+function Encounter:setupSpawnAndDespawnEvents(pCreatureObject)
+	if self:callFunctionIfNotNil(self.isEncounterFinished, true, pCreatureObject) then
+		return
+	end
+
 	if self.spawnTask == nil then
 		self.spawnTask = PersistentEvent:new {
 			-- Task properties
@@ -81,7 +85,7 @@ end
 -- @param pCreatureObject pointer to the creature object of the player.
 function Encounter:taskStart(pCreatureObject)
 	Logger:log("Starting spawn task in " .. self.taskName, LT_INFO)
-	self:setupSpawnAndDespawnEvents()
+	self:setupSpawnAndDespawnEvents(pCreatureObject)
 	self.spawnTask:start(pCreatureObject)
 	return true
 end
@@ -142,7 +146,7 @@ function Encounter:handleEncounterInRangeCheck(pCreatureObject)
 	if (CreatureObject(spawnedObjects[1]):isInRangeWithObject(pCreatureObject, self.inRangeValue)) then
 		self:callFunctionIfNotNil(self.onEncounterInRange, nil, pCreatureObject, spawnedObjects)
 	else
-		createEvent(1000, self.taskName, "handleEncounterInRangeCheck", pCreatureObject)
+		createEvent(1000, self.taskName, "handleEncounterInRangeCheck", pCreatureObject, "")
 	end
 end
 
@@ -151,7 +155,7 @@ end
 -- @param spawnedObjects list with pointers to the spawned objects.
 function Encounter:createEncounterEvents(pCreatureObject, spawnedObjects)
 	Logger:log("Creating encounter distance heartbeat in " .. self.taskName .. ".", LT_INFO)
-	createEvent(1000, self.taskName, "handleEncounterInRangeCheck", pCreatureObject)
+	createEvent(1000, self.taskName, "handleEncounterInRangeCheck", pCreatureObject, "")
 end
 
 -- Set all spawned objects to follow an object.
@@ -159,7 +163,7 @@ end
 -- @param objectToFollow pointer to the object to follow.
 function Encounter:setSpawnedObjectsToFollow(spawnedObjects, objectToFollow)
 	if spawnedObjects ~= nil then
-		for i = 1, table.getn(spawnedObjects), 1 do
+		for i = 1, #spawnedObjects, 1 do
 			if self.spawnObjectList[i]["setNotAttackable"] then
 				CreatureObject(spawnedObjects[i]):setPvpStatusBitmask(0)
 			end
@@ -199,8 +203,11 @@ function Encounter:handleSpawnEvent(pCreatureObject)
 	end
 
 	Logger:log("Spawn encounter in " .. self.taskName .. " triggered for player " .. SceneObject(pCreatureObject):getDisplayedName() .. ".", LT_INFO)
-	self:setupSpawnAndDespawnEvents()
-	self.spawnTask:finish(pCreatureObject)
+	self:setupSpawnAndDespawnEvents(pCreatureObject)
+
+	if (self.spawnTask ~= nil) then
+		self.spawnTask:finish(pCreatureObject)
+	end
 
 	if not self:callFunctionIfNotNil(self.isEncounterFinished, true, pCreatureObject) then
 		if self:isPlayerInPositionForEncounter(pCreatureObject) then
@@ -209,6 +216,10 @@ function Encounter:handleSpawnEvent(pCreatureObject)
 
 		self.despawnTask:start(pCreatureObject)
 	else
+		if (self.despawnTask ~= nil) then
+			self.despawnTask:finish(pCreatureObject)
+		end
+
 		self:finish(pCreatureObject)
 	end
 end
@@ -236,7 +247,7 @@ function Encounter:handleDespawnEvent(pCreatureObject)
 
 	local mobX, mobY
 
-	for i = 1, table.getn(spawnedObjects), 1 do
+	for i = 1, #spawnedObjects, 1 do
 		if spawnedObjects[i] ~= nil and self.spawnObjectList[i]["runOnDespawn"] and self.spawnObjectList[i]["setNotAttackable"] then
 			runAway = true
 			mobX = SceneObject(spawnedObjects[i]):getPositionX()
@@ -267,17 +278,17 @@ function Encounter:handleDespawnEvent(pCreatureObject)
 
 	local newZ = getTerrainHeight(pCreatureObject, newX, newY)
 
-	for i = 1, table.getn(spawnedObjects), 1 do
+	for i = 1, #spawnedObjects, 1 do
 		if (spawnedObjects[i] ~= nil) then
 			local objectID = SceneObject(spawnedObjects[i]):getObjectID()
 			writeData(objectID .. ":encounterNewX", newX)
 			writeData(objectID .. ":encounterNewY", newY)
 			writeData(objectID .. ":encounterNewZ", newZ)
-			createEvent(1000, self.taskName, "doRunAway", spawnedObjects[i])
+			createEvent(1000, self.taskName, "doRunAway", spawnedObjects[i], "")
 		end
 	end
 
-	createEvent(9000, self.taskName, "doDespawn", pCreatureObject)
+	createEvent(9000, self.taskName, "doDespawn", pCreatureObject, "")
 end
 
 function Encounter:doRunAway(pAiAgent)
@@ -309,8 +320,11 @@ function Encounter:doDespawn(pCreatureObject)
 	end
 
 	Logger:log("Despawning mobiles in encounter " .. self.taskName .. ".", LT_INFO)
-	self:setupSpawnAndDespawnEvents()
-	self.despawnTask:finish(pCreatureObject)
+	self:setupSpawnAndDespawnEvents(pCreatureObject)
+
+	if (self.despawnTask ~= nil) then
+		self.despawnTask:finish(pCreatureObject)
+	end
 
 	SpawnMobiles.despawnMobiles(pCreatureObject, self.taskName)
 

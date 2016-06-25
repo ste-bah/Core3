@@ -39,7 +39,7 @@ public:
 
 			creature->inflictDamage(creature, CreatureAttribute::ACTION, actionCost, true);
 
-			creature->setPosture(CreaturePosture::CROUCHED, false);
+			creature->setPosture(CreaturePosture::CROUCHED, false, false);
 
 			Reference<CreatureObject*> defender = server->getZoneServer()->getObject(target).castTo<CreatureObject*>();
 			if (defender == NULL)
@@ -58,10 +58,6 @@ public:
 
 			locker.release();
 
-			CreatureObjectDeltaMessage3* pmsg = new CreatureObjectDeltaMessage3(creature);
-			pmsg->updatePosture();
-			pmsg->close();
-			creature->broadcastMessage(pmsg, true);
 			creature->sendStateCombatSpam("cbt_spam", "tum_kneel", 0);
 		}
 

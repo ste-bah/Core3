@@ -84,7 +84,7 @@ class TangibleObject extends SceneObject {
 	protected SortedVector<ActiveArea> activeAreas;
 
 	protected SceneObject antiDecayKitObject;
-
+	
 	/**
 	 * TangibleObject constructor, used to initialized the object
 	 * @pre { templateData is a valid SharedTangibleObjectTemplate LuaObject that contains the necessary values to initialize CreatureObject }
@@ -120,6 +120,7 @@ class TangibleObject extends SceneObject {
 		
 		sliceable = false;
 		sliced = false;
+		isCraftedEnhancedItem = false;
 		
 		threatMap = null;
 		junkDealerNeeded = 0;
@@ -273,6 +274,7 @@ class TangibleObject extends SceneObject {
 	@preLocked
 	public native abstract void removeDefenders();
 	
+	
 	/**
 	 * Sets the combat state, needs to be overriden
 	 * @pre { this object is locked }
@@ -292,7 +294,7 @@ class TangibleObject extends SceneObject {
 	public native abstract void setUseCount(unsigned int newUseCount, boolean notifyClient = true);
 	
 	@preLocked
-	public native void setCountdownTimer(unsigned int newCount, boolean notifyClient = true);
+	public abstract native void setCountdownTimer(unsigned int newCount, boolean notifyClient = true);
 	
 	/**
 	 * Decreases use count, when reaches 0 destroys itself
@@ -381,11 +383,11 @@ class TangibleObject extends SceneObject {
 	 */
 	@preLocked
 	@arg1preLocked
-	public native abstract int inflictDamage(TangibleObject attacker, int damageType, float damage, boolean destroy, boolean notifyClient = true);
+	public native abstract int inflictDamage(TangibleObject attacker, int damageType, float damage, boolean destroy, boolean notifyClient = true, boolean isCombatAction = false);
 	
 	@preLocked
 	@arg1preLocked
-	public native abstract int inflictDamage(TangibleObject attacker, int damageType, float damage, boolean destroy, final string xp, boolean notifyClient = true);
+	public native abstract int inflictDamage(TangibleObject attacker, int damageType, float damage, boolean destroy, final string xp, boolean notifyClient = true, boolean isCombatAction = false);
 	
 	/**
 	 * Heals damage
@@ -440,7 +442,7 @@ class TangibleObject extends SceneObject {
 	@local
 	public abstract native void updateCraftingValues(CraftingValues values, boolean firstUpdate);
 	
-	public abstract native int notifyObjectDestructionObservers(TangibleObject attacker, int condition);
+	public abstract native int notifyObjectDestructionObservers(TangibleObject attacker, int condition, boolean isCombatAction);
 	
 	@preLocked
 	public native void dropFromDefenderLists(TangibleObject destructor);
@@ -593,22 +595,16 @@ class TangibleObject extends SceneObject {
 	public unsigned int getFaction() {
 		return faction;
 	}
-	
+
 	@read
-	public boolean isRebel() {
-		return faction == 0x16148850;
-	}
-	
+	public native boolean isRebel();
+
 	@read
-	public boolean isImperial() {
-		return faction == 0xDB4ACC54;
-	}
-	
+	public native boolean isImperial();
+
 	@read
-	public boolean isNeutral() {
-		return faction == 0;
-	}
-	
+	public native boolean isNeutral();
+
 	@dirty
 	@local
 	@nativeStub

@@ -33,7 +33,7 @@ mack = Creature:new {
 				{group = "holocron_dark", chance = 400000},
 				{group = "holocron_light", chance = 400000},
 				{group = "crystals_premium", chance = 400000},
-				{group = "color_crystals", chance = 1000000},
+				{group = "color_crystals_special", chance = 1000000},
 				{group = "rifles", chance = 300000},
 				{group = "pistols", chance = 300000},
 				{group = "melee_weapons", chance = 1300000},
@@ -42,7 +42,7 @@ mack = Creature:new {
 				{group = "carbines", chance = 1300000},
 				{group = "wearables_rare", chance = 800000}
 			},
-			lootChance = 7000000
+			lootChance = 9000000
 		},
 		{
 			groups = {
@@ -54,19 +54,19 @@ mack = Creature:new {
 				{group = "armor_attachments", chance = 1500000},
 				{group = "clothing_attachments", chance = 1500000}
 			},
-			lootChance = 7000000
+			lootChance = 9000000
 		},
 		{
 			groups = {
 				{group = "crystals_premium", chance = 1500000},
-				{group = "crystals_select", chance = 500000},
+				{group = "color_crystals_special", chance = 500000},
 				{group = "crystals_premium", chance = 500000},
 				{group = "color_crystals", chance = 2500000},
 				{group = "armor_all", chance = 2000000},
 				{group = "armor_attachments", chance = 1500000},
 				{group = "clothing_attachments", chance = 1500000}
 			},
-			lootChance = 7000000
+			lootChance = 9000000
 		}
 	},
 	weapons = {"nyaxs_weapons"},

@@ -1505,11 +1505,11 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 					"Master", "crafting_weaponsmith_master"
 				}
 			},]]
-			"Unlearn All Skills", "unlearn_all_skills",
-			"Cleanse Character", "cleanse_character",
+			--"Unlearn All Skills", "unlearn_all_skills",
+			--"Cleanse Character", "cleanse_character",
 			"Enhance Character", "enhance_character",
-			"Reset Buffs", "reset_buffs",
-			"Learn Languages", "language",
+			--"Reset Buffs", "reset_buffs",
+			--"Learn Languages", "language",
 			--"Credits", "credits",
 			--"Apply DOTs", "apply_dots",
 			--"Clear DOTs", "clear_dots",
@@ -1797,9 +1797,9 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			{
 				"Vehicle Deeds",
 				{
-					"Swoop", "object/tangible/deed/vehicle_deed/speederbike_swoop_deed.iff",
+					--"Swoop", "object/tangible/deed/vehicle_deed/speederbike_swoop_deed.iff",
 					--"Jetpack", "object/tangible/deed/vehicle_deed/jetpack_deed.iff",
-					"Speederbike", "object/tangible/deed/vehicle_deed/speederbike_deed.iff",
+					--"Speederbike", "object/tangible/deed/vehicle_deed/speederbike_deed.iff",
 					--"Speederbike Flash", "object/tangible/deed/vehicle_deed/speederbike_flash_deed.iff",
 					--"Landspeeder av21", "object/tangible/deed/vehicle_deed/landspeeder_av21_deed.iff",
 					--"Landspeeder x31", "object/tangible/deed/vehicle_deed/landspeeder_x31_deed.iff",
@@ -2605,10 +2605,10 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			{
 				--"Small StimPack", "object/tangible/medicine/stimpack_sm_s1.iff",
 				--"StimPack A", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_a.iff",
-				"StimPack B", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_b.iff",
+				--"StimPack B", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_b.iff",
 				--"StimPack C", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_c.iff",
 				--"StimPack D", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_d.iff",
-				"StimPack E", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_e.iff",
+				--"StimPack E", "object/tangible/medicine/crafted/crafted_stimpack_sm_s1_e.iff",
 				--"Medpack Grenade Damage A", "object/tangible/medicine/crafted/medpack_grenade_damage_a.iff",
 				--"Medpack Grenade Damage B", "object/tangible/medicine/crafted/medpack_grenade_damage_b.iff",
 				--"Medpack Grenade Damage C", "object/tangible/medicine/crafted/medpack_grenade_damage_c.iff",
@@ -2637,7 +2637,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				--"Medpack Dizzy", "object/tangible/medicine/crafted/medpack_dizzy_a.iff",
 				--"Medpack Intimidated", "object/tangible/medicine/crafted/medpack_intimidated_a.iff",
 				--"Medpack Stunned", "object/tangible/medicine/crafted/medpack_stunned_a.iff",
-				"Revive Pack", "object/tangible/medicine/medpack_revive.iff"
+				--"Revive Pack", "object/tangible/medicine/medpack_revive.iff"
 			},
 			--"Resources",
 			--{
@@ -2687,33 +2687,33 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			{
 				"Crafting Tools",
 				{
-					"Clothing and Armor Crafting Tool", "object/tangible/crafting/station/clothing_tool.iff",
-					"Food and Chemical Crafting Tool", "object/tangible/crafting/station/food_tool.iff",
-					"Generic Crafting Tool", "object/tangible/crafting/station/generic_tool.iff",
-					"Lightsaber Crafting Toolkit", "object/tangible/crafting/station/jedi_tool.iff",
-					"Starship Crafting Tool", "object/tangible/crafting/station/space_tool.iff",
-					"Structure and Furniture Crafting Tool", "object/tangible/crafting/station/structure_tool.iff",
-					"Weapon, Droid, and General Item Crafting Tool", "object/tangible/crafting/station/weapon_tool.iff"
+					--"Clothing and Armor Crafting Tool", "object/tangible/crafting/station/clothing_tool.iff",
+					--"Food and Chemical Crafting Tool", "object/tangible/crafting/station/food_tool.iff",
+					--"Generic Crafting Tool", "object/tangible/crafting/station/generic_tool.iff",
+					--"Lightsaber Crafting Toolkit", "object/tangible/crafting/station/jedi_tool.iff",
+					--"Starship Crafting Tool", "object/tangible/crafting/station/space_tool.iff",
+					--"Structure and Furniture Crafting Tool", "object/tangible/crafting/station/structure_tool.iff",
+					--"Weapon, Droid, and General Item Crafting Tool", "object/tangible/crafting/station/weapon_tool.iff"
 				},
 				"Crafting Stations",
 				{
-					"Clothing Crafting Station", "object/tangible/crafting/station/clothing_station.iff",
-					"Food Crafting Station", "object/tangible/crafting/station/food_station.iff",
-					"Starship Crafting Station", "object/tangible/crafting/station/space_station.iff",
-					"Structure Crafting Station", "object/tangible/crafting/station/structure_station.iff",
-					"Weapon Crafting Station", "object/tangible/crafting/station/weapon_station.iff"
+					--"Clothing Crafting Station", "object/tangible/crafting/station/clothing_station.iff",
+					--"Food Crafting Station", "object/tangible/crafting/station/food_station.iff",
+					--"Starship Crafting Station", "object/tangible/crafting/station/space_station.iff",
+					--"Structure Crafting Station", "object/tangible/crafting/station/structure_station.iff",
+					--"Weapon Crafting Station", "object/tangible/crafting/station/weapon_station.iff"
 				},
 				"Survey Tools",
 				{
-					"Gas Survey Tool", "object/tangible/survey_tool/survey_tool_gas.iff",
+					--"Gas Survey Tool", "object/tangible/survey_tool/survey_tool_gas.iff",
 					--"Inorganic Survey Tool", "oobject/tangible/survey_tool/survey_tool_inorganic.iff",
-					"Chemical Survey Tool", "object/tangible/survey_tool/survey_tool_liquid.iff",
-					"Flora Survey Tool", "object/tangible/survey_tool/survey_tool_lumber.iff",
-					"Mineral Survey Tool", "object/tangible/survey_tool/survey_tool_mineral.iff",
-					"Moisture Survey Tool", "object/tangible/survey_tool/survey_tool_moisture.iff",
+					--"Chemical Survey Tool", "object/tangible/survey_tool/survey_tool_liquid.iff",
+					--"Flora Survey Tool", "object/tangible/survey_tool/survey_tool_lumber.iff",
+					--"Mineral Survey Tool", "object/tangible/survey_tool/survey_tool_mineral.iff",
+					--"Moisture Survey Tool", "object/tangible/survey_tool/survey_tool_moisture.iff",
 					--"Organic Survey Tool", "object/tangible/survey_tool/survey_tool_organic.iff",
-					"Solar Survey Tool", "object/tangible/survey_tool/survey_tool_solar.iff",
-					"Wind Survey Tool", "object/tangible/survey_tool/survey_tool_wind.iff"
+					--"Solar Survey Tool", "object/tangible/survey_tool/survey_tool_solar.iff",
+					--"Wind Survey Tool", "object/tangible/survey_tool/survey_tool_wind.iff"
 				}
 				--"Repair Tools",
 				--{
@@ -2726,7 +2726,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			},
 			"Weapons",
 			{
-				"Carbines",
+				--"Carbines",
 				{
 			--		"CDEF Carbine", "object/weapon/ranged/carbine/carbine_cdef.iff",
 			--		"Corsec CDEF Carbine", "object/weapon/ranged/carbine/carbine_cdef_corsec.iff",
@@ -2746,11 +2746,11 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				--{
 			--		"Acid Stream Launcher", "object/weapon/ranged/heavy/heavy_acid_beam.iff",
 			--		"Beam Rifle", "object/weapon/ranged/rifle/rifle_beam.iff",
-					"Flame Thrower", "object/weapon/ranged/rifle/rifle_flame_thrower.iff",
+					--"Flame Thrower", "object/weapon/ranged/rifle/rifle_flame_thrower.iff",
 			--		"Heavy Acid Rifle", "object/weapon/ranged/rifle/rifle_acid_beam.iff",
 			--		"Heavy Particle Beam Cannon", "object/weapon/ranged/heavy/heavy_particle_beam.iff",
 			--		"Lightning Beam Cannon", "object/weapon/ranged/heavy/heavy_lightning_beam.iff",
-					"Light Lightning Cannon", "object/weapon/ranged/rifle/rifle_lightning.iff",
+					--"Light Lightning Cannon", "object/weapon/ranged/rifle/rifle_lightning.iff",
 			--		"Rocket Launcher", "object/weapon/ranged/heavy/heavy_rocket_launcher.iff"
 				--},
 				--"One-handed",
@@ -2776,7 +2776,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				--},
 				"Pistols",
 				{
-			"CDEF Pistol", "object/weapon/ranged/pistol/pistol_cdef.iff",
+			--"CDEF Pistol", "object/weapon/ranged/pistol/pistol_cdef.iff",
 			--		"CDEF Pistol (noob)", "object/weapon/ranged/pistol/pistol_cdef_noob.iff",
 			--		"Corsec CDEF Pistol", "object/weapon/ranged/pistol/pistol_cdef_corsec.iff",
 			--		"D18 Pistol", "object/weapon/ranged/pistol/pistol_d18.iff",
@@ -2806,8 +2806,8 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 			--		"Nightsister Energy Lance", "object/weapon/melee/polearm/lance_nightsister.iff",
 			--		"Janta Staff", "object/weapon/melee/polearm/lance_staff_janta.iff",
 			--		"Metal Staff", "object/weapon/melee/polearm/lance_staff_metal.iff",
-					"Vibro Lance", "object/weapon/melee/polearm/lance_vibrolance.iff",
-					"Long Vibro Axe", "object/weapon/melee/polearm/polearm_vibro_axe.iff",
+					--"Vibro Lance", "object/weapon/melee/polearm/lance_vibrolance.iff",
+					--"Long Vibro Axe", "object/weapon/melee/polearm/polearm_vibro_axe.iff",
 			--		"Wood Staff", "object/weapon/melee/polearm/lance_staff_wood_s1.iff",
 			--		"Reinforced Combat Staff", "object/weapon/melee/polearm/lance_staff_wood_s2.iff",
 				--},
@@ -2815,7 +2815,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				{
 			--		"Berserker Rifle", "object/weapon/ranged/rifle/rifle_berserker.iff",
 			--		"Bowcaster", "object/weapon/ranged/rifle/rifle_bowcaster.iff",
-					"CDEF Rifle", "object/weapon/ranged/rifle/rifle_cdef.iff",
+					--"CDEF Rifle", "object/weapon/ranged/rifle/rifle_cdef.iff",
 			--		"DLT20 Rifle", "object/weapon/ranged/rifle/rifle_dlt20.iff",
 			--		"DLT20a Rifle", "object/weapon/ranged/rifle/rifle_dlt20a.iff",
 			--		"E11 Rifle", "object/weapon/ranged/rifle/rifle_e11.iff",
@@ -2832,10 +2832,10 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				},
 				--"Two-handed",
 				--{
-					"Two-handed Curved Sword", "object/weapon/melee/2h_sword/2h_sword_katana.iff",
+					--"Two-handed Curved Sword", "object/weapon/melee/2h_sword/2h_sword_katana.iff",
 			--		"Grooved Two-handed Sword", "object/weapon/melee/2h_sword/2h_sword_katana_quest.iff",
 			--		"Scythe Blade", "object/weapon/melee/2h_sword/2h_sword_scythe.iff",
-					"Power Hammer", "object/weapon/melee/2h_sword/2h_sword_maul.iff",
+					--"Power Hammer", "object/weapon/melee/2h_sword/2h_sword_maul.iff",
 			--		"Two-handed Cleaver", "object/weapon/melee/2h_sword/2h_sword_cleaver.iff",
 			--		"Black Sun Executioner's Hack", "object/weapon/melee/2h_sword/2h_sword_blacksun_hack.iff",
 			--		"Gamorrean Battleaxe", "object/weapon/melee/2h_sword/2h_sword_battleaxe_quest.iff",
@@ -2844,7 +2844,7 @@ object_tangible_terminal_terminal_character_builder = object_tangible_terminal_s
 				--},
 				"Unarmed",
 				{
-					"Vibro Knuckler", "object/weapon/melee/special/vibroknuckler.iff",
+					--"Vibro Knuckler", "object/weapon/melee/special/vibroknuckler.iff",
 			--		"A Blacksun Razor Knuckler", "object/weapon/melee/special/blacksun_razor.iff"
 				}
 			}
